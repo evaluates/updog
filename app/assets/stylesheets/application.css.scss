@@ -203,3 +203,36 @@ nav{
 .suffix-domain:after{
   content:'.updog.co'
 }
+
+.frhul{
+  margin:3em 0;
+}
+
+table, td, th{
+  border:1px solid #ddd;
+  border-collapse:collapse;
+  padding:1em;
+}
+table{
+  width:100%;
+}
+
+td:nth-child(2){
+  text-align:center;
+}
+
+tbody tr:last-child td{
+  font-weight:bold;
+}
+
+.frhul .btn-create{
+  width:200px;
+  margin:2em auto 1em auto;
+  font-size:1.5em;
+}
+
+.frhul small,
+.frhul .btn-create{
+  display:block;
+  text-align:center;
+}
