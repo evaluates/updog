@@ -52,4 +52,9 @@ describe Site do
     s.domain = "www.pizza.co"
     expect(s.valid?).to eq(true)
   end
+  it "'s domain should be a subdomain" do
+    s = Site.new( name: "onew" )
+    s.domain = "www.pizza-jam.co"
+    expect(s.valid?).to eq(true)
+  end
 end
