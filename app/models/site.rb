@@ -11,20 +11,20 @@ class Site < ActiveRecord::Base
 
   def to_param
       "#{id}-#{name.parameterize}"
-  end 
+  end
 
   def creator
     User.find_by( uid: self.uid )
   end
 
-  def content client, env 
+  def content client, env
     if env['REQUEST_URI'][-1] == "/"
       path = env['PATH_INFO'] + "/index.html"
     else
       path = env['PATH_INFO']
     end
     Rails.cache.fetch("#{cache_key}/#{path}", expires_in: 30.seconds) do
-      begin 
+      begin
 	if path != '/'
 	  client.get_file( self.name + '/_site/' + path ).html_safe
 	else
@@ -41,7 +41,7 @@ class Site < ActiveRecord::Base
   end
 
   def user_has_less_than_5_sites
-    if self.user && self.user.sites.length > 4 
+    if self.user && self.user.sites.length > 4
       errors.add(:number_of_sites, "can't be greater than 5")
     end
   end
@@ -53,7 +53,7 @@ class Site < ActiveRecord::Base
   end
 
   def domain_is_a_subdomain
-    if self.domain && self.domain != "" && self.domain !~ /\w+\.\w+\.\w+/
+    if self.domain && self.domain != "" && self.domain !~ /\w+\.[\w-]+\.\w+/
       errors.add(:domain, "must have a subdomain like www.")
     end
   end
