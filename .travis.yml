@@ -14,17 +14,5 @@ after_failure:
 - cat ./config/database.yml
 - echo $RAILS_ENV
 - bundle exec rake --version
-after_success:
-  - chmod 600 travis_rsa
-  - mv travis_rsa ~/.ssh/id_rsa
-  - git remote add production ssh://git@garnet.wdidc.org/home/git/garnet.git
-  - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && git push production master
-before_install:
-- echo -e "Host garnet.wdidc.org\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-- openssl aes-256-cbc -K $encrypted_91297e33cb51_key -iv $encrypted_91297e33cb51_iv
-  -in travis_rsa.enc -out travis_rsa -d
-# to support running ubuntu trusty on travis
-# this in turn allows us to use phantomjs2 on travis
-# required to support Function.prototype.bind()
 sudo: required
 dist: trusty
