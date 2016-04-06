@@ -28,6 +28,14 @@ class SitesController < ApplicationController
       @content = @site.content get_client( @site.creator.access_token ), request.env
     rescue Exception => err
       @content = err
+      if err.to_s == "File not found"
+        request.env['PATH_INFO'] = "/404.html"
+	begin
+	  @content = @site.content get_client( @site.creator.access_token ), request.env
+	rescue Exception => err
+	  @content = err
+	end
+      end
     end
     respond_to do |format|
       format.all { render :html => @content, :layout => false }
