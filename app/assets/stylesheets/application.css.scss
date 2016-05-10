@@ -252,6 +252,12 @@ tbody tr:last-child td{
     font-size:4em;
     margin: 0;
     letter-spacing: -.025em;
+    @media all and (max-height:40em){
+      font-size: 3em;
+    }
+    @media all and (max-height:30em){
+      font-size: 2em;
+    }
     &:last-of-type{
       margin-bottom:1em;
     }
