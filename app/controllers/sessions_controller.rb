@@ -18,6 +18,7 @@ class SessionsController < ApplicationController
     begin
       access_token, user_id, url_state = get_auth.finish(params)
     rescue Exception
+      return redirect_to root_url
     end
     session['access_token'] = access_token
     @db = get_client access_token

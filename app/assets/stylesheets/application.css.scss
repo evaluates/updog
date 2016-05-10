@@ -14,6 +14,10 @@
  *= require_self
  */
 
+a{
+  color:#007ee5;
+}
+
 body{
   font-family:'Open Sans','Helvetica Neue', sans-serif;
   line-height:1.5;
@@ -30,6 +34,9 @@ body{
     content:' ';
     display:table;
     clear:both;
+  }
+  h2:first-child{
+    margin-top:0;
   }
 }
 
@@ -109,6 +116,9 @@ nav{
 
 .main{
   padding:2em 0;
+  @media all and (max-width:40em){
+    padding:1em 0;
+  }
 }
 
 .sites h2{
@@ -236,3 +246,30 @@ tbody tr:last-child td{
   display:block;
   text-align:center;
 }
+
+.index{
+  h2{
+    font-size:4em;
+    margin: 0;
+    letter-spacing: -.025em;
+    &:last-of-type{
+      margin-bottom:1em;
+    }
+  }
+}
+
+.dropbox {
+  background-color: #007ee5;
+  background-image: -webkit-linear-gradient(#168add, #007ee5);
+  background-image: linear-gradient(#168add, #007ee5);
+  border: 1px solid #0c6ebe;
+  text-decoration:none;
+  padding:.5em 1em;
+  border-radius:3px;
+  color: white;
+}
+
+.dropbox:hover{
+  background: linear-gradient(#168eef, #007ee5);
+}
+

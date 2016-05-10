@@ -15,7 +15,7 @@
 	<% end %>
     <% if @sites.length != 0 %>
       <h2>Your Sites:</h2>
-      <ul >
+    <ul>
 	<% @sites.each do |s| %>
 	  <li class='cf'>
 
@@ -28,31 +28,11 @@
   </div>
 
   <% else %>
-    <div class='splash'>
-      <div class='wrapper'>
-    <h2>UpDog is a static website host, powered by DropBox</h2>
-    </div>
-  </div>
 
-  <div class='wrapper'>
-    <h3>How it works:</h3>
-    <ol>
-      <li><a href='/auth/dropbox'>Log In with Dropbox</a></li>
-      <li>Create a new site</li>
-      <li>Add your site to the newly created folder.</li>
-      <li>Share your site.</li>
-    </ol>
-    <h3>What our customers are saying:</h3>
-    <div class='table'>
-      <div class='g-1-3'>
-	<blockquote>It’s so fast!</blockquote>
-      </div>
-      <div class='g-1-3'>
-	<blockquote>How does it update my site instantly? Magic?!</blockquote>
-      </div>
-      <div class='g-1-3'>
-	<blockquote>What’s updog?</blockquote>
-      </div>
-      </div>
-    </div>
+  <div class='wrapper index'>
+    <h2>Real.</h2>
+    <h2>Simple.</h2>
+    <h2>Hosting.</h2>
+    <a href='/auth/dropbox' class='dropbox'><span class='fa fa-dropbox'></span> Log In with DropBox</a>
+  </div>
   <% end %>
