@@ -28,6 +28,9 @@ class SitesController < ApplicationController
       @content = @site.content get_client( @site.creator.access_token ), request.env
     rescue Exception => err
       @content = err
+      if err.to_s == "Path is a directory"
+	return redirect_to request.env['REQUEST_URI'] + "/"
+      end
       if err.to_s == "File not found"
         request.env['PATH_INFO'] = "/404.html"
 	begin
