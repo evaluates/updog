@@ -237,7 +237,7 @@ tbody tr:last-child td{
 
 .frhul .btn-create{
   width:200px;
-  margin:2em auto 1em auto;
+  margin:0em auto 1em auto;
   font-size:1.5em;
 }
 
@@ -277,5 +277,10 @@ tbody tr:last-child td{
 
 .dropbox:hover{
   background: linear-gradient(#168eef, #007ee5);
+}
+
+form.center{
+  width:150px;
+  margin:auto;
 }
 
