@@ -19,6 +19,7 @@ class SitesController < ApplicationController
     redirect_to sites_path, :notice => "Deleted. #{undo_link}?"
   end
   def load
+    request.env["referrer"] = request.referer
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
     if !@site
      render :html => 'Not Found', :layout => true
