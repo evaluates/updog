@@ -1,5 +1,6 @@
 class Site < ActiveRecord::Base
   belongs_to :user, :foreign_key => :uid, :primary_key => :uid
+  has_many :clicks
   has_paper_trail
   validates :subdomain, uniqueness: { case_sensititve: false }
   validates :name, presence: true
@@ -18,6 +19,11 @@ class Site < ActiveRecord::Base
   end
 
   def content client, env
+    self.clicks.create(data:{
+      path: env["REQUEST_URI"],
+      ip: env["REMOTE_ADDR"],
+      referer: env["HTTP_REFERER"]
+    })
     if env['REQUEST_URI'][-1] == "/"
       path = env['PATH_INFO'] + "/index.html"
     else
