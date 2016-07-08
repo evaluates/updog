@@ -5,7 +5,6 @@ gem 'dropbox-sdk'
 gem 'paper_trail'
 gem 'httparty'
 gem 'pry'
-gem 'rails_12factor'
 gem 'dalli'
 gem 'gibbon'
 
