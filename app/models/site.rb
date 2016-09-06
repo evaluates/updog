@@ -29,6 +29,7 @@ class Site < ActiveRecord::Base
     else
       path = env['PATH_INFO']
     end
+    path = URI.unescape(path)
     Rails.cache.fetch("#{cache_key}/#{path}", expires_in: 30.seconds) do
       begin
 	if path != '/'
