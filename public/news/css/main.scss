@@ -1,0 +1,35 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+@charset "utf-8";
+
+blockquote{
+  border-left:3px solid #ccc;
+  margin:0;
+  padding-left:1em;
+  margin-left:1em;
+  p{
+    margin:0;
+    padding:.5em 0;
+  }
+}
+
+body{
+  padding-bottom: 4em;
+}
+
+h2 a {
+  text-decoration:none;
+}
+h2, h1{
+  margin-bottom:0;
+}
+
+.posts{
+  margin-top:2em;
+  .post-meta{
+    margin:1em 0 2em 0;
+    display:inline-block;
+  }
+}
+
