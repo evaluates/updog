@@ -7,7 +7,6 @@ gem 'httparty'
 gem 'pry'
 gem 'dalli'
 gem 'gibbon'
-gem 'thin'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'
