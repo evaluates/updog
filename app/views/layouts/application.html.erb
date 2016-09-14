@@ -32,9 +32,22 @@
 </header>
 
 <section class='main'>
+<div class='wrapper'>
+  <% if notice %>
+  <div class='notice'>
+    <%=  notice.html_safe %>
+  </div>
+  <% end %>
+</div>
     <%= yield %>
 </section>
 
+<footer>
+  <div class='wrapper'>
+   &copy; UpDog <%= DateTime.now.strftime("%Y") %>
+   <%= link_to "Contact Us", contact_path %>
+  </div>
+</footer>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
