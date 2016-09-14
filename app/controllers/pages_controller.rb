@@ -8,6 +8,13 @@ class PagesController < ApplicationController
 
   def source
   end
+
+  def contact
+  end
+
+  def contact_create
+    
+  end
   
   def admin
     if current_user && current_user.id == 1

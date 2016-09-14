@@ -1,0 +1,11 @@
+<div class='wrapper'>
+  <h2>Contact</h2>
+  <form method='post'>
+    <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+    <label for='email'>Email Address</label>
+    <input id='email' name='email' type='email' placeholder="jane@doe.com">
+    <label for='message'>Your Message</label>
+    <textarea id='message' name='message'></textarea>
+    <button>Submit</button>
+  </form>
+</div>
