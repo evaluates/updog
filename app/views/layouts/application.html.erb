@@ -32,6 +32,13 @@
 </header>
 
 <section class='main'>
+<div class='wrapper'>
+  <% if notice %>
+  <div class='notice'>
+    <%=  notice.html_safe %>
+  </div>
+  <% end %>
+</div>
     <%= yield %>
 </section>
 

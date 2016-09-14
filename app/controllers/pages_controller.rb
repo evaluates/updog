@@ -13,7 +13,9 @@ class PagesController < ApplicationController
   end
 
   def contact_create
-    
+    ContactMailer.new_message(params).deliver_now!
+    flash[:notice] = "Message sent successfully! We'll get back to you as soon as possible." 
+    redirect_to contact_path
   end
   
   def admin
