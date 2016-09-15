@@ -287,3 +287,17 @@ form.center{
 footer{
   margin:3em 0;
 }
+
+.posts article{
+  border-bottom:1px solid #ccc;
+  padding:2em 0;
+  h2{
+    margin:0;
+    a{
+      text-decoration:none;
+      &:hover{
+        text-decoration:underline;
+      }
+    }
+  }
+}

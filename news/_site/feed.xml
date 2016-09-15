@@ -6,8 +6,8 @@
 </description>
     <link>/news/</link>
     <atom:link href="/news/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 14 Sep 2016 15:53:02 -0400</pubDate>
-    <lastBuildDate>Wed, 14 Sep 2016 15:53:02 -0400</lastBuildDate>
+    <pubDate>Thu, 15 Sep 2016 09:36:39 -0400</pubDate>
+    <lastBuildDate>Thu, 15 Sep 2016 09:36:39 -0400</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -52,6 +52,82 @@
         <pubDate>Sun, 11 Sep 2016 00:00:00 -0400</pubDate>
         <link>/news/discontinuing-rendering-of-html-content/</link>
         <guid isPermaLink="true">/news/discontinuing-rendering-of-html-content/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Custom Favicons</title>
+        <description>&lt;p&gt;Starting today, any file named &lt;code class=&quot;highlighter-rouge&quot;&gt;favicon.ico&lt;/code&gt; will be loaded as
+the favicon for your site instead of the UpDog logo: &lt;img src=&quot;https://dl.dropbox.com/s/k6dyf3ajdxk1tvq/Screenshot%202016-09-15%2009.33.00.png?dl=0&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As always, you can name your favicon whatever you like, though you’ll need to link to it manually:&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;icon&quot;&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;image/png&quot;&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://example.com/myicon.png&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Mon, 09 May 2016 00:00:00 -0400</pubDate>
+        <link>/news/custom-favicons/</link>
+        <guid isPermaLink="true">/news/custom-favicons/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Custom 404 Pages</title>
+        <description>&lt;p&gt;You can now have custom 404 pages for your site!&lt;/p&gt;
+
+&lt;p&gt;Instead of responding with DropBox’s error: &lt;code class=&quot;highlighter-rouge&quot;&gt;file not found&lt;/code&gt;,
+you can create a &lt;code class=&quot;highlighter-rouge&quot;&gt;404.html&lt;/code&gt; file and put whatever message you
+like in there.&lt;/p&gt;
+
+&lt;p&gt;Here’s an example: &lt;a href=&quot;https://jshawl.updog.co/non-existent-folder/&quot;&gt;https://jshawl.updog.co/non-existent-folder/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Have a 404 page you’d like to show off? &lt;a href=&quot;/contact&quot;&gt;let us know&lt;/a&gt; and we’ll feature it here!&lt;/p&gt;
+</description>
+        <pubDate>Wed, 06 Apr 2016 00:00:00 -0400</pubDate>
+        <link>/news/custom-404-pages/</link>
+        <guid isPermaLink="true">/news/custom-404-pages/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Custom Domains</title>
+        <description>&lt;p&gt;You can now add your own domains to your UpDog site.&lt;/p&gt;
+
+&lt;p&gt;To enable this feature:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Log in to your DNS host.&lt;/li&gt;
+  &lt;li&gt;Create a new CNAME record that points to updog.co&lt;/li&gt;
+  &lt;li&gt;Save your changes and wait for the DNS to propagate.&lt;/li&gt;
+  &lt;li&gt;Need help? &lt;a href=&quot;/contact&quot;&gt;Contact us&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Here’s what that process looks like on Digital Ocean:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://dl.dropboxusercontent.com/s/4ksisxk7khatbi7/do.gif?dl=0&quot; alt=&quot;gif of adding CNAME to point to updog.co&quot; /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Tue, 24 Feb 2015 00:00:00 -0500</pubDate>
+        <link>/news/custom-domains/</link>
+        <guid isPermaLink="true">/news/custom-domains/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Hello World</title>
+        <description>&lt;p&gt;UpDog is a static site host powered by the DropBox API.&lt;/p&gt;
+
+&lt;p&gt;This is a Ruby on Rails application running on &lt;a href=&quot;http://jshawl.com/do&quot;&gt;Digital Ocean’s&lt;/a&gt; fastest solid state drives.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 22 Feb 2015 00:00:00 -0500</pubDate>
+        <link>/news/hello-world/</link>
+        <guid isPermaLink="true">/news/hello-world/</guid>
         
         
       </item>
