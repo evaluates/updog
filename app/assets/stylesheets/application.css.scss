@@ -262,9 +262,9 @@ tbody tr:last-child td{
     @media all and (max-height:30em){
       font-size: 2em;
     }
-    &:last-of-type{
-      margin-bottom:1em;
-    }
+  }
+  p{
+    margin-bottom:3em;
   }
 }
 
