@@ -16,4 +16,6 @@ Create a new file:
 db_key: 'dropbox consumer key'
 db_secret: 'dropbox consumer secret'
 db_callback: 'http://localhost:3000/auth/dropbox/callback'
+mailchimp_list_id: 'list id from mailchimp'
+mailchimp_api_key: 'your mailchimp api key'
 ```
