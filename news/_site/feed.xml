@@ -6,9 +6,43 @@
 </description>
     <link>/news/</link>
     <atom:link href="/news/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 15 Sep 2016 09:39:50 -0400</pubDate>
-    <lastBuildDate>Thu, 15 Sep 2016 09:39:50 -0400</lastBuildDate>
+    <pubDate>Sat, 17 Sep 2016 10:47:44 -0400</pubDate>
+    <lastBuildDate>Sat, 17 Sep 2016 10:47:44 -0400</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>UpDog is Going Pro!</title>
+        <description>&lt;p&gt;In the coming weeks, we’ll be releasing new features, upgrading hardware &lt;em&gt;and&lt;/em&gt;
+software to bring you the best UpDog yet.&lt;/p&gt;
+
+&lt;p&gt;To say thank you to everyone who has supported UpDog so far, here’s a sneak peak
+at what’s to come:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Automatic Markdown rendering&lt;/li&gt;
+  &lt;li&gt;Custom document roots&lt;/li&gt;
+  &lt;li&gt;Faster response times&lt;/li&gt;
+  &lt;li&gt;SSL Certificates for custom domains&lt;/li&gt;
+  &lt;li&gt;and more!&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is your chance to be heard and guide the direction of future UpDog development.
+&lt;br /&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.google.com/forms/d/e/1FAIpQLSfvACKX3H5JOfUKF1S4WYUDxCX39qhHy_vr1QzBNSnufDHQLA/viewform&quot; class=&quot;dropbox&quot;&gt;Fill out our brief survey now&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;br /&gt;
+Thank you! And as always &lt;a href=&quot;/contact&quot;&gt;let us know&lt;/a&gt; if there’s anything we can do
+to help.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 17 Sep 2016 00:00:00 -0400</pubDate>
+        <link>/news/updog-is-going-pro/</link>
+        <guid isPermaLink="true">/news/updog-is-going-pro/</guid>
+        
+        
+      </item>
     
       <item>
         <title>Discontinuing Rendering of HTML Content</title>
