@@ -19,7 +19,7 @@ On September 1st, 2016, an email arrived in my inbox:
 
 ### What this means for non-updog users
 
-Instead of DropBox links rendering HTML content, like:
+Instead of Dropbox links rendering HTML content, like:
 
 ![Rendered HTML](https://dl.dropbox.com/s/q63q0k8keg4hqd2/Screenshot%202016-09-11%2018.24.33.png?dl=0)
 
@@ -27,5 +27,4 @@ Viewers will see the raw HTML source code:
 
 ![Unrendered HTML](https://dl.dropbox.com/s/ygstsvefsovvt23/Screenshot%202016-09-11%2018.25.32.png?dl=0)
 
-Because UpDog uses the DropBox API, your site and HTML files here will be unaffected.
-
+Because UpDog uses the Dropbox API, your site and HTML files here will be unaffected.
