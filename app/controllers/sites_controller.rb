@@ -8,7 +8,7 @@ class SitesController < ApplicationController
   end
   def new
     @sites = Site.where( uid: session[:user_id] )
-    if @sites.length != 0
+    unless current_user.is_pro? || @sites.length == 0
       redirect_to root_path
     end
     @site = Site.new
@@ -37,11 +37,15 @@ class SitesController < ApplicationController
 	return redirect_to request.env['REQUEST_URI'] + "/"
       end
       if err.to_s == "File not found"
-        request.env['PATH_INFO'] = "/404.html"
-	begin
-	  @content = @site.content get_client( @site.creator.access_token ), request.env
-	rescue Exception => err
-	  @content = err
+	if request.env['PATH_INFO'] == '/markdown.css'
+	  @content = File.read(Rails.root + '/public/markdown.css')
+	else
+	  request.env['PATH_INFO'] = "/404.html"
+	  begin
+	    @content = @site.content get_client( @site.creator.access_token ), request.env
+	  rescue Exception => err
+	    @content = err
+	  end
 	end
       end
     end
@@ -49,6 +53,7 @@ class SitesController < ApplicationController
     mime_type = Mime::Type.lookup_by_extension(extname)
     content_type = mime_type.to_s unless mime_type.nil?
     content_type = 'text/html' if extname == "htm"
+    content_type = "text/html; charset=utf-8" if extname == "md" && !params.key?(:raw) && @site.creator.is_pro? && @site.render_markdown
     respond_to do |format|
       format.all { render :html => @content, :layout => false, :content_type => content_type }
     end
@@ -58,9 +63,10 @@ class SitesController < ApplicationController
     @db = get_client @site.creator.access_token
     if @site.save
       begin
-      @db.file_create_folder( @site.name )
-      @db.put_file('/' + @site.name + '/index.html', open(Rails.public_path + 'welcome.html') )
-      rescue
+        @db.file_create_folder( @site.name )
+        @db.put_file('/' + @site.name + '/index.html', open(Rails.public_path + 'welcome/index.html'))
+      rescue => e
+        binding.pry
       end
       redirect_to @site
     else
@@ -76,9 +82,13 @@ class SitesController < ApplicationController
     end
   end
 
+  def add_to db, path
+    db.put_file('/' + @site.name + '/index.html', open(path) )
+  end
+
   private
   def site_params
-    params.require(:site).permit(:name, :domain)
+    params.require(:site).permit(:name, :domain, :document_root, :render_markdown)
   end
   def undo_link
     view_context.link_to("undo", revert_version_path(@site.versions.last), :method => :post)

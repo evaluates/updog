@@ -11,49 +11,44 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160630134655) do
+ActiveRecord::Schema.define(version: 20161008122006) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "clicks", force: true do |t|
+  create_table "clicks", force: :cascade do |t|
     t.json     "data"
     t.integer  "site_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "posts", force: true do |t|
-    t.text     "body"
-    t.string   "title"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "sites", force: true do |t|
+  create_table "sites", force: :cascade do |t|
     t.integer  "uid"
-    t.string   "name"
+    t.string   "name",            limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "subdomain"
-    t.string   "domain"
+    t.string   "subdomain",       limit: 255
+    t.string   "domain",          limit: 255
+    t.string   "document_root"
+    t.boolean  "render_markdown"
   end
 
-  create_table "users", force: true do |t|
-    t.string   "provider"
+  create_table "users", force: :cascade do |t|
+    t.string   "provider",     limit: 255
     t.integer  "uid"
-    t.string   "name"
-    t.string   "email"
+    t.string   "name",         limit: 255
+    t.string   "email",        limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "access_token"
+    t.string   "access_token", limit: 255
   end
 
-  create_table "versions", force: true do |t|
-    t.string   "item_type",  null: false
-    t.integer  "item_id",    null: false
-    t.string   "event",      null: false
-    t.string   "whodunnit"
+  create_table "versions", force: :cascade do |t|
+    t.string   "item_type",  limit: 255, null: false
+    t.integer  "item_id",                null: false
+    t.string   "event",      limit: 255, null: false
+    t.string   "whodunnit",  limit: 255
     t.text     "object"
     t.datetime "created_at"
   end

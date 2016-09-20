@@ -13,6 +13,12 @@
   <br>
   <%= f.label :domain %>
   <%= f.text_field :domain %> (optional) <small data-toggle=".instructions">What is this?</small><br><br>
+  <% if @site.creator && @site.creator.is_pro? %>
+    <%= f.label :document_root %>
+    <%= f.text_field :document_root, placeholder: '_site/' %> (optional) <br><br>
+    <%= f.label :render_markdown %>
+    <%= f.check_box :render_markdown %> (optional) <br><br>
+  <% end %>
   <%= f.submit 'Save', :class => 'btn-create' %>
   <div class='instructions'>
   <p>Using your own custom domain? To enable this feature:</p>

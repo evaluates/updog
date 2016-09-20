@@ -7,6 +7,10 @@ gem 'httparty'
 gem 'pry'
 gem 'dalli'
 gem 'gibbon'
+gem 'rails_12factor'
+gem 'redcarpet'
+gem 'rouge'
+gem 'stripe'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'
