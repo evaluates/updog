@@ -1,13 +1,16 @@
 Rails.application.routes.draw do
   match 'auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
-  match '/', to: 'sites#load', constraints: { subdomain: /.+/ }, via: [:get, :post, :put, :patch, :delete]
+  match '/', to: 'sites#load', constraints: { subdomain: /.+/, domain:'updog.co' }, via: [:get, :post, :put, :patch, :delete]
+  match '/', to: 'sites#load', constraints: { subdomain: /.+updog-staging/, domain:'herokuapp.com' }, via: [:get, :post, :put, :patch, :delete]
   root 'sites#index'
   get '/logout', to: 'sessions#destroy'
   get '/auth/dropbox', to: 'sessions#new'
   get '/news/css/main.css', to: 'news#css'
   get '/news/:path', to: 'news#show'
   get '/news', to: 'news#index'
-  match '/*req', to: 'sites#load', constraints: { subdomain: /.+/ }, via: [:get, :post, :put, :patch, :delete]
+  resources :subscriptions
+  match '/*req', to: 'sites#load', constraints: { subdomain: /.+/, domain: 'updog.co' }, via: [:get, :post, :put, :patch, :delete]
+  match '/*req', to: 'sites#load', constraints: { subdomain: /.+updog-staging/, domain:'herokuapp.com' }, via: [:get, :post, :put, :patch, :delete]
   get '/about', to: 'pages#about'
   get '/source', to: 'pages#source'
   get '/contact', to: 'pages#contact'
@@ -16,6 +19,10 @@ Rails.application.routes.draw do
   get '/admin', to: 'pages#admin'
   get '/webhook', to: 'webhook#challenge'
   post '/webhook', to: 'webhook#post'
+  post '/subscriptions/hook', to: 'subscriptions#hook'
   post "/versions/:id/revert", to: "versions#revert", as: "revert_version"
-  resources :sites, path: '' 
+  post "/checkout", to: "subscriptions#checkout"
+  post "/subscriptions/update_card", to: "subscriptions#update_card"
+  resources :sites, path: ''
+
 end

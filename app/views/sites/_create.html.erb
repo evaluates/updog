@@ -1,7 +1,9 @@
-<% if @sites.length < 1 %>
+<% if @sites.length < 1 || current_user.is_pro? %>
   <div class='cf'>
     <div class='left'>
       <a href='<%= new_site_path %>' class='site-new btn-create'><i class="fa fa-plus-circle"></i> Create New Site</a>
     </div>
   </div>
+<% else %>
+  <a href='/pricing' class='dropbox'>Upgrade to Pro to Create Additional Sites</a>
 <% end %>

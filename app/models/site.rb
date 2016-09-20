@@ -1,3 +1,14 @@
+require 'redcarpet'
+require 'rouge'
+require 'rouge/plugins/redcarpet'
+
+class HTMLR < Redcarpet::Render::HTML
+    include Rouge::Plugins::Redcarpet
+    def block_code(code, language)
+      Rouge.highlight(code, language || 'text', 'html')
+    end
+end
+
 class Site < ActiveRecord::Base
   belongs_to :user, :foreign_key => :uid, :primary_key => :uid
   has_many :clicks
@@ -7,7 +18,6 @@ class Site < ActiveRecord::Base
   validates :domain, uniqueness: { case_sensititve: false, allow_blank: true }
   validate :domain_isnt_updog
   validate :domain_is_a_subdomain
-  validate :user_has_less_than_5_sites
   before_validation :namify
 
   def to_param
@@ -30,19 +40,41 @@ class Site < ActiveRecord::Base
       path = env['PATH_INFO']
     end
     path = URI.unescape(path)
-    Rails.cache.fetch("#{cache_key}/#{path}", expires_in: 30.seconds) do
+    expires_in = self.creator.is_pro?  ? 5.seconds : 30.seconds
+    Rails.cache.fetch("#{cache_key}/#{path}", expires_in: expires_in) do
       path = path + 'index.html' if path == '/'
       document_root = self.document_root || ''
       file_path = self.name + '/' + document_root + '/' + path
       file_path = file_path.gsub(/\/+/,'/')
-      client.get_file( file_path ).html_safe
+      oat = client.get_file( file_path ).html_safe
+      if file_path.match(/\.(md|markdown)$/) && !env['QUERY_STRING'].match(/raw/) && self.creator.is_pro? && self.render_markdown
+	oat = markdown(oat)
+      end
+      oat
     end
   end
 
-  def user_has_less_than_5_sites
-    if self.user && self.user.sites.length > 4
-      errors.add(:number_of_sites, "can't be greater than 5")
-    end
+  def markdown content
+    render_options = {
+      filter_html:     true,
+      hard_wrap:       true,
+      link_attributes: { rel: 'nofollow' },
+      with_toc_data:      true
+    }
+    renderer = HTMLR.new(render_options)
+
+    extensions = {
+      autolink:           true,
+      fenced_code_blocks: true,
+      lax_spacing:        true,
+      no_intra_emphasis:  true,
+      strikethrough:      true,
+      superscript:        true
+    }
+    md = Redcarpet::Markdown.new(renderer, extensions).render(content).html_safe
+    preamble = "<!doctype html><html><head><meta name='viewport' content='width=device-width;'><meta charshet='utf-8'><link rel='stylesheet' type='text/css' href='/markdown.css'></head><body>"
+    footer = "</body></html>"
+    (preamble + md + footer).html_safe
   end
 
   def domain_isnt_updog

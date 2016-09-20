@@ -1,4 +1,10 @@
 <div class='wrapper'>
-  <h2>Edit <%= @site.name %></h2>
+  <h2><%= @site.name %> settings</h2>
   <%= render 'form' %>
+  <br>
+  <hr>
+  <br>
+  <br>
+  <a data-method="delete" rel="nofollow" href='<%= site_path(@site) %>' class='btn-delete'><i class="fa fa-times"></i>
+  Delete <%= @site.name %></a>
 </div>

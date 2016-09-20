@@ -1,55 +1,80 @@
 <div class='wrapper'>
   <h2>Pricing</h2>
-  <h1 class='js-fit'>Totally</h1>
-  <h1 class='js-fit'>Freakin’</h1>
-  <h1 class='js-fit'>Free.</h1>
-
   <div class='frhul'>
-    <h2>But Seriously...</h2>
-    <p>This site costs <strong>$269.77</strong> to maintain annually. Here's the cost breakdown:</p>
     <table>
       <thead>
 	<tr>
-	  <th>Item</th>
-	  <th>Annual Cost</th>
+	  <th>Basic</th>
+	  <th>Pro</th>
 	</tr>
       </thead>
       <tbody>
 	<tr>
-	  <td>updog.co domain</td>
-	  <td>$22.99</td>
+	  <td>1 Site</td>
+	  <td>Unlimited Sites</td>
 	</tr>
 	<tr>
-	  <td>updog.co domain WHOIS guard</td>
-	  <td>$2.88</td>
+	  <td>30 second cache time</td>
+	  <td>5 second cache time</td>
 	</tr>
 	<tr>
-	  <td>SSL Certificate (https://)</td>
-	  <td>$99.90</td>
+	  <td>Free SSL for *.updog.co domains</td>
+	  <td>Free SSL for any domain</td>
 	</tr>
 	<tr>
-	  <td>DigitalOcean Droplet</td>
-	  <td>$120.00</td>
+	  <td class='no'>No custom document root</td>
+	  <td>Custom document root</td>
 	</tr>
 	<tr>
-	  <td>DigitalOcean Droplet Backups</td>
-	  <td>$24.00</td>
+	  <td class='no'>No support for Markdown Rendering</td>
+	  <td>Support for Markdown Rendering</td>
 	</tr>
 	<tr>
-	  <td>Total Annual Cost</td>
-	  <td>$269.77</td>
+	  <td>I will help you transfer your site from a web host.</td>
+	  <td>I will help you transfer your site from a web host.</td>
 	</tr>
+  <% if @current_user %>
+	<tr>
+      <% if @subscriptions.any? %>
+      <td>
+        <%= link_to "Downgrade to this plan", subscription_path(@current_user.subscriptions.first), method: :delete %>
+      </td>
+      <td>
+        <form action="/subscriptions/update_card" method="POST">
+          <script
+          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="<%= ENV['stripe_publishable_key'] %>"
+          data-panel-label="Update Card Details"
+          data-label="Update Card Details"
+          data-allow-remember-me=false
+          data-locale="auto">
+          </script>
+        </form>
+      </td>
+      <% else %>
+      <td>
+        Free (as in beer)
+      </td>
+      <td>
+  	    <%= form_tag('/checkout') do %>
+  	    <script src="https://checkout.stripe.com/checkout.js"
+  		    class= "stripe-button"
+  		    data-key="<%= ENV['stripe_publishable_key'] %>"
+  		    data-amount=500
+  		    data-email="jesse@jshawl.com"
+  		    data-currency='USD'
+  	      ></script>
+  	    <% end %>
+      <% end %>
+	  </td>
+	</tr>
+  <% else %>
+  <tr>
+    <td>Free (as in beer)</td>
+    <td><a href='/auth/dropbox' class='dropbox'><span class='fa fa-dropbox'></span> Log In to Upgrade</a></td>
+  </tr>
+  <% end %>
       </tbody>
     </table>
-    <p>Donations are not required but very much appreciated!</p>
-    <form class='center' action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-    <input type="hidden" name="cmd" value="_s-xclick">
-    <input type="hidden" name="hosted_button_id" value="F4RQ5WE98YPZN">
-    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-    </form>
-    <a class='btn-create' href="mailto:jesse@jshawl.com?cc=cash@square.com&subject=$5">Donate $5</a>
-    <small>(You can change the amount before confirming donation.)</small>
-
   </div>
 </div>
