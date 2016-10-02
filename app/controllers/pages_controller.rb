@@ -5,7 +5,7 @@ class PagesController < ApplicationController
 
   def pricing
     @current_user = current_user
-    @subscriptions = current_user.subscriptions
+    @subscriptions = current_user && current_user.subscriptions || []
   end
 
   def source

@@ -37,8 +37,9 @@
 	  <td>I will help you transfer your site from a web host.</td>
 	  <td>I will help you transfer your site from a web host.</td>
 	</tr>
+  <% if @current_user %>
 	<tr>
-      <% if @current_user.subscriptions.any? %>
+      <% if @subscriptions.any? %>
       <td>
         <%= link_to "Downgrade to this plan", subscription_path(@current_user.subscriptions.first), method: :delete %>
       </td>
@@ -62,6 +63,12 @@
       <% end %>
 	  </td>
 	</tr>
+  <% else %>
+  <tr>
+    <td>Free (as in beer)</td>
+    <td><a href='/auth/dropbox' class='dropbox'><span class='fa fa-dropbox'></span> Log In to Upgrade</a></td>
+  </tr>
+  <% end %>
       </tbody>
     </table>
   </div>
