@@ -8,6 +8,7 @@ gem 'pry'
 gem 'dalli'
 gem 'gibbon'
 gem 'rails_12factor'
+gem 'stripe'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'

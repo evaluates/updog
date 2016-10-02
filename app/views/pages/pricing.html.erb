@@ -38,11 +38,28 @@
 	  <td>I will help you transfer your site from a web host.</td>
 	</tr>
 	<tr>
-	  <td>
-	    Free (as in beer)
-	  </td>
-	  <td>
-	    <a class='btn-create' href="mailto:jesse@jshawl.com?cc=cash@square.com&subject=$5">$5 / month</a>
+      <% if @current_user.subscriptions.any? %>
+      <td>
+        <%= link_to "Downgrade to this plan", subscription_path(@current_user.subscriptions.first), method: :delete %>
+      </td>
+      <td>
+        You currently have this plan
+      </td>
+      <% else %>
+      <td>
+        Free (as in beer)
+      </td>
+      <td>
+  	    <%= form_tag('/checkout') do %>
+  	    <script src="https://checkout.stripe.com/checkout.js"
+  		    class= "stripe-button"
+  		    data-key="<%= ENV['stripe_publishable_key'] %>"
+  		    data-amount=500
+  		    data-email="jesse@jshawl.com"
+  		    data-currency='USD'
+  	      ></script>
+  	    <% end %>
+      <% end %>
 	  </td>
 	</tr>
       </tbody>
