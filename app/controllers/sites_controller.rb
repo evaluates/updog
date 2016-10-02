@@ -7,6 +7,10 @@ class SitesController < ApplicationController
     @site = Site.find_by( uid: session[:user_id], id: params[:id] )
   end
   def new
+    @sites = Site.where( uid: session[:user_id] )
+    if @sites.length != 0
+      redirect_to root_path
+    end
     @site = Site.new
   end
   def show

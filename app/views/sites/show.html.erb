@@ -1,9 +1,7 @@
 <div class='wrapper'>
   <div class='cf'>
   <div class='left'>
-	<% if @sites.length < 5 %>
-	  <a href='<%= new_site_path %>' class='site-new btn-create'><i class="fa fa-plus-circle"></i> Create New Site (<%= 5 - @sites.length %> left)</a>
-	<% end %>
+    <%= render 'create' %>
   </div>
   <div class='right'>
     <a href='<%= edit_site_path( @site ) %>' class='btn-edit'><i class="fa fa-pencil"></i> Edit</a>
