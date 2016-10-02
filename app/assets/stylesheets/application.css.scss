@@ -230,19 +230,14 @@ table, td, th{
 table{
   width:100%;
 }
-
-td:nth-child(2){
-  text-align:center;
+table td{
+  width:50%;
 }
 
-tbody tr:last-child td{
-  font-weight:bold;
-}
 
-.frhul .btn-create{
-  width:200px;
-  margin:0em auto 1em auto;
-  font-size:1.5em;
+
+.no{
+  color:#aaa;
 }
 
 .frhul small,
