@@ -7,9 +7,10 @@ class ApplicationController < ActionController::Base
   def get_client at
     return DropboxClient.new(at)
   end
-
+  def is_pro?
+    current_user.subscriptions.where('active_until > ?', Time.now).any?
+  end
   def current_user
     User.find_by( access_token: session['access_token'] )
   end
-
 end
