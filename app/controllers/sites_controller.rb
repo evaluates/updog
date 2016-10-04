@@ -8,7 +8,7 @@ class SitesController < ApplicationController
   end
   def new
     @sites = Site.where( uid: session[:user_id] )
-    unless is_pro? || @sites.length == 0
+    unless current_user.is_pro? || @sites.length == 0
       redirect_to root_path
     end
     @site = Site.new

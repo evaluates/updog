@@ -18,4 +18,7 @@ class User < ActiveRecord::Base
 	  user.name = name
 	end
     end
+  def is_pro?
+    self.subscriptions.where('active_until > ?', Time.now).any?
+  end
 end
