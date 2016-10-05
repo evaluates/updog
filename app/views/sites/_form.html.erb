@@ -5,6 +5,7 @@
   <% end %>
   </ul>
 <% end %>
+
 <%= form_for @site do |f| %>
   <%= f.label :name %>
   <div class='suffix-domain'>
@@ -13,6 +14,14 @@
   <br>
   <%= f.label :domain %>
   <%= f.text_field :domain %> (optional) <small data-toggle=".instructions">What is this?</small><br><br>
+  <% if current_user.is_pro? %>
+    <%= f.label :document_root %>
+    <%= f.text_field :document_root, placeholder: '_site/' %> (optional)
+  <% else %>
+    <%= link_to 'Upgrade to Pro to Configure the Document Root', pricing_path, class: 'dropbox'%>
+  <% end %>
+  <br><br>
+
   <%= f.submit 'Save', :class => 'btn-create' %>
   <div class='instructions'>
   <p>Using your own custom domain? To enable this feature:</p>

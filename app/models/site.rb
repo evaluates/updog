@@ -31,19 +31,9 @@ class Site < ActiveRecord::Base
     end
     path = URI.unescape(path)
     Rails.cache.fetch("#{cache_key}/#{path}", expires_in: 30.seconds) do
-      begin
-	if path != '/'
-	  client.get_file( self.name + '/_site/' + path ).html_safe
-	else
-	  client.get_file( self.name + '/_site/index.html' ).html_safe
-	end
-      rescue
-	if path != '/'
-	  client.get_file( self.name + path ).html_safe
-	else
-	  client.get_file( self.name + '/index.html' ).html_safe
-	end
-      end
+      path = path + "index.html" if path == "/"
+      self.document_root ||= ''
+      client.get_file( self.name + '/' + self.document_root +  path ).html_safe
     end
   end
 
