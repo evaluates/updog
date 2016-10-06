@@ -26,7 +26,7 @@ class SitesController < ApplicationController
     request.env["referrer"] = request.referer
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
     if !@site
-     render :html => 'Not Found', :layout => true
+     render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true
      return
     end
     begin
