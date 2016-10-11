@@ -48,6 +48,7 @@ class SitesController < ApplicationController
     extname = File.extname(request.env['PATH_INFO'])[1..-1]
     mime_type = Mime::Type.lookup_by_extension(extname)
     content_type = mime_type.to_s unless mime_type.nil?
+    content_type = 'text/html' if extname == "htm"
     respond_to do |format|
       format.all { render :html => @content, :layout => false, :content_type => content_type }
     end
