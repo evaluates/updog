@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< a8b6c16fcc6f824a684840aedbf66d57aea19196
-ActiveRecord::Schema.define(version: 20161006225750) do
-=======
 ActiveRecord::Schema.define(version: 20161008122006) do
->>>>>>> add 12 factor
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,30 +25,36 @@ ActiveRecord::Schema.define(version: 20161008122006) do
 
   create_table "sites", force: :cascade do |t|
     t.integer  "uid"
-    t.string   "name",            limit: 255
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "subdomain",       limit: 255
-    t.string   "domain",          limit: 255
+    t.string   "subdomain"
+    t.string   "domain"
     t.string   "document_root"
     t.boolean  "render_markdown"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.string   "stripe_id"
+    t.integer  "user_id"
+    t.datetime "active_until"
+  end
+
   create_table "users", force: :cascade do |t|
-    t.string   "provider",     limit: 255
+    t.string   "provider"
     t.integer  "uid"
-    t.string   "name",         limit: 255
-    t.string   "email",        limit: 255
+    t.string   "name"
+    t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "access_token", limit: 255
+    t.string   "access_token"
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string   "item_type",  limit: 255, null: false
-    t.integer  "item_id",                null: false
-    t.string   "event",      limit: 255, null: false
-    t.string   "whodunnit",  limit: 255
+    t.string   "item_type",  null: false
+    t.integer  "item_id",    null: false
+    t.string   "event",      null: false
+    t.string   "whodunnit"
     t.text     "object"
     t.datetime "created_at"
   end
