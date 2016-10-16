@@ -3,6 +3,7 @@ class AddDocumentRootToSites < ActiveRecord::Migration
   def change
     add_column :sites, :document_root, :string
     Site.all.each do |site|
+      p "getting #{site.name}"
       begin
         site.content(DropboxClient.new(site.creator.access_token),
           {
