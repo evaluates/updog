@@ -1,0 +1,50 @@
+    <div class='wrapper'>
+      <div class='posts'>
+<h2>Deploy Middleman Sites</h2>
+<span class="post-meta">Oct 16, 2016</span>
+<div class="notice" style="margin-top:10px;">
+  Note: a Pro membership is required to configure a document root.
+</div>
+
+<p><a href="https://middlemanapp.com/">Middleman</a> is a static site generator using all the
+shortcuts and tools in modern web development.</p>
+
+<p>You can install middleman on your own system, and get up and running with a few
+terminal commands:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ gem install middleman
+$ middleman init my_project_name
+$ middleman serve
+</code></pre>
+</div>
+
+<p>In this post, we’ll walk through the process of deploying a middleman site using
+UpDog, like this one - https://middleman.updog.co/</p>
+
+<h3 id="create-a-new-updog-site">Create A New UpDog Site</h3>
+
+<p>Visit <a href="https://updog.co/new">https://updog.co/new</a> and create a new site.</p>
+
+<p>Once the site has been created, click on “Settings” and update the document root.</p>
+
+<p>By default, middleman compiles all content to a directory named <code class="highlighter-rouge">build</code>. Set this
+as the document root and click “Save”:</p>
+
+<p><img src="https://dl.dropbox.com/s/64iubufgnagztnh/Screenshot%202016-10-16%2016.53.40.png?dl=0" alt="" /></p>
+
+<h3 id="initialize-the-project-in-your-dropbox-folder">Initialize the project in your Dropbox Folder</h3>
+
+<p>Once you’ve created your site, navigate to your site folder in <code class="highlighter-rouge">~/Dropbox/Apps/updog/&lt;name-of-your-site-here&gt;</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ middleman init .
+$ middleman build
+</code></pre>
+</div>
+
+<h3 id="thats-it">That’s it!</h3>
+
+<p>Here’s the completed example: <a href="https://middleman.updog.co/">https://middleman.updog.co/</a></p>
+
+</div>
+
+    </div>
