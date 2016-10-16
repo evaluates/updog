@@ -6,9 +6,75 @@
 </description>
     <link>/news/</link>
     <atom:link href="/news/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 02 Oct 2016 18:58:19 -0400</pubDate>
-    <lastBuildDate>Sun, 02 Oct 2016 18:58:19 -0400</lastBuildDate>
+    <pubDate>Sun, 16 Oct 2016 16:35:28 -0400</pubDate>
+    <lastBuildDate>Sun, 16 Oct 2016 16:35:28 -0400</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>UpDog Now Supports Markdown Rendering</title>
+        <description>&lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;URL='https://jshawl.updog.co/markdown-example.md'&quot; /&gt;
+
+&lt;h1 id=&quot;updog-now-supports-markdown&quot;&gt;UpDog Now Supports Markdown!&lt;/h1&gt;
+
+&lt;p&gt;We’re happy to announce that UpDog now compiles markdown files (any file that ends in &lt;code class=&quot;highlighter-rouge&quot;&gt;.md&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;.markdown&lt;/code&gt;) automatically for Pro members.&lt;/p&gt;
+
+&lt;p&gt;You can view the raw markdown at anytime by appending &lt;code class=&quot;highlighter-rouge&quot;&gt;?raw&lt;/code&gt; to the URL, like this:&lt;/p&gt;
+
+&lt;p&gt;https://jshawl.updog.co/markdown-example.md?raw&lt;/p&gt;
+
+&lt;p&gt;Pretty cool, huh?&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;A CSS File has been provided for you, though you can override these styles by
+adding a file named &lt;code class=&quot;highlighter-rouge&quot;&gt;markdown.css&lt;/code&gt; to your site’s document root.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;updog-syntax-highlights-your-code&quot;&gt;UpDog Syntax-Highlights Your Code&lt;/h2&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// javascript&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-css highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;/* CSS */&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;font-family&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;'Helvetica Neue'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Helvetica&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;line-height&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-rb highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# ruby&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:posts&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We’re using the &lt;a href=&quot;https://github.com/richleland/pygments-css/blob/master/autumn.css&quot;&gt;GitHub Pygments CSS Theme&lt;/a&gt;, but you can include your own &lt;a href=&quot;http://richleland.github.io/pygments-css/&quot;&gt;Pygments theme&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;getting-started&quot;&gt;Getting Started&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Upgrade to a Pro membership
+    &lt;ul&gt;
+      &lt;li&gt;If you haven’t already&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Click on &lt;code class=&quot;highlighter-rouge&quot;&gt;settings&lt;/code&gt; for one of your sites.&lt;/li&gt;
+  &lt;li&gt;Enable markdown rendering.&lt;/li&gt;
+  &lt;li&gt;Check it out in a browser!&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Sun, 16 Oct 2016 00:00:00 -0400</pubDate>
+        <link>/news/updog-now-supports-markdown/</link>
+        <guid isPermaLink="true">/news/updog-now-supports-markdown/</guid>
+        
+        
+      </item>
     
       <item>
         <title>Configuring a Custom Domain with GoDaddy</title>
