@@ -300,3 +300,14 @@ footer{
     }
   }
 }
+
+.domain-status{
+   background: #EC4E42;
+   display:inline-block;
+   height:10px;
+   width:10px;
+   border-radius:100%;
+}
+[data-cname-equals-updog="true"]{
+ background: #54C65D
+}

@@ -11,7 +11,17 @@
     <%= f.text_field :name %>
   </div>
   <br>
-  <%= f.label :domain %>
+  <%= f.label :domain do %>
+    Domain
+    <% unless @site.domain.blank? %>
+      <span class='domain-status' data-cname-equals-updog='<%= @name.include? "updog.co" %>' data-toggle='.domain-lookup'></span>
+    <% end %>
+  <% end %>
+  <div class='domain-lookup' style='display:none;'>
+    <p>
+    <%= @name.to_s %>
+    </p>
+  </div>
   <%= f.text_field :domain %> (optional) <small data-toggle=".instructions">What is this?</small><br><br>
   <% if @site.creator && @site.creator.is_pro? %>
     <%= f.label :document_root %>

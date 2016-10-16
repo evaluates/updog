@@ -48,6 +48,7 @@ GEM
     coffee-script-source (1.10.0)
     dalli (2.7.6)
     diff-lcs (1.2.5)
+    dnsruby (1.59.3)
     domain_name (0.5.20160826)
       unf (>= 0.0.5, < 1.0.0)
     dropbox-sdk (1.6.5)
@@ -201,6 +202,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 4.0.0)
   dalli
+  dnsruby
   dropbox-sdk
   figaro
   gibbon

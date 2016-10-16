@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   post "/versions/:id/revert", to: "versions#revert", as: "revert_version"
   post "/checkout", to: "subscriptions#checkout"
   post "/subscriptions/update_card", to: "subscriptions#update_card"
-  resources :sites, path: ''
+  resources :sites, path: '' do
+    get '/domain_lookup', to: 'sites#domain_lookup'
+  end
 
 end

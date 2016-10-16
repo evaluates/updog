@@ -5,6 +5,17 @@ class SitesController < ApplicationController
   end
   def edit
     @site = Site.find_by( uid: session[:user_id], id: params[:id] )
+    unless @site.domain.blank?
+      begin
+      resolver = Resolv::DNS.new
+      name = resolver.getresource @site.domain, Resolv::DNS::Resource::IN::CNAME
+      @name = @site.domain + '’s CNAME value is ' + name.name.to_s
+      rescue => e
+        @name = e.to_s
+      end
+    else
+      @name = ''
+    end
   end
   def new
     @sites = Site.where( uid: session[:user_id] )
@@ -84,6 +95,8 @@ class SitesController < ApplicationController
 
   def add_to db, path
     db.put_file('/' + @site.name + '/index.html', open(path) )
+  end
+  def domain_lookup
   end
 
   private
