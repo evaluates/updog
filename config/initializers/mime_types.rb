@@ -2,3 +2,4 @@
 
 # Add new mime types for use in respond_to blocks:
 Mime::Type.register "image/x-icon", :ico
+Mime::Type.register "image/svg+xml", :svg
