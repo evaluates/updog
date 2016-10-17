@@ -30,6 +30,9 @@ body{
   max-width:40em;
   margin:auto;
 
+  @media (max-width:40em){
+    width:90%;
+  }
   &:after{
     content:' ';
     display:table;
@@ -308,8 +311,9 @@ footer{
   font-weight:bold;
 }
 
+td .dropbox{
+  display:inline-block;
+}
 td form.checkout input.btn-create{
-  display:block;
-  width:100%;
   font-size:1.2em;
 }
