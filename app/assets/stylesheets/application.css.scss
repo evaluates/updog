@@ -300,3 +300,16 @@ footer{
     }
   }
 }
+
+.pricing td{
+  padding:.5em 1em;
+  background: #007ee5;
+  color:#fff;
+  font-weight:bold;
+}
+
+td form.checkout input.btn-create{
+  display:block;
+  width:100%;
+  font-size:1.2em;
+}

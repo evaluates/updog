@@ -9,6 +9,10 @@
 	</tr>
       </thead>
       <tbody>
+	<tr class='pricing'>
+	  <td>Free!</td>
+	  <td>$5 monthly</td>
+	</tr>
 	<tr>
 	  <td>1 Site</td>
 	  <td>Unlimited Sites</td>
@@ -49,24 +53,42 @@
       </td>
       <% else %>
       <td>
-        Free (as in beer)
       </td>
       <td>
-  	    <%= form_tag('/checkout') do %>
-  	    <script src="https://checkout.stripe.com/checkout.js"
-  		    class= "stripe-button"
-  		    data-key="<%= ENV['stripe_publishable_key'] %>"
-  		    data-amount=500
-  		    data-email="jesse@jshawl.com"
-  		    data-currency='USD'
-  	      ></script>
-  	    <% end %>
+	<form action="/checkout" class='checkout' method="post">
+	  <noscript>You must <a href="http://www.enable-javascript.com" target="_blank">enable JavaScript</a> in your web browser in order to pay via Stripe.</noscript>
+	  <input
+	      type="submit"
+	      value="Pay with card"
+	      data-name="UpDog Pro"
+	      data-key="<%= ENV['stripe_publishable_key'] %>"
+	      data-amount=500
+	      data-email="jesse@jshawl.com"
+	      class='btn-create trigger-checkout'
+	      data-currency='USD'
+	  />
+	  <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+	  <script src="https://checkout.stripe.com/v2/checkout.js"></script>
+	  <script>
+	    $('.trigger-checkout').on('click', function(event) {
+		event.preventDefault();
+		var $button = $(this),
+		    $form = $button.parents('form');
+		var opts = $.extend({}, $button.data(), {
+		    token: function(result) {
+			$form.append($('<input>').attr({ type: 'hidden', name: 'stripeToken', value: result.id })).submit();
+		    }
+		});
+		StripeCheckout.open(opts);
+	    });
+	  </script>
+	</form>
       <% end %>
 	  </td>
 	</tr>
   <% else %>
   <tr>
-    <td>Free (as in beer)</td>
+    <td></td>
     <td><a href='/auth/dropbox' class='dropbox'><span class='fa fa-dropbox'></span> Log In to Upgrade</a></td>
   </tr>
   <% end %>
