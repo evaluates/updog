@@ -67,7 +67,7 @@ class SitesController < ApplicationController
         @db.file_create_folder( @site.name )
         @db.put_file('/' + @site.name + '/index.html', open(Rails.public_path + 'welcome/index.html'))
       rescue => e
-        binding.pry
+	p e
       end
       redirect_to @site
     else

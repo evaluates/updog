@@ -35,14 +35,13 @@ class Site < ActiveRecord::Base
       referer: env["HTTP_REFERER"]
     })
     if env['REQUEST_URI'][-1] == "/" && env['PATH_INFO'] != '/404.html'
-      path = env['PATH_INFO'] + "index.html"
+      path = env['PATH_INFO'] + "/index.html"
     else
       path = env['PATH_INFO']
     end
     path = URI.unescape(path)
     expires_in = self.creator.is_pro?  ? 5.seconds : 30.seconds
     Rails.cache.fetch("#{cache_key}/#{path}", expires_in: expires_in) do
-      path = path + 'index.html' if path == '/'
       document_root = self.document_root || ''
       file_path = self.name + '/' + document_root + '/' + path
       file_path = file_path.gsub(/\/+/,'/')
