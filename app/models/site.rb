@@ -71,7 +71,7 @@ class Site < ActiveRecord::Base
       superscript:        true
     }
     md = Redcarpet::Markdown.new(renderer, extensions).render(content).html_safe
-    preamble = "<!doctype html><html><head><meta name='viewport' content='width=device-width;'><meta charshet='utf-8'><link rel='stylesheet' type='text/css' href='/markdown.css'></head><body>"
+    preamble = "<!doctype html><html><head><meta name='viewport' content='width=device-width'><meta charshet='utf-8'><link rel='stylesheet' type='text/css' href='/markdown.css'></head><body>"
     footer = "</body></html>"
     (preamble + md + footer).html_safe
   end
