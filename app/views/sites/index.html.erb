@@ -1,4 +1,4 @@
-<% if session['access_token'] %>
+<% if current_user %>
   <div class='wrapper'>
       <div class='sites'>
 	<%= render 'create' %>
