@@ -8,4 +8,7 @@ class ContactMailer < ActionMailer::Base
   def notify(cc)
     mail subject: "Updog.co payment failed", to: cc, cc: 'jesse@updog.co'
   end
+  def send_welcome(email)
+    mail subject: "Welcome to UpDog!", to: email, cc: 'jesse@updog.co'
+  end
 end
