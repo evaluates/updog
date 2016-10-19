@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   get '/news/css/main.css', to: 'news#css'
   get '/news/:path', to: 'news#show'
   get '/news', to: 'news#index'
-  resources :subscriptions
+  resources :payments
   match '/*req', to: 'sites#load', constraints: { subdomain: /.+/, domain: 'updog.co' }, via: [:get, :post, :put, :patch, :delete]
   match '/*req', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :post, :put, :patch, :delete]
   match '/*req', to: 'sites#load', constraints: { subdomain: /.+updog-staging/, domain:'herokuapp.com' }, via: [:get, :post, :put, :patch, :delete]
@@ -21,10 +21,8 @@ Rails.application.routes.draw do
   get '/admin', to: 'pages#admin'
   get '/webhook', to: 'webhook#challenge'
   post '/webhook', to: 'webhook#post'
-  post '/subscriptions/hook', to: 'subscriptions#hook'
   post "/versions/:id/revert", to: "versions#revert", as: "revert_version"
-  post "/checkout", to: "subscriptions#checkout"
-  post "/subscriptions/update_card", to: "subscriptions#update_card"
+  post "/checkout", to: "payments#checkout"
   resources :sites, path: ''
 
 end

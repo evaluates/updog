@@ -11,7 +11,7 @@
       <tbody>
 	<tr class='pricing'>
 	  <td>Free!</td>
-	  <td>$5 monthly</td>
+	  <td>$5 one time ever! *</td>
 	</tr>
 	<tr>
 	  <td>1 Site</td>
@@ -33,23 +33,14 @@
 	  <td>We will help you transfer your site from a web host.</td>
 	  <td>We will help you transfer your site from a web host.</td>
 	</tr>
-  <% if @current_user %>
+      <% if @current_user %>
 	<tr>
-      <% if @subscriptions.any? %>
+      <% if current_user.is_pro %>
       <td>
-        <%= link_to "Downgrade to this plan", subscription_path(@current_user.subscriptions.first), method: :delete %>
+	Free!
       </td>
       <td>
-        <form action="/subscriptions/update_card" method="POST">
-          <script
-          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-          data-key="<%= ENV['stripe_publishable_key'] %>"
-          data-panel-label="Update Card Details"
-          data-label="Update Card Details"
-          data-allow-remember-me=false
-          data-locale="auto">
-          </script>
-        </form>
+	Thank you for upgrading to Pro!
       </td>
       <% else %>
       <td>
@@ -63,7 +54,6 @@
 	      data-name="UpDog Pro"
 	      data-key="<%= ENV['stripe_publishable_key'] %>"
 	      data-amount=500
-	      data-email="jesse@jshawl.com"
 	      class='btn-create trigger-checkout'
 	      data-currency='USD'
 	  />
@@ -94,5 +84,8 @@
   <% end %>
       </tbody>
     </table>
+    <p>* We offer a no-questions-asked refund policy on all purchases. <a href='/contact'>Contact us</a> at any time
+    if you'd like your money back.
+    </p>
   </div>
 </div>

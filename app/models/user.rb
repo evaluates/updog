@@ -1,6 +1,5 @@
 class User < ActiveRecord::Base
   has_many :sites, :foreign_key => :uid, :primary_key => :uid
-  has_many :subscriptions
   def self.subscribe email
     begin
       gibbon = Gibbon::Request.new(api_key: ENV['mailchimp_api_key'])
@@ -10,16 +9,13 @@ class User < ActiveRecord::Base
     end
   end
   def self.create_with_omniauth( email, uid, name )
-	self.subscribe email
-	ContactMailer.send_welcome(email).deliver_now!
-	create! do |user|
-	  user.email = email
-	  user.provider = 'dropbox'
-	  user.uid = uid
-	  user.name = name
-	end
-    end
-  def is_pro?
-    self.subscriptions.where('active_until > ?', Time.now).any?
+  	self.subscribe email
+  	ContactMailer.send_welcome(email).deliver_now!
+  	create! do |user|
+  	  user.email = email
+  	  user.provider = 'dropbox'
+  	  user.uid = uid
+  	  user.name = name
+  	end
   end
 end
