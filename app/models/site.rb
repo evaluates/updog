@@ -35,7 +35,7 @@ class Site < ActiveRecord::Base
       referer: env["HTTP_REFERER"]
     })
     if env['REQUEST_URI'][-1] == "/" && env['PATH_INFO'] != '/404.html'
-      path = env['PATH_INFO'] + "index.html"
+      path = env['PATH_INFO'] + "/index.html"
     else
       path = env['PATH_INFO']
     end
