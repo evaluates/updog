@@ -11,4 +11,9 @@ class ContactMailer < ActionMailer::Base
   def send_welcome(email)
     mail subject: "Welcome to UpDog!", to: email, bcc: 'jesse@updog.co'
   end
+  def receipt(email, id)
+    @id = id
+    @time = Time.now
+    mail subject: "UpDog Payment Receipt", to: email
+  end
 end
