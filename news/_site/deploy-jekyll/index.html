@@ -1,0 +1,48 @@
+    <div class='wrapper'>
+      <div class='posts'>
+<h2>Deploying Jekyll Sites</h2>
+<span class="post-meta">Oct 21, 2016</span>
+<div class="notice" style="margin-top:10px;">
+  Note: a Pro membership is required to configure a document root.
+</div>
+
+<p><a href="https://jekyllrb.com/">Jekyll</a> is a static site generator that transforms
+your plain text into static websites and blogs.</p>
+
+<p>You can install Jekyll on your own system, and get up and running with a few
+terminal commands:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ gem install jekyll
+$ jekyll new my_project_name
+$ jekyll serve
+</code></pre>
+</div>
+
+<p>In this post, we’ll walk through the process of deploying a jekyll site using
+UpDog, like this one - <a href="https://jekyll.updog.co/">https://jekyll.updog.co/</a></p>
+
+<h3 id="create-a-new-updog-site">Create A New UpDog Site</h3>
+
+<p>Visit <a href="https://updog.co/new">https://updog.co/new</a> and create a new site.</p>
+
+<p>Once the site has been created, click on “Settings” and update the document root.</p>
+
+<p>By default, Jekyll compiles all content to a directory named <code class="highlighter-rouge">_site</code>. Set this
+as the document root and click “Save”</p>
+
+<h3 id="initialize-the-project-in-your-dropbox-folder">Initialize the project in your Dropbox Folder</h3>
+
+<p>Once you’ve created your site on UpDog.co, navigate to your site folder in <code class="highlighter-rouge">~/Dropbox/Apps/updog/&lt;name-of-your-site-here&gt;</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ jekyll new .
+$ jekyll build
+</code></pre>
+</div>
+
+<h3 id="thats-it">That’s it!</h3>
+
+<p>Here’s the completed example: <a href="https://jekyll.updog.co/">https://jekyll.updog.co/</a></p>
+
+</div>
+
+    </div>

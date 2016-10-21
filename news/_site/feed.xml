@@ -6,9 +6,59 @@
 </description>
     <link>/news/</link>
     <atom:link href="/news/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 16 Oct 2016 17:01:17 -0400</pubDate>
-    <lastBuildDate>Sun, 16 Oct 2016 17:01:17 -0400</lastBuildDate>
+    <pubDate>Fri, 21 Oct 2016 15:17:12 -0400</pubDate>
+    <lastBuildDate>Fri, 21 Oct 2016 15:17:12 -0400</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Deploying Jekyll Sites</title>
+        <description>&lt;div class=&quot;notice&quot; style=&quot;margin-top:10px;&quot;&gt;
+  Note: a Pro membership is required to configure a document root.
+&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; is a static site generator that transforms
+your plain text into static websites and blogs.&lt;/p&gt;
+
+&lt;p&gt;You can install Jekyll on your own system, and get up and running with a few
+terminal commands:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ gem install jekyll
+$ jekyll new my_project_name
+$ jekyll serve
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In this post, we’ll walk through the process of deploying a jekyll site using
+UpDog, like this one - &lt;a href=&quot;https://jekyll.updog.co/&quot;&gt;https://jekyll.updog.co/&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;create-a-new-updog-site&quot;&gt;Create A New UpDog Site&lt;/h3&gt;
+
+&lt;p&gt;Visit &lt;a href=&quot;https://updog.co/new&quot;&gt;https://updog.co/new&lt;/a&gt; and create a new site.&lt;/p&gt;
+
+&lt;p&gt;Once the site has been created, click on “Settings” and update the document root.&lt;/p&gt;
+
+&lt;p&gt;By default, Jekyll compiles all content to a directory named &lt;code class=&quot;highlighter-rouge&quot;&gt;_site&lt;/code&gt;. Set this
+as the document root and click “Save”&lt;/p&gt;
+
+&lt;h3 id=&quot;initialize-the-project-in-your-dropbox-folder&quot;&gt;Initialize the project in your Dropbox Folder&lt;/h3&gt;
+
+&lt;p&gt;Once you’ve created your site on UpDog.co, navigate to your site folder in &lt;code class=&quot;highlighter-rouge&quot;&gt;~/Dropbox/Apps/updog/&amp;lt;name-of-your-site-here&amp;gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ jekyll new .
+$ jekyll build
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;thats-it&quot;&gt;That’s it!&lt;/h3&gt;
+
+&lt;p&gt;Here’s the completed example: &lt;a href=&quot;https://jekyll.updog.co/&quot;&gt;https://jekyll.updog.co/&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 21 Oct 2016 00:00:00 -0400</pubDate>
+        <link>/news/deploy-jekyll/</link>
+        <guid isPermaLink="true">/news/deploy-jekyll/</guid>
+        
+        
+      </item>
     
       <item>
         <title>UpDog Now Supports Markdown Rendering</title>
