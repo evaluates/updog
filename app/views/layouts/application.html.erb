@@ -19,7 +19,7 @@
   <h1><a href='/'><span>&#10145;</span> UpDog</a></h1>
   <nav>
   <a href='/news'>News</a>
-  <a href='/source'>View Source</a>
+  <a href='/contact'>Contact Us</a>
   <a href='/pricing'>Pricing</a>
     <% if session[:user_name] %>
 	<%= link_to 'Logout &nbsp;'.html_safe + session[:user_name], '/logout' %>
@@ -44,7 +44,7 @@
 <footer>
   <div class='wrapper'>
    &copy; UpDog <%= DateTime.now.strftime("%Y") %> | 
-   <%= link_to "Contact Us", contact_path %> | 
+   <%= link_to "View Source", '/source' %> | 
    <a href='https://docs.google.com/forms/d/e/1FAIpQLSffDieMhqaIffL0luVG__kCQnivQZc9ai1rWUkQHRv2LwyWhA/viewform'>Feedback</a>
   </div>
 </footer>

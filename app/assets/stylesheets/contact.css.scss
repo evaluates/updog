@@ -5,6 +5,7 @@ textarea{
   margin-top:.5em;
   padding:.5em;
   border: 1px solid #ccc;
+  box-sizing:border-box;
 }
 
 input[type="email"]{
