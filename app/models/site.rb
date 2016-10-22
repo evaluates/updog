@@ -1,13 +1,5 @@
-require 'redcarpet'
+require 'kramdown'
 require 'rouge'
-require 'rouge/plugins/redcarpet'
-
-class HTMLR < Redcarpet::Render::HTML
-    include Rouge::Plugins::Redcarpet
-    def block_code(code, language)
-      Rouge.highlight(code, language || 'text', 'html')
-    end
-end
 
 class Site < ActiveRecord::Base
   belongs_to :user, :foreign_key => :uid, :primary_key => :uid
@@ -54,23 +46,12 @@ class Site < ActiveRecord::Base
   end
 
   def markdown content
-    render_options = {
-      filter_html:     true,
-      hard_wrap:       true,
-      link_attributes: { rel: 'nofollow' },
-      with_toc_data:      true
-    }
-    renderer = HTMLR.new(render_options)
-
-    extensions = {
-      autolink:           true,
-      fenced_code_blocks: true,
-      lax_spacing:        true,
-      no_intra_emphasis:  true,
-      strikethrough:      true,
-      superscript:        true
-    }
-    md = Redcarpet::Markdown.new(renderer, extensions).render(content).html_safe
+    md = Kramdown::Document.new(content,
+      input: 'GFM',
+      syntax_highlighter: 'rouge',
+      syntax_highlighter_opts: {
+	formatter: Rouge::Formatters::HTML
+    }).to_html
     preamble = "<!doctype html><html><head><meta name='viewport' content='width=device-width'><meta charshet='utf-8'><link rel='stylesheet' type='text/css' href='/markdown.css'></head><body>"
     footer = "</body></html>"
     (preamble + md + footer).html_safe

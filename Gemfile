@@ -8,7 +8,7 @@ gem 'pry'
 gem 'dalli'
 gem 'gibbon'
 gem 'rails_12factor'
-gem 'redcarpet'
+gem 'kramdown'
 gem 'rouge'
 gem 'stripe'
 
