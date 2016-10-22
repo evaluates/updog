@@ -37,9 +37,9 @@ class SitesController < ApplicationController
       if err.to_s == "Path is a directory"
 	return redirect_to request.env['REQUEST_URI'] + "/"
       end
-      if err.to_s == "File not found"
+      if err.to_s == "File not found" || err.to_s == "File has been deleted"
 	if request.env['PATH_INFO'] == '/markdown.css'
-	  @content = File.read(Rails.root + '/public/markdown.css')
+	  @content = File.read(Rails.root.to_s + '/public/md.css').html_safe
 	else
 	  request.env['PATH_INFO'] = "/404.html"
 	  begin
