@@ -46,7 +46,7 @@ class Site < ActiveRecord::Base
   end
 
   def markdown content
-    md = Kramdown::Document.new(content,
+    md = Kramdown::Document.new(content.force_encoding('utf-8'),
       input: 'GFM',
       syntax_highlighter: 'rouge',
       syntax_highlighter_opts: {
