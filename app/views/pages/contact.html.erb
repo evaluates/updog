@@ -3,9 +3,9 @@
   <form method='post'>
     <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
     <label for='email'>Email Address</label>
-    <input id='email' name='email' type='email' placeholder="jane@doe.com">
+    <input required id='email' name='email' type='email' placeholder="jane@doe.com" value='<%= params[:email] %>'>
     <label for='message'>Your Message</label>
-    <textarea id='message' name='content'></textarea>
+    <textarea id='message' name='content'><%= params[:content] %></textarea>
     <button class='btn-create'>Submit</button>
   </form>
 </div>
