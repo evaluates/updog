@@ -9,7 +9,6 @@ class Site < ActiveRecord::Base
   validates :name, presence: true
   validates :domain, uniqueness: { case_sensititve: false, allow_blank: true }
   validate :domain_isnt_updog
-  validate :domain_is_a_subdomain
   before_validation :namify
 
   def to_param
@@ -60,12 +59,6 @@ class Site < ActiveRecord::Base
   def domain_isnt_updog
     if self.domain =~ /updog\.co/
       errors.add(:domain, "can't contain updog.co")
-    end
-  end
-
-  def domain_is_a_subdomain
-    if self.domain && self.domain != "" && self.domain !~ /\w+\.[\w-]+\.\w+/
-      errors.add(:domain, "must have a subdomain like www.")
     end
   end
 

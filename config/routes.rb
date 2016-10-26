@@ -1,8 +1,23 @@
+def load? request
+    request.env['SERVER_NAME'] == 'localhost' || request.env['SERVER_NAME'] == 'updog.co'
+end
+class RequestConstraint
+  def matches? request
+    load? request
+  end
+end
+
+class LoadConstraint
+  def matches? request
+    !load? request
+  end
+end
+
 Rails.application.routes.draw do
   match 'auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
-  match '/', to: 'sites#load', constraints: { subdomain: /.+/, domain:'updog.co' }, via: [:get, :post, :put, :patch, :delete]
-  match '/', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :post, :put, :patch, :delete]
-  match '/', to: 'sites#load', constraints: { subdomain: /.+updog-staging/, domain:'herokuapp.com' }, via: [:get, :post, :put, :patch, :delete]
+  match '/', to: 'sites#index', constraints: RequestConstraint.new, via: [:get,:post,:put,:patch,:delete]
+  match '/', to: 'sites#load', via: [:get, :post, :put, :patch, :delete]
+  match '/*req', to: 'sites#load', constraints: LoadConstraint.new, via: [:get, :post, :put, :patch, :delete]
   root 'sites#index'
   get '/logout', to: 'sessions#destroy'
   get '/auth/dropbox', to: 'sessions#new'
@@ -10,9 +25,6 @@ Rails.application.routes.draw do
   get '/news/:path', to: 'news#show'
   get '/news', to: 'news#index'
   resources :payments
-  match '/*req', to: 'sites#load', constraints: { subdomain: /.+/, domain: 'updog.co' }, via: [:get, :post, :put, :patch, :delete]
-  match '/*req', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :post, :put, :patch, :delete]
-  match '/*req', to: 'sites#load', constraints: { subdomain: /.+updog-staging/, domain:'herokuapp.com' }, via: [:get, :post, :put, :patch, :delete]
   get '/about', to: 'pages#about'
   get '/source', to: 'pages#source'
   get '/contact', to: 'pages#contact'
@@ -24,5 +36,4 @@ Rails.application.routes.draw do
   post "/versions/:id/revert", to: "versions#revert", as: "revert_version"
   post "/checkout", to: "payments#checkout"
   resources :sites, path: ''
-
 end
