@@ -26,6 +26,10 @@ class SessionsController < ApplicationController
     email = @db.account_info['email']
     uid = @db.account_info['uid']
     user = User.find_by_provider_and_uid('dropbox', user_id) || User.create_with_omniauth(email, uid, name)     
+    if user.blacklisted?
+      user.destroy
+      raise 'An error has occured'
+    end
     session[:user_id] = uid
     session[:access_token] = access_token
     session[:user_name] = name

@@ -18,4 +18,9 @@ class User < ActiveRecord::Base
   	  user.name = name
   	end
   end
+  def blacklisted?
+    email_without_dots = self.email.gsub(/\./,'')
+    ENV['blacklist'] ||= ''
+    ENV['blacklist'].split(',').include? email_without_dots
+  end
 end
