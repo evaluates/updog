@@ -13,6 +13,9 @@ class PagesController < ApplicationController
   def contact
   end
 
+  def thanks
+  end
+
   def contact_create
     errors = []
     if params[:email].blank?

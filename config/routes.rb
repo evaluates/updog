@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get '/source', to: 'pages#source'
   get '/contact', to: 'pages#contact'
   post '/contact', to: 'pages#contact_create'
+  get '/thanks', to: 'pages#thanks'
   get '/pricing', to: 'pages#pricing'
   get '/admin', to: 'pages#admin'
   get '/webhook', to: 'webhook#challenge'
