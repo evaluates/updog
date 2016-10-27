@@ -43,7 +43,7 @@ class PagesController < ApplicationController
         @users[time] ||= []
         @users[time] << user
       end
-      @users = @users
+      @users = @users.reverse
     else
       redirect_to root_path
     end
