@@ -5,6 +5,22 @@ class PagesController < ApplicationController
 
   def pricing
     @current_user = current_user
+    @paypal_url = paypal_url
+  end
+
+  def paypal_url
+    values = {
+      :business => 'jesse-seller@jshawl.com',
+      :cmd => '_cart',
+      :upload => 1,
+      :return => "http://localhost:3000/",
+      :invoice => Time.now.to_i,
+      "amount_1" => 5,
+      "item_name_1" => "UpDog Pro",
+      "item_number_1" => 1,
+      "quantity_1" => 1
+    }
+    "https://www.sandbox.paypal.com/cgi-bin/webscr?" + values.to_query
   end
 
   def source
