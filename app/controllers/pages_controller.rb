@@ -10,11 +10,12 @@ class PagesController < ApplicationController
 
   def paypal_url
     values = {
-      :business => 'jesse-seller@jshawl.com',
+      :business => 'jesse-buyer@jshawl.com',
       :cmd => '_cart',
       :upload => 1,
       :return => "http://localhost:3000/",
-      :invoice => Time.now.to_i,
+      :notify_url => "http://acecb659.ngrok.io/payment_notifications",
+      :invoice => current_user.id,
       "amount_1" => 5,
       "item_name_1" => "UpDog Pro",
       "item_number_1" => 1,
