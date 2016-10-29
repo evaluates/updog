@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get '/news/:path', to: 'news#show'
   get '/news', to: 'news#index'
   resources :payments
+  resources :payment_notifications, only: [:create]
   match '/*req', to: 'sites#load', constraints: { subdomain: /.+/, domain: 'updog.co' }, via: [:get, :post, :put, :patch, :delete]
   match '/*req', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :post, :put, :patch, :delete]
   match '/*req', to: 'sites#load', constraints: { subdomain: /.+updog-staging/, domain:'herokuapp.com' }, via: [:get, :post, :put, :patch, :delete]
@@ -25,5 +26,4 @@ Rails.application.routes.draw do
   post "/versions/:id/revert", to: "versions#revert", as: "revert_version"
   post "/checkout", to: "payments#checkout"
   resources :sites, path: ''
-
 end
