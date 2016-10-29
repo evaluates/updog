@@ -10,18 +10,18 @@ class PagesController < ApplicationController
 
   def paypal_url
     values = {
-      :business => 'jesse-buyer@jshawl.com',
+      :business => 'jesse@updog.co',
       :cmd => '_cart',
       :upload => 1,
-      :return => "http://localhost:3000/",
-      :notify_url => "http://acecb659.ngrok.io/payment_notifications",
+      :return => ENV['paypal_return'],
+      :notify_url => ENV['paypal_notify'],
       :invoice => current_user.id,
       "amount_1" => 5,
       "item_name_1" => "UpDog Pro",
       "item_number_1" => 1,
       "quantity_1" => 1
     }
-    "https://www.sandbox.paypal.com/cgi-bin/webscr?" + values.to_query
+    ENV['paypal_url'] + values.to_query
   end
 
   def source
