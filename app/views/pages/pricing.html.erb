@@ -74,8 +74,10 @@
 	  </script>
 	</form>
 	or<br>
-	<%= link_to @paypal_url do %>
-	  <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/buy-logo-medium.png" alt="Buy now with PayPal" />
+	<%= form_tag @paypal_url do %>
+	   <%= hidden_field_tag :cmd, "_s-xclick" %>
+	   <%= hidden_field_tag :encrypted, @encrypted %>
+	  <input type='image' src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/buy-logo-medium.png" alt="Buy now with PayPal" />
 	<% end %>
       <% end %>
 	  </td>
