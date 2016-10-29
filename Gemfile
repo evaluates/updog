@@ -9,6 +9,7 @@ gem 'dalli'
 gem 'gibbon'
 gem 'rails_12factor'
 gem 'kramdown'
+gem 'remote_syslog_logger'
 gem 'rouge'
 gem 'stripe'
 
