@@ -16,8 +16,6 @@ Rails.application.configure do
    :tls                  => true,
    :enable_starttls_auto => true
   }
-  config.logger = RemoteSyslogLogger.new('logs4.papertrailapp.com', 51437)
-
 
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
