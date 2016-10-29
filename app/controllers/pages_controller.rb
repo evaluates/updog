@@ -12,6 +12,7 @@ class PagesController < ApplicationController
   end
 
   def paypal_encrypted
+    id = current_user ? current_user.id : 0
     values = {
       :business => 'jesse@updog.co',
       :cmd => '_cart',
@@ -19,7 +20,7 @@ class PagesController < ApplicationController
       :return => ENV['paypal_return'],
       :notify_url => ENV['paypal_notify'],
       :cert_id => ENV['paypal_cert_id'],
-      :invoice => current_user.id,
+      :invoice => id,
       "amount_1" => 5,
       "item_name_1" => "UpDog Pro",
       "item_number_1" => 1,
