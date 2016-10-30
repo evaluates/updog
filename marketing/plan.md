@@ -90,6 +90,11 @@ worthwhile to read / interact with / buy from.
 
 ### My Message To My Target Market
 
+You know how publishing your own website requires a domain name, a hosting account,
+a way to connect them, and a way to get your files up there? Well what we do is
+provide all four of those for a one-time fee, with the convenience of Dropbox 
+syncing.
+
 ## During (Lead)
 
 ## After (Customer)
