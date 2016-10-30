@@ -83,6 +83,19 @@ class SitesController < ApplicationController
     end
   end
 
+  def send_contact
+    @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
+    return redirect_to :back unless @site.creator.is_pro
+    email = @site.creator.email
+    @input = params.except(:action, :controller, :redirect)
+    ContactMailer.user_mailer(email, @site.link, @input).deliver_now!
+    if params[:redirect]
+      redirect_to params[:redirect]
+    else
+      redirect_to :back
+    end
+  end
+
   def add_to db, path
     db.put_file('/' + @site.name + '/index.html', open(path) )
   end

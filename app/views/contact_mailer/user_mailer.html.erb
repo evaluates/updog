@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name='viewport' content='width=device-width'>
+  </head>
+<body style='max-width:100%'>
+  <% style = 'border-collapse:collapse; border: 1px solid #ccc;padding:.5em 1em;' %>
+  You have a new message from <%= @link %>:<br><br>
+  <table style='<%= style %>width:100%;'>
+  <% @input.each do |key, value| %>
+    <tr>
+      <td style='width:25%;<%= style %>'><strong><%= key %></strong></td>
+      <td style='width:75%; <%= style %>'><%= value %></td>
+    </tr>
+  <% end %>
+  </table>
+</body>
+</html>

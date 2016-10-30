@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
   match 'auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
-  match '/', to: 'sites#load', constraints: { subdomain: /.+/, domain:'updog.co' }, via: [:get, :post, :put, :patch, :delete]
-  match '/', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :post, :put, :patch, :delete]
-  match '/', to: 'sites#load', constraints: { subdomain: /.+updog-staging/, domain:'herokuapp.com' }, via: [:get, :post, :put, :patch, :delete]
+  match '/', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :put, :patch, :delete]
+  match '/*req', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :put, :patch, :delete]
+  match '/', to: 'sites#send_contact', constraints: { subdomain: /.+/}, via: [:post]
+  match '/*req', to: 'sites#send_contact', constraints: { subdomain: /.+/}, via: [:post]
   root 'sites#index'
   get '/logout', to: 'sessions#destroy'
   get '/auth/dropbox', to: 'sessions#new'
@@ -11,9 +12,6 @@ Rails.application.routes.draw do
   get '/news', to: 'news#index'
   resources :payments
   resources :payment_notifications, only: [:create]
-  match '/*req', to: 'sites#load', constraints: { subdomain: /.+/, domain: 'updog.co' }, via: [:get, :post, :put, :patch, :delete]
-  match '/*req', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :post, :put, :patch, :delete]
-  match '/*req', to: 'sites#load', constraints: { subdomain: /.+updog-staging/, domain:'herokuapp.com' }, via: [:get, :post, :put, :patch, :delete]
   get '/about', to: 'pages#about'
   get '/source', to: 'pages#source'
   get '/contact', to: 'pages#contact'

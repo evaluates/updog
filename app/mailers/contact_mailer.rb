@@ -16,4 +16,9 @@ class ContactMailer < ActionMailer::Base
     @time = Time.now
     mail subject: "UpDog Payment Receipt", to: email
   end
+  def user_mailer(email, link, input)
+    @input = input
+    @link = link
+    mail subject: "New message from #{link}", to: email, from: "#{link} <jesse@updog.co>"
+  end
 end
