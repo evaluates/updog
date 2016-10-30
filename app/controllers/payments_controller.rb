@@ -7,6 +7,7 @@ class PaymentsController < ApplicationController
 	      :currency => "usd"
       )
       current_user.update!(is_pro: true)
+      current_user.create_upgrading! source: 'stripe'
       flash[:notice] = "Card charged successfully!"
       ContactMailer.receipt(current_user.email, charge[:id]).deliver_now!
       redirect_to '/thanks'
