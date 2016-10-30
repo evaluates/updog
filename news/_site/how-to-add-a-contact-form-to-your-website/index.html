@@ -1,0 +1,85 @@
+    <div class='wrapper'>
+      <div class='posts'>
+<h2>How To Add A Contact Form To Your Website</h2>
+<span class="post-meta">Oct 30, 2016</span>
+<div class="notice" style="margin-top:10px;">
+  Note: a Pro membership is required to use contact forms.
+</div>
+
+<p>In this post, I’ll show you how to add a contact form to your UpDog site, like
+this one:</p>
+
+<p><a href="https://contact-form-example.updog.co/">https://contact-form-example.updog.co/</a></p>
+
+<p>In order to start receiving messages from your site’s visitors, you’ll need to
+add an HTML form. The minimum required code to set this up is:</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">'post'</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;textarea</span> <span class="na">name=</span><span class="s">'message'</span><span class="nt">&gt;&lt;/textarea&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">'submit'</span><span class="nt">&gt;</span>Submit<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre>
+</div>
+
+<h3 id="required-code">Required Code</h3>
+
+<p>The two most important parts of the above code are:</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">'post'</span><span class="nt">&gt;</span>
+</code></pre>
+</div>
+
+<p>which tells UpDog to process a form request instead of loading a file from your
+Dropbox folder.</p>
+
+<p>and</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">'message'</span><span class="nt">&gt;</span>
+</code></pre>
+</div>
+
+<p>Every form input on your site with a <code class="highlighter-rouge">name</code> attribute, will be collected and formatted
+into a table before arriving in your inbox.</p>
+
+<p><img src="https://dl.dropbox.com/s/8v69u1nuchepw3w/Screenshot%202016-10-30%2017.26.23.png?dl=0" alt="" /></p>
+
+<p>You can have as many form inputs as you like.</p>
+
+<h3 id="confirming-a-successful-form-submission">Confirming a Successful Form Submission</h3>
+
+<p>By default, visitors who submit the contact form will be redirected back to the
+page with the contact form.</p>
+
+<p>If instead, you’d like to redirect to a thank you or confirmation page, add a
+hidden input with the name <code class="highlighter-rouge">redirect</code>, like:</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">'hidden'</span> <span class="na">name=</span><span class="s">'redirect'</span> <span class="na">value=</span><span class="s">'/thanks.html'</span><span class="nt">&gt;</span>
+</code></pre>
+</div>
+
+<h3 id="the-complete-code">The Complete Code</h3>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- index.html --&gt;</span>
+<span class="nt">&lt;h1&gt;</span>An Example Contact Form<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">'post'</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;label&gt;</span>Your Email<span class="nt">&lt;/label&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">required</span> <span class="na">type=</span><span class="s">'email'</span> <span class="na">name=</span><span class="s">'email'</span> <span class="na">placeholder=</span><span class="s">'jane@doe.com'</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;label&gt;</span>Your Message<span class="nt">&lt;/label&gt;</span>
+  <span class="nt">&lt;textarea</span> <span class="na">required</span> <span class="na">name=</span><span class="s">'message'</span><span class="nt">&gt;&lt;/textarea&gt;&lt;br&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">'hidden'</span> <span class="na">value=</span><span class="s">'/thanks.html'</span> <span class="na">name=</span><span class="s">'redirect'</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">'submit'</span><span class="nt">&gt;</span>Submit<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre>
+</div>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- thanks.html --&gt;</span>
+<span class="nt">&lt;h1&gt;</span>Thank You!<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;p&gt;</span>Your form was sent successfully.<span class="nt">&lt;/p&gt;</span>
+</code></pre>
+</div>
+
+<p>Questions? <a href="/contact">Contact us</a>.</p>
+
+</div>
+
+    </div>
