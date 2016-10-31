@@ -89,6 +89,7 @@ class SitesController < ApplicationController
     email = @site.creator.email
     @input = params.except(:action, :controller, :redirect)
     ContactMailer.user_mailer(email, @site.link, @input).deliver_now!
+    @site.contacts.create!(params: @input)
     if params[:redirect]
       redirect_to params[:redirect]
     else

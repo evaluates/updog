@@ -4,6 +4,7 @@ require 'rouge'
 class Site < ActiveRecord::Base
   belongs_to :user, :foreign_key => :uid, :primary_key => :uid
   has_many :clicks
+  has_many :contacts
   has_paper_trail
   validates :subdomain, uniqueness: { case_sensititve: false }
   validates :name, presence: true
