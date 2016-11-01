@@ -37,7 +37,6 @@ class PagesController < ApplicationController
   end
 
   def thanks
-    redirect_to '/pricing' unless current_user && current_user.is_pro?
   end
 
   def contact_create
