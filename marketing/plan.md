@@ -92,9 +92,39 @@ worthwhile to read / interact with / buy from.
 
 You know how publishing your own website requires a domain name, a hosting account,
 a way to connect them, and a way to get your files up there? Well what we do is
-provide all four of those for a one-time fee, with the convenience of Dropbox 
-syncing.
+provide all four of those for a one-time fee, with the convenience of Dropbox
+syncing. In fact, one customer was able to publish a website in fewer than 5 minutes.
+
+### The Media I will Use to Reach my Target Market
+
+- Email marketing
+  - Aim for weekly
+- Facebook advertising
+- Google AdSense
 
 ## During (Lead)
+
+### Lead Capture System
+
+Write educational blog posts / pdfs / pocket guides for free about
+DNS, domains, HTML, and CSS.
+
+Social Media - engage with people tweeting about web hosting / dropbox instead of automated.
+
+Order business cards / distribute whenever someone asks what I do.
+
+### Lead Nurturing System
+
+Send weekly blog posts about HTML, CSS, domains and hosting.
+
+### Sales Conversion Strategy
+
+- Add Phone number
+- Add privacy policy and terms of use
+- Offer a double-money back guarantee
+- Track the average duration between signing up and upgrading
+  - contact after sweet spot if not upgraded
+  - can i get names from dropbox api?
+- Add testimonials
 
 ## After (Customer)
