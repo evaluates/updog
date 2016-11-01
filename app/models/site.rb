@@ -77,6 +77,15 @@ class Site < ActiveRecord::Base
       self.subdomain
     end
   end
+  def self.created_today
+    where("created_at > ?", Time.now.beginning_of_day)
+  end
+  def self.popular
+    joins(:clicks).
+    group("sites.id").
+    order("count(clicks.id) DESC").
+    limit(10)
+  end
 
   private
    def  namify

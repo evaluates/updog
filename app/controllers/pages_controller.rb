@@ -58,14 +58,9 @@ class PagesController < ApplicationController
 
   def admin
     if current_user && current_user.email == 'jesseshawl@gmail.com'
-      @users = {}
-      @count = User.all.count
-      User.all.sort_by(&:created_at).reverse.each do |user|
-        time = user.created_at.strftime("%F")
-        @users[time] ||= []
-        @users[time] << user
-      end
-      @users = @users
+      @users = User.created_today
+      @sites = Site.created_today
+      @popular_sites = Site.popular
     else
       redirect_to root_path
     end

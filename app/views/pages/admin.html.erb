@@ -1,9 +1,14 @@
 <div class='wrapper'>
-  <h2>Admin</h2>
-  <% @users.each do |day, users| %>
-    <strong><%= day %>:</strong> <%= users.count %> new users<br>
+  <h2><%= @users.count %> New Users</h2>
+  <% @users.each do |user| %>
+    <%= user.email %> <br>
   <% end %>
-  <ul>
-</ul>
-
+  <h2><%= @sites.length %> New Sites</h2>
+  <% @sites.each do |site| %>
+    <a href='http://<%= site.link %>'>http://<%= site.link %></a> - <%= site.creator.email %><br>
+  <% end %>
+  <h2>Popular Sites</h2>
+  <% @popular_sites.each do |site| %>
+    <a href='http://<%= site.link %>'>http://<%= site.link %></a> - <%= site.creator.email %> - <%= site.clicks.count %> clicks<br>
+  <% end %>
 </div>

@@ -24,4 +24,7 @@ class User < ActiveRecord::Base
     ENV['blacklist'] ||= ''
     ENV['blacklist'].split(',').include? email_without_dots
   end
+  def self.created_today
+    where("created_at > ?", Time.now.beginning_of_day)
+  end
 end
