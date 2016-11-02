@@ -85,15 +85,22 @@ class SitesController < ApplicationController
 
   def send_contact
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
-    return redirect_to :back unless @site.creator.is_pro
-    email = @site.creator.email
-    @input = params.except(:action, :controller, :redirect)
-    ContactMailer.user_mailer(email, @site.link, @input).deliver_now!
-    @site.contacts.create!(params: @input)
-    if params[:redirect]
-      redirect_to params[:redirect]
-    else
-      redirect_to :back
+    begin
+      unless request.env['HTTP_REFERER'].match(@site.domain) || request.env['HTTP_REFERER'].match(@site.subdomain)
+	return render nothing: true
+      end
+      return redirect_to :back unless @site.creator.is_pro
+      email = @site.creator.email
+      @input = params.except(:action, :controller, :redirect)
+      ContactMailer.user_mailer(email, @site.link, @input).deliver_now!
+      @site.contacts.create!(params: @input)
+      if params[:redirect]
+	redirect_to params[:redirect]
+      else
+	redirect_to :back
+      end
+    rescue
+      render nothing: true
     end
   end
 
