@@ -83,6 +83,7 @@ class Site < ActiveRecord::Base
   def self.popular
     joins(:clicks).
     group("sites.id").
+    where("clicks.created_at > ?", Time.now.beginning_of_day).
     order("count(clicks.id) DESC").
     limit(10)
   end
