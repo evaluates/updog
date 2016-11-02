@@ -6,9 +6,82 @@
 </description>
     <link>/news/</link>
     <atom:link href="/news/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 30 Oct 2016 17:36:40 -0400</pubDate>
-    <lastBuildDate>Sun, 30 Oct 2016 17:36:40 -0400</lastBuildDate>
+    <pubDate>Tue, 01 Nov 2016 18:43:21 -0400</pubDate>
+    <lastBuildDate>Tue, 01 Nov 2016 18:43:21 -0400</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>3 Must Have &amp;lt;meta&gt; Tags</title>
+        <description>&lt;p&gt;Every HTML document consists of two main tags, &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;head&amp;gt;&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;body&amp;gt;&lt;/code&gt;. &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;head&amp;gt;&lt;/code&gt;
+is a place for meta information, like the web page’s title and links to stylesheets
+and javascripts.&lt;/p&gt;
+
+&lt;p&gt;In this post, I’ll share three absolutely must have, couldn’t live without &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;meta&amp;gt;&lt;/code&gt;
+tags. They are:&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'utf-8'&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'viewport'&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'width=device-width'&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'description'&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'A description that appears in search results'&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Let’s break those down…&lt;/p&gt;
+
+&lt;h3 id=&quot;charsetutf-8&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;charset='utf-8'&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;This attribute specifies the &lt;a href=&quot;https://en.wikipedia.org/wiki/Character_encodings_in_HTML#Specifying_the_document.27s_character_encoding&quot;&gt;character encoding&lt;/a&gt; the document should use.&lt;/p&gt;
+
+&lt;p&gt;There are 127 characters available to display on a web page using the default encoding,
+&lt;a href=&quot;http://www.ascii-code.com/&quot;&gt;ascii&lt;/a&gt;, which include the numbers 0-9, the letters
+a-z, their uppercase variants A-Z, and other commonly used symbols: &lt;code class=&quot;highlighter-rouge&quot;&gt;!@#$%^&amp;amp;*()-+{}[]&quot;'&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;If you’re using any other symbol, like &lt;code class=&quot;highlighter-rouge&quot;&gt;é&lt;/code&gt; (in resumé) or curly quotes &lt;code class=&quot;highlighter-rouge&quot;&gt;‘’“”&lt;/code&gt;, the
+browser will try to represent these characters with gibberish symbols: &lt;code class=&quot;highlighter-rouge&quot;&gt;â€˜â€œâ€™â€œ&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;To show the characters you type into your text editor, add&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'utf-8'&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;to the &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;head&amp;gt;&lt;/code&gt; of your HTML document.&lt;/p&gt;
+
+&lt;h3 id=&quot;nameviewport-contentwidthdevice-width&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;name='viewport' content='width=device-width'&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;The viewport the browser’s virtual represenation of a screen’s size. This allows users
+to pinch to zoom and pan to focus on your content.&lt;/p&gt;
+
+&lt;p&gt;Sometimes though, you want to override the default viewport width to take control
+over what exactly your visitors see when they visit your site, especially on mobile
+devices like phones and tablets.&lt;/p&gt;
+
+&lt;p&gt;By adding&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;viewport&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;width=device-width&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;you are telling the browser to force the layout into the provided screensize, rather
+than allowing visitors to zoom into your content. In effect, the browser will
+do the zooming for you.&lt;/p&gt;
+
+&lt;p&gt;Have a look at the following demonstrations:&lt;/p&gt;
+
+&lt;p&gt;With: &lt;img src=&quot;https://dl.dropbox.com/s/irquh1zzzfiz3fd/Screenshot%202016-11-01%2018.20.02.png?dl=0&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Without: &lt;img src=&quot;https://dl.dropbox.com/s/bj4h3s7nl1dlhgh/Screenshot%202016-11-01%2018.20.32.png?dl=0&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;By specifying the viewport’s width, you’re putting your content front and center
+for all visitors.&lt;/p&gt;
+
+&lt;h3 id=&quot;namedescription-contentyour-description-here&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;name='description' content='your description here'&lt;/code&gt;&lt;/h3&gt;
+</description>
+        <pubDate>Tue, 01 Nov 2016 00:00:00 -0400</pubDate>
+        <link>/news/must-have-in-the-head/</link>
+        <guid isPermaLink="true">/news/must-have-in-the-head/</guid>
+        
+        
+      </item>
     
       <item>
         <title>How To Add A Contact Form To Your Website</title>
@@ -447,30 +520,6 @@ like in there.&lt;/p&gt;
         <pubDate>Wed, 06 Apr 2016 00:00:00 -0400</pubDate>
         <link>/news/custom-404-pages/</link>
         <guid isPermaLink="true">/news/custom-404-pages/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Custom Domains</title>
-        <description>&lt;p&gt;You can now add your own domains to your UpDog site.&lt;/p&gt;
-
-&lt;p&gt;To enable this feature:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Log in to your DNS host.&lt;/li&gt;
-  &lt;li&gt;Create a new CNAME record that points to updog.co&lt;/li&gt;
-  &lt;li&gt;Save your changes and wait for the DNS to propagate.&lt;/li&gt;
-  &lt;li&gt;Need help? &lt;a href=&quot;/contact&quot;&gt;Contact us&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Here’s what that process looks like on Digital Ocean:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://dl.dropboxusercontent.com/s/4ksisxk7khatbi7/do.gif?dl=0&quot; alt=&quot;gif of adding CNAME to point to updog.co&quot; /&gt;&lt;/p&gt;
-</description>
-        <pubDate>Tue, 24 Feb 2015 00:00:00 -0500</pubDate>
-        <link>/news/custom-domains/</link>
-        <guid isPermaLink="true">/news/custom-domains/</guid>
         
         
       </item>
