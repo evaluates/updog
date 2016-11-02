@@ -1,0 +1,71 @@
+    <div class='wrapper'>
+      <div class='posts'>
+<h2>3 Must Have &lt;meta> Tags</h2>
+<span class="post-meta">Nov 1, 2016</span>
+<p>Every HTML document consists of two main tags, <code class="highlighter-rouge">&lt;head&gt;</code> and <code class="highlighter-rouge">&lt;body&gt;</code>. <code class="highlighter-rouge">&lt;head&gt;</code>
+is a place for meta information, like the web page’s title and links to stylesheets
+and javascripts.</p>
+
+<p>In this post, I’ll share three absolutely must have, couldn’t live without <code class="highlighter-rouge">&lt;meta&gt;</code>
+tags. They are:</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">'utf-8'</span><span class="nt">&gt;</span>
+<span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">'viewport'</span> <span class="na">content=</span><span class="s">'width=device-width'</span><span class="nt">&gt;</span>
+<span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">'description'</span> <span class="na">content=</span><span class="s">'A description that appears in search results'</span><span class="nt">&gt;</span>
+</code></pre>
+</div>
+
+<p>Let’s break those down…</p>
+
+<h3 id="charsetutf-8"><code class="highlighter-rouge">charset='utf-8'</code></h3>
+
+<p>This attribute specifies the <a href="https://en.wikipedia.org/wiki/Character_encodings_in_HTML#Specifying_the_document.27s_character_encoding">character encoding</a> the document should use.</p>
+
+<p>There are 127 characters available to display on a web page using the default encoding,
+<a href="http://www.ascii-code.com/">ascii</a>, which include the numbers 0-9, the letters
+a-z, their uppercase variants A-Z, and other commonly used symbols: <code class="highlighter-rouge">!@#$%^&amp;*()-+{}[]"'</code></p>
+
+<p>If you’re using any other symbol, like <code class="highlighter-rouge">é</code> (in resumé) or curly quotes <code class="highlighter-rouge">‘’“”</code>, the
+browser will try to represent these characters with gibberish symbols: <code class="highlighter-rouge">â€˜â€œâ€™â€œ</code></p>
+
+<p>To show the characters you type into your text editor, add</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">'utf-8'</span><span class="nt">&gt;</span>
+</code></pre>
+</div>
+
+<p>to the <code class="highlighter-rouge">&lt;head&gt;</code> of your HTML document.</p>
+
+<h3 id="nameviewport-contentwidthdevice-width"><code class="highlighter-rouge">name='viewport' content='width=device-width'</code></h3>
+
+<p>The viewport the browser’s virtual represenation of a screen’s size. This allows users
+to pinch to zoom and pan to focus on your content.</p>
+
+<p>Sometimes though, you want to override the default viewport width to take control
+over what exactly your visitors see when they visit your site, especially on mobile
+devices like phones and tablets.</p>
+
+<p>By adding</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width"</span><span class="nt">&gt;</span>
+</code></pre>
+</div>
+
+<p>you are telling the browser to force the layout into the provided screensize, rather
+than allowing visitors to zoom into your content. In effect, the browser will
+do the zooming for you.</p>
+
+<p>Have a look at the following demonstrations:</p>
+
+<p>With: <img src="https://dl.dropbox.com/s/irquh1zzzfiz3fd/Screenshot%202016-11-01%2018.20.02.png?dl=0" alt="" /></p>
+
+<p>Without: <img src="https://dl.dropbox.com/s/bj4h3s7nl1dlhgh/Screenshot%202016-11-01%2018.20.32.png?dl=0" alt="" /></p>
+
+<p>By specifying the viewport’s width, you’re putting your content front and center
+for all visitors.</p>
+
+<h3 id="namedescription-contentyour-description-here"><code class="highlighter-rouge">name='description' content='your description here'</code></h3>
+
+</div>
+
+    </div>
