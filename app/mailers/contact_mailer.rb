@@ -21,4 +21,10 @@ class ContactMailer < ActionMailer::Base
     @link = link
     mail subject: "New message from #{link}", to: email, from: "#{link} <jesse@updog.co>"
   end
+  def daily_summary
+    @users = User.created_today
+    @sites = Site.created_today
+    @popular_sites = Site.popular
+    mail subject: "UpDog.co Daily Summary"
+  end
 end

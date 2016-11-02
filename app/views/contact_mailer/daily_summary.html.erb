@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name='viewport' content='width=device-width'>
+  </head>
+<body style='max-width:100%'>
+<h2><%= @users.count %> New Users</h2>
+<% @users.each do |user| %>
+  <%= user.email %> <br>
+<% end %>
+<h2><%= @sites.length %> New Sites</h2>
+<% @sites.each do |site| %>
+  <a href='http://<%= site.link %>'>http://<%= site.link %></a> - <%= site.creator.email %><br>
+<% end %>
+<h2>Popular Sites</h2>
+<% @popular_sites.each do |site| %>
+  <a href='http://<%= site.link %>'>http://<%= site.link %></a> - <%= site.creator.email %> - <%= site.clicks_today.count %> clicks<br>
+<% end %>
+</body>
+</html>

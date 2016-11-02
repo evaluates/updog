@@ -87,6 +87,9 @@ class Site < ActiveRecord::Base
     order("count(clicks.id) DESC").
     limit(10)
   end
+  def clicks_today
+    clicks.where('created_at > ?', Time.now.beginning_of_day)
+  end
 
   private
    def  namify

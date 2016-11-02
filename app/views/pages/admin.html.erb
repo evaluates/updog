@@ -9,6 +9,6 @@
   <% end %>
   <h2>Popular Sites</h2>
   <% @popular_sites.each do |site| %>
-    <a href='http://<%= site.link %>'>http://<%= site.link %></a> - <%= site.creator.email %> - <%= site.clicks.count %> clicks<br>
+    <a href='http://<%= site.link %>'>http://<%= site.link %></a> - <%= site.creator.email %> - <%= site.clicks_today.count %> clicks<br>
   <% end %>
 </div>
