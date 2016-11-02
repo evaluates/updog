@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :payments
   resources :payment_notifications, only: [:create]
   get '/about', to: 'pages#about'
+  get '/tos', to: 'pages#tos'
   get '/source', to: 'pages#source'
   get '/contact', to: 'pages#contact'
   post '/contact', to: 'pages#contact_create'
