@@ -6,8 +6,8 @@
 </description>
     <link>/news/</link>
     <atom:link href="/news/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 01 Nov 2016 18:43:21 -0400</pubDate>
-    <lastBuildDate>Tue, 01 Nov 2016 18:43:21 -0400</lastBuildDate>
+    <pubDate>Sat, 05 Nov 2016 09:29:06 -0400</pubDate>
+    <lastBuildDate>Sat, 05 Nov 2016 09:29:06 -0400</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -75,6 +75,19 @@ do the zooming for you.&lt;/p&gt;
 for all visitors.&lt;/p&gt;
 
 &lt;h3 id=&quot;namedescription-contentyour-description-here&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;name='description' content='your description here'&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;The description attribute of the meta tag determines the text displayed in search
+results when visitors search for your site:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://dl.dropbox.com/s/nbv43yomfdwx4vh/Screenshot%202016-11-05%2009.23.47.png?dl=0&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It is important to note that &lt;a href=&quot;https://webmasters.googleblog.com/2009/09/google-does-not-use-keywords-meta-tag.html&quot;&gt;Google does not factor in&lt;/a&gt;
+the description of your site when determining rankings. Despite that, this is
+your first impression to new visitors of your site.&lt;/p&gt;
+
+&lt;p&gt;Without the description, google will display the first sentence of content on the
+given page, which might not be convincing enough for potential visitors to click
+on your link.&lt;/p&gt;
 </description>
         <pubDate>Tue, 01 Nov 2016 00:00:00 -0400</pubDate>
         <link>/news/must-have-in-the-head/</link>
