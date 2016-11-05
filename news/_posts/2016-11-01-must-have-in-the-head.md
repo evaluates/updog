@@ -68,3 +68,16 @@ By specifying the viewport’s width, you’re putting your content front and ce
 for all visitors.
 
 ### `name='description' content='your description here'`
+
+The description attribute of the meta tag determines the text displayed in search
+results when visitors search for your site:
+
+![](https://dl.dropbox.com/s/nbv43yomfdwx4vh/Screenshot%202016-11-05%2009.23.47.png?dl=0)
+
+It is important to note that [Google does not factor in](https://webmasters.googleblog.com/2009/09/google-does-not-use-keywords-meta-tag.html)
+the description of your site when determining rankings. Despite that, this is
+your first impression to new visitors of your site.
+
+Without the description, google will display the first sentence of content on the
+given page, which might not be convincing enough for potential visitors to click
+on your link.
