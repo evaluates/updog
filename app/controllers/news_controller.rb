@@ -3,6 +3,7 @@ class NewsController < ApplicationController
     render file: 'news/_site/index.html'
   end
   def show
-    render file: 'news/_site/'+ params[:path]+'/index.html'
+    file = params[:path] == "feed" ? "feed.xml" : params[:path] + '/index.html'
+    render file: 'news/_site/'+ file
   end
 end
