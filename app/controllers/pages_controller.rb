@@ -1,11 +1,19 @@
 class PagesController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:contact_create]
+  skip_before_action :verify_authenticity_token, only: [:contact_create, :feedback_create]
 
   PAYPAL_CERT_PEM = File.read("#{Rails.root}/certs/paypal_cert.pem")
   APP_CERT_PEM = File.read("#{Rails.root}/certs/app_cert.pem")
   APP_KEY_PEM = File.read("#{Rails.root}/certs/app_key.pem")
 
   def about
+  end
+
+  def feedback
+  end
+  def feedback_create
+    ContactMailer.feedback_create(params).deliver_now!
+    flash[:notice] = "Feedback sent successfully!"
+    redirect_to feedback_path
   end
 
   def tos

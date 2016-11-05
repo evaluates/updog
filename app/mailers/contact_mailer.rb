@@ -27,4 +27,9 @@ class ContactMailer < ActionMailer::Base
     @popular_sites = Site.popular
     mail subject: "UpDog.co Daily Summary"
   end
+  def feedback_create params
+    @how = params[:how]
+    @email = params[:email]
+    mail subject: "UpDog.co Feedback", reply_to: @email
+  end
 end
