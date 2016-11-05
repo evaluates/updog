@@ -9,7 +9,7 @@ class ContactMailer < ActionMailer::Base
     mail subject: "Updog.co payment failed", to: cc, cc: 'jesse@updog.co'
   end
   def send_welcome(email)
-    mail subject: "Welcome to UpDog!", to: email, bcc: 'jesse@updog.co'
+    mail subject: "Welcome to UpDog!", to: email
   end
   def receipt(email, id)
     @id = id
