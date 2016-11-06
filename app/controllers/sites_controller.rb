@@ -16,6 +16,9 @@ class SitesController < ApplicationController
   end
   def show
     @site = Site.find_by( uid: session[:user_id], id: params[:id] )
+    unless @site
+      return render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true, status: 404
+    end
     @sites = current_user && current_user.sites || []
   end
   def destroy
