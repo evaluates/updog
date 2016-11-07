@@ -36,8 +36,8 @@
   <a href='/news'>News</a>
   <a href='/contact'>Contact Us</a>
   <a href='/pricing'>Pricing</a>
-    <% if session[:user_name] %>
-	<%= link_to 'Logout &nbsp;'.html_safe + session[:user_name], '/logout' %>
+    <% if current_user %>
+	<%= link_to 'Logout &nbsp;'.html_safe + current_user.name, '/logout' %>
     <% else %>
       <a href='http://updog.co/auth/dropbox'>Log in</a>
     <% end %>
