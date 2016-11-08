@@ -74,6 +74,7 @@ class PagesController < ApplicationController
     if current_user && current_user.email == 'jesseshawl@gmail.com'
       upgrades = Upgrading.all
       new_users = User.where('created_at > ?', Date.parse('2016-10-17'))
+      pros = User.where(is_pro:true)
       upgrade_times = upgrades.map {|u|
 	u.created_at - u.user.created_at
       }
@@ -83,8 +84,10 @@ class PagesController < ApplicationController
       @revenue = User.where(is_pro: true).count * 5
       @avg_pro_time = upgrade_times.inject{|sum,el| sum + el}.to_f / upgrades.count
       @mean_pro_time = median upgrade_times
-      @pct_pro = ((User.where(is_pro:true).count.to_f / User.all.count.to_f) * 100).round(2)
+      @pct_pro = ((pros.count.to_f / User.all.count.to_f) * 100).round(2)
       @pct_new_pro = ((new_users.where(is_pro:true).count.to_f / new_users.count.to_f) * 100).round(2)
+      @num_users = User.all.count
+      @paying_users = pros.count
     else
       redirect_to root_path
     end
