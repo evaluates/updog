@@ -72,11 +72,27 @@ class PagesController < ApplicationController
 
   def admin
     if current_user && current_user.email == 'jesseshawl@gmail.com'
+      upgrades = Upgrading.all
+      new_users = User.where('created_at > ?', Date.parse('2016-10-17'))
+      upgrade_times = upgrades.map {|u|
+	u.created_at - u.user.created_at
+      }
       @users = User.created_today
       @sites = Site.created_today
       @popular_sites = Site.popular
+      @revenue = User.where(is_pro: true).count * 5
+      @avg_pro_time = upgrade_times.inject{|sum,el| sum + el}.to_f / upgrades.count
+      @mean_pro_time = median upgrade_times
+      @pct_pro = (User.where(is_pro:true).count.to_f / User.all.count.to_f) * 100
+      @pct_new_pro = (new_users.where(is_pro:true).count.to_f / new_users.count.to_f) * 100
     else
       redirect_to root_path
     end
   end
+  def median(array)
+    sorted = array.sort
+    len = sorted.length
+    (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
+  end
+
 end
