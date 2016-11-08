@@ -3,15 +3,15 @@ class Drip
       acct_id = ENV['drip_account']
       campaign_id = ENV['drip_campaign']
       opts = {
-        headers: { 
-	  'User-Agent': 'UpDog (updog.co)',
-	  'Content-Type': 'application/vnd.api+json'
+        headers: {
+	  :'User-Agent' => 'UpDog (updog.co)',
+	  :'Content-Type' => 'application/vnd.api+json'
        },
 	basic_auth: { username: ENV['drip_token']},
 	body: {
-	  "subscribers": [{
-	    "email": email,
-	    "time_zone":"Ameriza/New_York"
+	  :subscribers => [{
+	    email: email,
+	    time_zone: "Ameriza/New_York"
 	  }]
 	}.to_json
       }
@@ -24,14 +24,14 @@ class Drip
       acct_id = ENV['drip_account']
       opts = {
         headers: {
-	  'User-Agent': 'UpDog (updog.co)',
-	  'Content-Type': 'application/vnd.api+json'
+	  :'User-Agent' => 'UpDog (updog.co)',
+	  :'Content-Type' => 'application/vnd.api+json'
        },
 	basic_auth: { username: ENV['drip_token']},
 	body: {
-	  "events": [{
-	    "email": email,
-	    "action": action
+	  events: [{
+	    email: email,
+	    action: action
 	  }]
 	}.to_json
       }
