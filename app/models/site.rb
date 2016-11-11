@@ -12,6 +12,7 @@ class Site < ActiveRecord::Base
   validate :domain_isnt_updog
   validate :domain_is_a_subdomain
   before_validation :namify
+  after_create :notify_drip
 
   def to_param
       "#{id}-#{name.parameterize}"
@@ -92,6 +93,9 @@ class Site < ActiveRecord::Base
   end
 
   private
+  def notify_drip
+    Drip.event self.creator.email, 'created a site'
+  end
    def  namify
     self.name.downcase!
     self.name = self.name.gsub(/[^\w+]/,'-')
