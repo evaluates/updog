@@ -50,6 +50,7 @@ class Site < ActiveRecord::Base
       	  }.to_json
       	}
       }
+      logger.info "Requesting https://#{self.name}.updog.co#{file_path.gsub(self.name+'/','')}"
       res = HTTParty.post(url, opts)
       oat = res.body.html_safe
       oat = "Not found" if oat.match("Invalid authorization value")
