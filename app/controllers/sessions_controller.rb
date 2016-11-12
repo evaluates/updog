@@ -15,10 +15,10 @@ class SessionsController < ApplicationController
       opts = {
         body: {
           code: params[:code],
-	  grant_type: 'authorization_code',
-	  client_id: ENV['db_key'],
-	  client_secret: ENV['db_secret'],
-	  redirect_uri: ENV['db_callback']
+      	  grant_type: 'authorization_code',
+      	  client_id: ENV['db_key'],
+      	  client_secret: ENV['db_secret'],
+      	  redirect_uri: ENV['db_callback']
         }
       }
       res = HTTParty.post(url, opts)
@@ -37,7 +37,7 @@ class SessionsController < ApplicationController
     opts = {
       headers: {
         'Authorization' => "Bearer #{access_token}",
-	'Content-Type' => 'application/json'
+      	'Content-Type' => 'application/json'
       },
       body: {
         account_id: account_id

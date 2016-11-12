@@ -87,8 +87,7 @@ class SitesController < ApplicationController
 	}
 	HTTParty.post(url, opts)
       rescue => e
-	binding.pry
-	p e
+	       p e
       end
       redirect_to @site
     else
