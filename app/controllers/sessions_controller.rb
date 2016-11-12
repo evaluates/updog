@@ -17,7 +17,10 @@ class SessionsController < ApplicationController
     code = params[:code]
     begin
       access_token, user_id, url_state = get_auth.finish(params)
-    rescue Exception
+    rescue => e
+      logger.error "Dropbox Error"
+      logger.error e.message
+      logger.error e.backtrace.join("\n")
       return redirect_to root_url
     end
     session['access_token'] = access_token
