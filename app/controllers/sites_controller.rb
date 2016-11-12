@@ -34,7 +34,7 @@ class SitesController < ApplicationController
      return
     end
     begin
-      @content = @site.content get_client( @site.creator.access_token ), request.env
+      @content = @site.content request.env
     rescue Exception => err
       @content = err
       if err.to_s == "Path is a directory"
@@ -46,7 +46,7 @@ class SitesController < ApplicationController
 	else
 	  request.env['PATH_INFO'] = "/404.html"
 	  begin
-	    @content = @site.content get_client( @site.creator.access_token ), request.env
+	    @content = @site.content request.env
 	  rescue Exception => err
 	    @content = err
 	  end
@@ -64,12 +64,30 @@ class SitesController < ApplicationController
   end
   def create
     @site = Site.new site_params.merge( uid: session[:user_id] )
-    @db = get_client @site.creator.access_token
     if @site.save
       begin
-        @db.file_create_folder( @site.name )
-        @db.put_file('/' + @site.name + '/index.html', open(Rails.public_path + 'welcome/index.html'))
+	url = 'https://api.dropboxapi.com/2/files/create_folder'
+	opts = {
+  	  headers: headers,
+	  body: {
+	    path: @site.name
+	  }.to_json
+	}
+	HTTParty.post(url, opts)
+	url = 'https://content.dropboxapi.com/2/files/upload'
+	opts = {
+  	  headers: {
+	    'Authorization' => "Bearer #{session["access_token"]}",
+	    'Content-Type' =>  'application/octet-stream',
+	    'Dropbox-API-Arg' => {
+	      path: '/' + @site.name + '/index.html',
+	    }.to_json
+	  },
+	  body: File.read(Rails.public_path + 'welcome/index.html')
+	}
+	HTTParty.post(url, opts)
       rescue => e
+	binding.pry
 	p e
       end
       redirect_to @site
@@ -107,11 +125,13 @@ class SitesController < ApplicationController
     end
   end
 
-  def add_to db, path
-    db.put_file('/' + @site.name + '/index.html', open(path) )
-  end
-
   private
+  def headers
+    {
+      'Authorization' => "Bearer #{session["access_token"]}",
+      'Content-Type' => 'application/json'
+    }
+  end
   def site_params
     params.require(:site).permit(:name, :domain, :document_root, :render_markdown)
   end

@@ -22,7 +22,7 @@ class Site < ActiveRecord::Base
     User.find_by( uid: self.uid )
   end
 
-  def content client, env
+  def content env
     self.clicks.create(data:{
       path: env["REQUEST_URI"],
       ip: env["REMOTE_ADDR"],
@@ -37,9 +37,20 @@ class Site < ActiveRecord::Base
     expires_in = self.creator.is_pro?  ? 5.seconds : 30.seconds
     Rails.cache.fetch("#{cache_key}/#{path}", expires_in: expires_in) do
       document_root = self.document_root || ''
-      file_path = self.name + '/' + document_root + '/' + path
+      file_path = '/' + self.name + '/' + document_root + '/' + path
       file_path = file_path.gsub(/\/+/,'/')
-      oat = client.get_file( file_path ).html_safe
+      url = 'https://content.dropboxapi.com/2/files/download'
+      opts = {
+	headers: {
+	  'Authorization' => "Bearer #{self.creator.access_token}",
+	  'Content-Type' => '',
+	  'Dropbox-API-Arg' => {
+	    path: file_path
+	  }.to_json
+	}
+      }
+      res = HTTParty.post(url, opts)
+      oat = res.html_safe
       if file_path.match(/\.(md|markdown)$/) && !env['QUERY_STRING'].match(/raw/) && self.creator.is_pro? && self.render_markdown
 	oat = markdown(oat)
       end
