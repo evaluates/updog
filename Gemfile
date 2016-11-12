@@ -10,6 +10,7 @@ gem 'rails_12factor'
 gem 'kramdown'
 gem 'rouge'
 gem 'stripe'
+gem 'unicorn'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'

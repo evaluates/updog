@@ -22,4 +22,5 @@ test:
 
 production:
   <<: *default
+  username: jesse
   database: updog_production
