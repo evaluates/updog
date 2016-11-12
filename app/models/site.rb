@@ -51,16 +51,12 @@ class Site < ActiveRecord::Base
       	}
       }
       res = HTTParty.post(url, opts)
-      oat = res.html_safe
+      oat = res.body.html_safe
       oat = "Not found" if oat.match("Invalid authorization value")
-      begin
-        if file_path.match(/\.(md|markdown)$/) && !env['QUERY_STRING'].match(/raw/) && self.creator.is_pro? && self.render_markdown
-  	      oat = markdown(oat)
-        end
-        oat
-      rescue
-        "Not Found"
+      if file_path.match(/\.(md|markdown)$/) && !env['QUERY_STRING'].match(/raw/) && self.creator.is_pro? && self.render_markdown
+	      oat = markdown(oat)
       end
+      oat
     end
   end
 

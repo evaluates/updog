@@ -35,22 +35,24 @@ class SitesController < ApplicationController
     end
     begin
       @content = @site.content request.env
+      raise @content if @content["error"]
     rescue Exception => err
       @content = err
       if err.to_s == "Path is a directory"
-	return redirect_to request.env['REQUEST_URI'] + "/"
+	       return redirect_to request.env['REQUEST_URI'] + "/"
       end
-      if err.to_s == "File not found" || err.to_s == "File has been deleted"
-	if request.env['PATH_INFO'] == '/markdown.css'
-	  @content = File.read(Rails.root.to_s + '/public/md.css').html_safe
-	else
-	  request.env['PATH_INFO'] = "/404.html"
-	  begin
-	    @content = @site.content request.env
-	  rescue Exception => err
-	    @content = err
-	  end
-	end
+      if err.to_s.match("not_found")
+      	if request.env['PATH_INFO'] == '/markdown.css'
+      	  @content = File.read(Rails.root.to_s + '/public/md.css').html_safe
+      	else
+      	  request.env['PATH_INFO'] = "/404.html"
+      	  begin
+      	    @content = @site.content request.env
+            raise @content if @content["error"]
+      	  rescue Exception => err
+      	    @content = "Not found"
+      	  end
+      	end
       end
     end
     extname = File.extname(request.env['PATH_INFO'])[1..-1]
