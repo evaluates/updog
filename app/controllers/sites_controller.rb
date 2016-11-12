@@ -66,26 +66,26 @@ class SitesController < ApplicationController
     @site = Site.new site_params.merge( uid: session[:user_id] )
     if @site.save
       begin
-	url = 'https://api.dropboxapi.com/2/files/create_folder'
-	opts = {
-  	  headers: headers,
-	  body: {
-	    path: @site.name
-	  }.to_json
-	}
-	HTTParty.post(url, opts)
-	url = 'https://content.dropboxapi.com/2/files/upload'
-	opts = {
-  	  headers: {
-	    'Authorization' => "Bearer #{session["access_token"]}",
-	    'Content-Type' =>  'application/octet-stream',
-	    'Dropbox-API-Arg' => {
-	      path: '/' + @site.name + '/index.html',
-	    }.to_json
-	  },
-	  body: File.read(Rails.public_path + 'welcome/index.html')
-	}
-	HTTParty.post(url, opts)
+      	url = 'https://api.dropboxapi.com/2/files/create_folder'
+      	opts = {
+        	  headers: headers,
+      	  body: {
+      	    path: @site.name
+      	  }.to_json
+      	}
+      	HTTParty.post(url, opts)
+      	url = 'https://content.dropboxapi.com/2/files/upload'
+      	opts = {
+        	  headers: {
+      	    'Authorization' => "Bearer #{session["access_token"]}",
+      	    'Content-Type' =>  'application/octet-stream',
+      	    'Dropbox-API-Arg' => {
+      	      path: '/' + @site.name + '/index.html',
+      	    }.to_json
+      	  },
+      	  body: File.read(Rails.public_path + 'welcome/index.html')
+      	}
+      	HTTParty.post(url, opts)
       rescue => e
 	       p e
       end

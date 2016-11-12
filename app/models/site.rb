@@ -34,27 +34,33 @@ class Site < ActiveRecord::Base
       path = env['PATH_INFO']
     end
     path = URI.unescape(path)
-    expires_in = self.creator.is_pro?  ? 5.seconds : 30.seconds
+    expires_in = self.creator && self.creator.is_pro?  ? 5.seconds : 30.seconds
     Rails.cache.fetch("#{cache_key}/#{path}", expires_in: expires_in) do
       document_root = self.document_root || ''
       file_path = '/' + self.name + '/' + document_root + '/' + path
       file_path = file_path.gsub(/\/+/,'/')
       url = 'https://content.dropboxapi.com/2/files/download'
+      at = self.creator && self.creator.access_token
       opts = {
-	headers: {
-	  'Authorization' => "Bearer #{self.creator.access_token}",
-	  'Content-Type' => '',
-	  'Dropbox-API-Arg' => {
-	    path: file_path
-	  }.to_json
-	}
+      	headers: {
+      	  'Authorization' => "Bearer #{at}",
+      	  'Content-Type' => '',
+      	  'Dropbox-API-Arg' => {
+      	    path: file_path
+      	  }.to_json
+      	}
       }
       res = HTTParty.post(url, opts)
       oat = res.html_safe
-      if file_path.match(/\.(md|markdown)$/) && !env['QUERY_STRING'].match(/raw/) && self.creator.is_pro? && self.render_markdown
-	oat = markdown(oat)
+      oat = "Not found" if oat.match("Invalid authorization value")
+      begin
+        if file_path.match(/\.(md|markdown)$/) && !env['QUERY_STRING'].match(/raw/) && self.creator.is_pro? && self.render_markdown
+  	      oat = markdown(oat)
+        end
+        oat
+      rescue
+        "Not Found"
       end
-      oat
     end
   end
 
