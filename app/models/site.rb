@@ -36,11 +36,16 @@ class Site < ActiveRecord::Base
     path = URI.unescape(path)
     expires_in = self.creator && self.creator.is_pro?  ? 5.seconds : 30.seconds
     Rails.cache.fetch("#{cache_key}/#{path}", expires_in: expires_in) do
+      folder = self.db_path || '/' + self.name
       document_root = self.document_root || ''
-      file_path = '/' + self.name + '/' + document_root + '/' + path
+      file_path = folder + '/' + document_root + '/' + path
       file_path = file_path.gsub(/\/+/,'/')
       url = 'https://content.dropboxapi.com/2/files/download'
-      at = self.creator && self.creator.access_token
+      if self.db_path
+        at = self.creator && self.creator.full_access_token
+      else
+        at = self.creator && self.creator.access_token
+      end
       opts = {
       	headers: {
       	  'Authorization' => "Bearer #{at}",

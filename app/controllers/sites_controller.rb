@@ -67,6 +67,9 @@ class SitesController < ApplicationController
   def create
     @site = Site.new site_params.merge( uid: session[:user_id] )
     if @site.save
+      if params[:db_path]
+        return redirect_to @site
+      end
       begin
       	url = 'https://api.dropboxapi.com/2/files/create_folder'
       	opts = {
@@ -161,7 +164,7 @@ class SitesController < ApplicationController
     }
   end
   def site_params
-    params.require(:site).permit(:name, :domain, :document_root, :render_markdown)
+    params.require(:site).permit(:name, :domain, :document_root, :render_markdown, :db_path)
   end
   def undo_link
     view_context.link_to("undo", revert_version_path(@site.versions.last), :method => :post)

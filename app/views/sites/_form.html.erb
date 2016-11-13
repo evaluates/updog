@@ -48,67 +48,9 @@
   </ul>
 <% end %>
 <%= form_for @site do |f| %>
-  <div id='db-chooser'>
-    <div class='folder back hidden'>
-      <a href='#'><i class='fa fa-arrow-left'></i> Back</a>
-    </div>
-    <div id='folders'>
-    </div>
-  </div>
-  <script>
-    var token = '<%= current_user.access_token %>'
-    var folders = document.getElementById('folders')
-    var container = document.getElementById('db-chooser')
-    var $back = $(".back")
-    getFolders()
-    function getFolders(path){
-      var path = path || ''
-      folders.innerHTML = '<i class="fa fa-cog"></i>'
-      if(path){
-	$back.attr('data-path', path)
-	$back.removeClass('hidden')
-      }else{
-	$back.addClass('hidden')
-      }
-      $.getJSON('/folders?access_token=' + token + '&path=' + path, function(response){
-	$(".fa-cog").remove()
-	if(!response.length){
-	  folders.appendChild(
-	    view({name: path}, false)
-	  )
-	}
-	response.forEach(function(folder){
-	  folders.appendChild(view(folder))
-	})
-      })
-    }
-    $(container).on("click", ".back",function(event){
-      event.preventDefault()
-      var path = $(this).attr('data-path')
-      path = path.split("/")
-      path.pop()
-      path = path.join("/")
-      getFolders(path)
-    })
-    function view(folder, next){
-      var str = '<div class="folder"><a href="#"><span class="fa fa-folder"></span> ' + folder.name
-      if(next !== false){
-        str += "<span class='fa fa-arrow-right'></span>"
-      }
-      str += "</a></div>"
-      var div = $(str)
-      div.on('click', function(event){
-	event.preventDefault()
-	if(next !== false){
-	  getFolders(folder.path_lower)
-	}else{
-	  $(".active").removeClass("active")
-          $(event.target).closest(".folder").addClass('active')
-        }
-      })
-      return div[0]
-    }
-  </script>
+  <% if current_user.is_pro %>
+    <%= render 'select_folder' %>
+  <% end %>
   <%= f.label :name %>
   <div class='suffix-domain'>
     <%= f.text_field :name %>

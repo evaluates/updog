@@ -17,7 +17,13 @@
 
 <h3>Instructions</h3>
 <ol>
-  <li>Add your site to your Dropbox folder in <strong>~/Dropbox/Apps/updog/<%= @site.name %></strong></li>
-    <li><a href='http://<%= @site.link %>'> View Site </a></li>
+  <li>Add your site to your Dropbox folder in <strong>
+  <% if @site.db_path %>
+    ~/Dropbox<%= @site.db_path %>
+  <% else %>
+    ~/Dropbox/Apps/updog/<%= @site.name %>
+  <% end %>
+  </strong></li>
+  <li><a href='http://<%= @site.link %>'> View Site </a></li>
 </ol>
 </div>

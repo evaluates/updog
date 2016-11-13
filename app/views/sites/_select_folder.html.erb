@@ -1,0 +1,76 @@
+<% if !current_user.full_access_token %>
+  <a href='/auth/dropbox?full=true' class='dropbox'><i class='fa fa-dropbox'></i> Link Entire Dropbox</a>
+  <br>
+  <br>
+<% else %>
+  <label>Select a Folder</label>
+  <input type="hidden" name="site[db_path]" id="db_path" value="">
+  <% if @site.db_path %>
+    <p>Current folder is <%= @site.db_path %></p>
+  <% end %>
+  <div id='db-chooser'>
+    <div class='folder back hidden'>
+      <a href='#'><i class='fa fa-arrow-left'></i> Back</a>
+    </div>
+    <div id='folders'>
+    </div>
+  </div>
+  <script>
+    var token = '<%= current_user.full_access_token %>'
+    var folders = document.getElementById('folders')
+    var container = document.getElementById('db-chooser')
+    var $back = $(".back")
+    getFolders()
+    function getFolders(path){
+      var path = path || ''
+      folders.innerHTML = '<i class="fa fa-cog"></i>'
+      $.getJSON('/folders?access_token=' + token + '&path=' + path, function(response){
+        if(path){
+          $back.attr('data-path', path)
+          $back.removeClass('hidden')
+          var $folder = view({name: path}, false)
+          $folder.classList.add('active')
+          folders.appendChild($folder)
+          $("#db_path").val(path)
+        }else{
+          $back.addClass('hidden')
+        }
+      	$(".fa-cog").remove()
+      	response.forEach(function(folder){
+      	  folders.appendChild(view(folder))
+      	})
+      })
+    }
+    $(container).on("click", ".back",function(event){
+      event.preventDefault()
+      var path = $(this).attr('data-path')
+      path = path.split("/")
+      path.pop()
+      path = path.join("/")
+      getFolders(path)
+    })
+    function view(folder, next){
+      var str = '<div class="folder"><a href="#"><span class="fa fa-folder'
+      if(next === false){
+        str += '-open'
+      }
+      str += '"></span> ' + folder.name
+      if(next !== false){
+	       str += "<span class='fa fa-arrow-right'></span>"
+      }
+      str += "</a></div>"
+      var div = $(str)
+      div.on('click', function(event){
+      	event.preventDefault()
+      	if(next !== false){
+      	  getFolders(folder.path_lower)
+      	}else{
+          $("#db_path").val(folder.name)
+      	  $(".active").removeClass("active")
+      	  $(event.target).closest(".folder").addClass('active')
+      	}
+      })
+      return div[0]
+    }
+  </script>
+<% end %>

@@ -1,8 +1,14 @@
 class SessionsController < ApplicationController
   def new
-    redirect_uri = ENV['db_callback']
-    client_id = ENV['db_key']
-    redirect_to "https://www.dropbox.com/oauth2/authorize?response_type=code&client_id=#{client_id}&redirect_uri=#{redirect_uri}"
+    if params[:full]
+      redirect_uri = ENV['db_full_callback']
+      client_id = ENV['db_full_key']
+      redirect_to "https://www.dropbox.com/oauth2/authorize?response_type=code&client_id=#{client_id}&redirect_uri=#{redirect_uri}"
+    else
+      redirect_uri = ENV['db_callback']
+      client_id = ENV['db_key']
+      redirect_to "https://www.dropbox.com/oauth2/authorize?response_type=code&client_id=#{client_id}&redirect_uri=#{redirect_uri}"
+    end
   end
   def index
     if session['access_token'] != ''
@@ -10,15 +16,24 @@ class SessionsController < ApplicationController
     end
   end
   def create
+    if params[:full]
+      db_key = ENV['db_full_key']
+      db_secret = ENV['db_full_secret']
+      db_callback = ENV['db_full_callback']
+    else
+      db_key = ENV['db_key']
+      db_secret = ENV['db_secret']
+      db_callback = ENV['db_callback']
+    end
     begin
       url = "https://api.dropboxapi.com/oauth2/token"
       opts = {
         body: {
           code: params[:code],
       	  grant_type: 'authorization_code',
-      	  client_id: ENV['db_key'],
-      	  client_secret: ENV['db_secret'],
-      	  redirect_uri: ENV['db_callback']
+      	  client_id: db_key,
+      	  client_secret: db_secret,
+      	  redirect_uri: db_callback
         }
       }
       res = HTTParty.post(url, opts)
@@ -32,7 +47,6 @@ class SessionsController < ApplicationController
       logger.error e.backtrace.join("\n")
       return redirect_to root_url
     end
-    session['access_token'] = access_token
     url = "https://api.dropboxapi.com/2/users/get_account"
     opts = {
       headers: {
@@ -51,10 +65,14 @@ class SessionsController < ApplicationController
       user.destroy
       raise 'An error has occured'
     end
-    session[:user_id] = uid
-    session[:access_token] = access_token
-    session[:user_name] = name
-    user.access_token = access_token
+    if params[:full]
+      user.full_access_token = access_token
+    else
+      session[:user_id] = uid
+      session[:access_token] = access_token
+      session[:user_name] = name
+      user.access_token = access_token
+    end
     user.save
     redirect_to '/'
   end
