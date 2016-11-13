@@ -24,8 +24,8 @@ class Drip
       acct_id = ENV['drip_account']
       opts = {
         headers: {
-	  :'User-Agent' => 'UpDog (updog.co)',
-	  :'Content-Type' => 'application/vnd.api+json'
+	  'User-Agent' => 'UpDog (updog.co)',
+	  'Content-Type' => 'application/vnd.api+json'
        },
 	basic_auth: { username: ENV['drip_token']},
 	body: {
