@@ -74,7 +74,11 @@ class SessionsController < ApplicationController
       user.access_token = access_token
     end
     user.save
-    redirect_to '/'
+    if session[:back_to]
+      redirect_to session[:back_to]
+    else
+      redirect_to '/'
+    end
   end
   def destroy
     session.clear

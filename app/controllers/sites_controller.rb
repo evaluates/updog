@@ -5,8 +5,10 @@ class SitesController < ApplicationController
   end
   def edit
     @site = Site.find_by( uid: session[:user_id], id: params[:id] )
+    session[:back_to] = request.url
   end
   def new
+    session[:back_to] = request.url
     @sites = Site.where( uid: session[:user_id] )
     return redirect_to root_path if !current_user
     unless current_user.is_pro? || @sites.length == 0
