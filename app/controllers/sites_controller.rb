@@ -40,8 +40,8 @@ class SitesController < ApplicationController
       raise @content if @content["error"]
     rescue Exception => err
       @content = err
-      if err.to_s == "Path is a directory"
-	       return redirect_to request.env['REQUEST_URI'] + "/"
+      if err.to_s.match("not_file")
+	   return redirect_to request.env['REQUEST_URI'] + "/"
       end
       if err.to_s.match("not_found")
       	if request.env['PATH_INFO'] == '/markdown.css'
