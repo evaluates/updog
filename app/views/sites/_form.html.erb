@@ -10,6 +10,7 @@
     position: relative;
     border-bottom:1px solid #ccc;
     padding:.5em;
+    cursor: pointer;
   }
   .folder:hover{
     background:rgba(0%,48.3%,91.1%, .1);
@@ -19,6 +20,16 @@
   }
   .folder a{
     text-decoration:none;
+  }
+  #db-chooser{
+    overflow:hidden;
+  }
+  #db-chooser .back{
+    transition: all .2s ease;
+  }
+  #db-chooser .back.hidden{
+    margin-top:-2.5em;
+    border:none;
   }
   @keyframes {
     0% {
@@ -37,43 +48,58 @@
   </ul>
 <% end %>
 <%= form_for @site do |f| %>
-  <div id='db-chooser'></div>
+  <div id='db-chooser'>
+    <div class='folder back hidden'>
+      <a href='#'><i class='fa fa-arrow-left'></i> Back</a>
+    </div>
+    <div id='folders'>
+    </div>
+  </div>
   <script>
-    var token = '<%= @site.creator.access_token %>'
+    var token = '<%= current_user.access_token %>'
+    var folders = document.getElementById('folders')
     var container = document.getElementById('db-chooser')
+    var $back = $(".back")
     getFolders()
     function getFolders(path){
       var path = path || ''
-      container.innerHTML = '<i class="fa fa-cog"></i>'
+      folders.innerHTML = '<i class="fa fa-cog"></i>'
+      if(path){
+	$back.attr('data-path', path)
+	$back.removeClass('hidden')
+      }else{
+	$back.addClass('hidden')
+      }
       $.getJSON('/folders?access_token=' + token + '&path=' + path, function(response){
 	$(".fa-cog").remove()
-	if(path){
-	  var back = $("<div class='folder back' data-path='"+path+"'><a href='#' class='back' data-path='"+path+"'><i class='fa fa-arrow-left'></i> Back</a></div>")
-	  container.appendChild(back[0])
-	}
 	if(!response.length){
-	  container.innerHTML += 'No folders here'
+	  folders.appendChild(
+	    view({name: path}, false)
+	  )
 	}
 	response.forEach(function(folder){
-	  container.appendChild(view(folder))
+	  folders.appendChild(view(folder))
 	})
       })
     }
-    container.addEventListener("click", function(event){
-      if(event.target.classList.contains("back")){
-        event.preventDefault()
-	var path = event.target.getAttribute("data-path")
-	path = path.split("/")
-	path.pop()
-	path = path.join("/")
-	getFolders(path)
-      }
+    $(container).on("click", ".back",function(event){
+      event.preventDefault()
+      var path = $(this).attr('data-path')
+      path = path.split("/")
+      path.pop()
+      path = path.join("/")
+      getFolders(path)
     })
-    function view(folder){
-      var div = $('<div class="folder"><a href="#"><span class="fa fa-folder"></span> ' + folder.name + "<span class='fa fa-arrow-right'></span></a></div>")
+    function view(folder, next){
+      var str = '<div class="folder"><a href="#"><span class="fa fa-folder"></span> ' + folder.name
+      if(next !== false){
+        str += "<span class='fa fa-arrow-right'></span>"
+      }
+      str += "</a></div>"
+      var div = $(str)
       div.on('click', function(event){
 	event.preventDefault()
-	if(event.target.classList.contains('fa-arrow-right')){
+	if(next !== false){
 	  getFolders(folder.path_lower)
 	}else{
 	  $(".active").removeClass("active")
