@@ -5,7 +5,7 @@
 <% else %>
   <label>Select a Folder</label>
   <input type="hidden" name="site[db_path]" id="db_path" value="">
-  <% if @site.db_path %>
+  <% if @site.db_path && @site.db_path != "" %>
     <p>Current folder is <%= @site.db_path %></p>
   <% end %>
   <div id='db-chooser'>

@@ -67,13 +67,13 @@ class SitesController < ApplicationController
   def create
     @site = Site.new site_params.merge( uid: session[:user_id] )
     if @site.save
-      if params[:db_path]
+      if params[:db_path] == ""
         return redirect_to @site
       end
       begin
       	url = 'https://api.dropboxapi.com/2/files/create_folder'
       	opts = {
-        	  headers: headers,
+        	headers: headers,
       	  body: {
       	    path: @site.name
       	  }.to_json
@@ -151,7 +151,9 @@ class SitesController < ApplicationController
       return render json: {error: res}
     end
     entries = JSON.parse(res.body)["entries"] || []
-    folders = entries.select{|entry| entry[".tag"] == "folder"}
+    folders = entries.select{|entry|
+      entry[".tag"] == "folder"
+    }.sort_by{|folder| folder["name"] }
     response.headers['Has_more'] = res["has_more"].to_s
     render json: folders, content_type: 'application/json'
   end
