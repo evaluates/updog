@@ -1,3 +1,34 @@
+<style>
+  .fa-cog{
+    animation: rotate 2s linear;
+  }
+  .folder .fa-arrow-right{
+    position:absolute;
+    right:.5em;
+  }
+  .folder{
+    position: relative;
+    border-bottom:1px solid #ccc;
+    padding:.5em;
+  }
+  .folder:hover{
+    background:rgba(0%,48.3%,91.1%, .1);
+  }
+  .folder.active{
+    background:rgba(0%,48.3%,91.1%, .2);
+  }
+  .folder a{
+    text-decoration:none;
+  }
+  @keyframes {
+    0% {
+      transform: rotate(0)
+    }
+    100% {
+      transform: rotate(360)
+    }
+  }
+</style>
 <% if @site.errors.any? %>
   <ul>
   <% @site.errors.full_messages.each do |e| %>
@@ -6,6 +37,52 @@
   </ul>
 <% end %>
 <%= form_for @site do |f| %>
+  <div id='db-chooser'></div>
+  <script>
+    var token = '<%= @site.creator.access_token %>'
+    var container = document.getElementById('db-chooser')
+    getFolders()
+    function getFolders(path){
+      var path = path || ''
+      container.innerHTML = '<i class="fa fa-cog"></i>'
+      $.getJSON('/folders?access_token=' + token + '&path=' + path, function(response){
+	$(".fa-cog").remove()
+	if(path){
+	  var back = $("<div class='folder back' data-path='"+path+"'><a href='#' class='back' data-path='"+path+"'><i class='fa fa-arrow-left'></i> Back</a></div>")
+	  container.appendChild(back[0])
+	}
+	if(!response.length){
+	  container.innerHTML += 'No folders here'
+	}
+	response.forEach(function(folder){
+	  container.appendChild(view(folder))
+	})
+      })
+    }
+    container.addEventListener("click", function(event){
+      if(event.target.classList.contains("back")){
+        event.preventDefault()
+	var path = event.target.getAttribute("data-path")
+	path = path.split("/")
+	path.pop()
+	path = path.join("/")
+	getFolders(path)
+      }
+    })
+    function view(folder){
+      var div = $('<div class="folder"><a href="#"><span class="fa fa-folder"></span> ' + folder.name + "<span class='fa fa-arrow-right'></span></a></div>")
+      div.on('click', function(event){
+	event.preventDefault()
+	if(event.target.classList.contains('fa-arrow-right')){
+	  getFolders(folder.path_lower)
+	}else{
+	  $(".active").removeClass("active")
+          $(event.target).closest(".folder").addClass('active')
+        }
+      })
+      return div[0]
+    }
+  </script>
   <%= f.label :name %>
   <div class='suffix-domain'>
     <%= f.text_field :name %>

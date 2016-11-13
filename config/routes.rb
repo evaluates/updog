@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   get '/pricing', to: 'pages#pricing'
   get '/feedback', to: 'pages#feedback'
   post '/feedback', to: 'pages#feedback_create'
+  get '/folders', to: 'sites#folders'
   get '/admin', to: 'pages#admin'
   get '/webhook', to: 'webhook#challenge'
   post '/webhook', to: 'webhook#post'

@@ -125,6 +125,33 @@ class SitesController < ApplicationController
       render nothing: true
     end
   end
+  def folders
+    path = params[:path] || ""
+    at = params[:access_token] || ""
+    if at.blank?
+      return render json: {
+        error: "missing access token"
+      }
+    end
+    url = 'https://api.dropboxapi.com/2/files/list_folder'
+    opts = {
+      headers: {
+        'Authorization' => 'Bearer ' + at,
+	'Content-Type' => 'application/json'
+      },
+      body: {
+        path: path,
+      }.to_json
+    }
+    res = HTTParty.post(url, opts)
+    if res.body.match("Error")
+      return render json: {error: res}
+    end
+    entries = JSON.parse(res.body)["entries"] || []
+    folders = entries.select{|entry| entry[".tag"] == "folder"}
+    response.headers['Has_more'] = res["has_more"].to_s
+    render json: folders, content_type: 'application/json'
+  end
 
   private
   def headers
