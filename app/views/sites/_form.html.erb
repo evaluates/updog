@@ -1,10 +1,14 @@
 <style>
   .fa-cog{
-    animation: rotate 2s linear;
+    animation: goround 2s linear infinite;
+    transform-origin: 50% 50%;
+    margin-left:.25em;
   }
   .folder .fa-arrow-right{
     position:absolute;
     right:.5em;
+    top:50%;
+    transform: translateY(-50%);
   }
   .folder{
     position: relative;
@@ -31,12 +35,15 @@
     margin-top:-2.5em;
     border:none;
   }
-  @keyframes {
+  @keyframes goround{
     0% {
-      transform: rotate(0)
+      transform: rotate(0deg)
+    }
+    50% {
+      transform: rotate(180deg)
     }
     100% {
-      transform: rotate(360)
+      transform: rotate(360deg)
     }
   }
 </style>
@@ -48,7 +55,7 @@
   </ul>
 <% end %>
 <%= form_for @site do |f| %>
-  <% if current_user.is_pro && params[:full] %>
+  <% if current_user.is_pro %>
     <%= render 'select_folder' %>
   <% end %>
   <%= f.label :name %>
