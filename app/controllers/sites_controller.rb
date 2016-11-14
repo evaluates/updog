@@ -50,6 +50,7 @@ class SitesController < ApplicationController
       	  request.env['PATH_INFO'] = "/404.html"
           @content = @site.content request.env
           @content = "Not found" if @content.match(/{\".tag\": \"not_found\"}/)
+          status = 404
           logger.error err.message
       	end
       end
@@ -59,8 +60,9 @@ class SitesController < ApplicationController
     content_type = mime_type.to_s unless mime_type.nil?
     content_type = mime_type.nil? ? 'text/html; charset=utf-8' : mime_type.to_s
     content_type = "text/html; charset=utf-8" if extname == "md" && !params.key?(:raw) && @site.creator.is_pro? && @site.render_markdown
+    status ||= 200
     respond_to do |format|
-      format.all { render :html => @content, :layout => false, :content_type => content_type }
+      format.all { render :html => @content, :layout => false, :content_type => content_type, :status => status }
     end
   end
   def create
