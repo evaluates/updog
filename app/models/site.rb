@@ -62,7 +62,7 @@ class Site < ActiveRecord::Base
       logger.info "Db path: #{self.db_path}"
       res = HTTParty.post(url, opts)
       oat = res.body.html_safe
-      oat = "Not found" if oat.match("Invalid authorization value")
+      oat = "Not found - Please Reauthenticate Dropbox" if oat.match("Invalid authorization value")
       if file_path.match(/\.(md|markdown)$/) && !env['QUERY_STRING'].match(/raw/) && self.creator.is_pro? && self.render_markdown
 	      oat = markdown(oat)
       end

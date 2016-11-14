@@ -52,6 +52,8 @@ class SitesController < ApplicationController
       	    @content = @site.content request.env
             raise @content if @content["error"]
       	  rescue Exception => err
+            logger.error err.message
+            logger.error err.backtrace.join("\n")
       	    @content = "Not found"
       	  end
       	end
