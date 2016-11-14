@@ -57,6 +57,9 @@ class Site < ActiveRecord::Base
       	}
       }
       logger.info "Requesting https://#{self.name}.updog.co#{file_path.gsub(self.name+'/','')}"
+      logger.info "Dropbox file path: #{file_path}"
+      logger.info "Document root: #{self.document_root}"
+      logger.info "Db path: #{self.db_path}"
       res = HTTParty.post(url, opts)
       oat = res.body.html_safe
       oat = "Not found" if oat.match("Invalid authorization value")
