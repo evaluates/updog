@@ -14,7 +14,6 @@ class User < ActiveRecord::Base
   end
   def self.create_with_omniauth( email, uid, name )
   	self.subscribe email
-  	ContactMailer.send_welcome(email).deliver_now!
   	create! do |user|
   	  user.email = email
   	  user.provider = 'dropbox'
