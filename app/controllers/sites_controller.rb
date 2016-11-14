@@ -48,13 +48,9 @@ class SitesController < ApplicationController
       	  @content = File.read(Rails.root.to_s + '/public/md.css').html_safe
       	else
       	  request.env['PATH_INFO'] = "/404.html"
-      	  begin
-      	    @content = @site.content request.env
-            raise @content if @content["error"]
-      	  rescue Exception => err
-            logger.error err.message
-      	    @content = "Not found"
-      	  end
+          @content = @site.content request.env
+          @content = "Not found" if @content.match(/{\".tag\": \"not_found\"}/)
+          logger.error err.message
       	end
       end
     end
