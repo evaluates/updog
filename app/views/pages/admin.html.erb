@@ -1,4 +1,5 @@
 <div class='wrapper'>
+  <%= Click.all.count %> requests served, and counting.
   <h2><%= @users.count %> New Users</h2>
   <% @users.each do |user| %>
     <%= user.email %> <br>
