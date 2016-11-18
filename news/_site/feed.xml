@@ -6,9 +6,46 @@
 </description>
     <link>/news/</link>
     <atom:link href="/news/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 14 Nov 2016 18:26:28 -0500</pubDate>
-    <lastBuildDate>Mon, 14 Nov 2016 18:26:28 -0500</lastBuildDate>
+    <pubDate>Thu, 17 Nov 2016 19:15:46 -0500</pubDate>
+    <lastBuildDate>Thu, 17 Nov 2016 19:15:46 -0500</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Use Any Folder In Dropbox</title>
+        <description>&lt;div class=&quot;notice&quot; style=&quot;margin-top:10px;&quot;&gt;
+  Note: a Pro membership is required to use any folder in Dropbox.
+&lt;/div&gt;
+
+&lt;p&gt;By default, UpDog will create a folder that only it (and you, of course) has access to.&lt;/p&gt;
+
+&lt;p&gt;As of today, Pro members can now use any folder in their Dropbox account to host
+a site through UpDog.&lt;/p&gt;
+
+&lt;h2 id=&quot;link-your-full-dropbox-account&quot;&gt;Link Your Full Dropbox Account&lt;/h2&gt;
+
+&lt;p&gt;When &lt;a href=&quot;https://updog.co/new&quot;&gt;creating a new site&lt;/a&gt;, you’ll have the option to link
+your entire Dropbox account. Clicking this button will ask your permission to
+connect your account to UpDog.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://dl.dropbox.com/s/51mqkku99jznq6o/Screenshot%202016-11-17%2019.07.01.png?dl=0&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.wikihow.com/Unlink-an-App-in-Dropbox&quot;&gt;You can undo this at any time&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Once you’ve linked your account, you’ll be presented with a list of folders in
+your Dropbox account. Select the folder that contains your website:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://dl.dropbox.com/s/gi2vyal9ldjz3vg/Screenshot%202016-11-17%2019.11.34.png?dl=0&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Choose a name for your site, click save and add some HTML files to the folder you selected.&lt;/p&gt;
+
+&lt;p&gt;That’s it!&lt;/p&gt;
+</description>
+        <pubDate>Thu, 17 Nov 2016 00:00:00 -0500</pubDate>
+        <link>/news/use-any-folder-in-dropbox/</link>
+        <guid isPermaLink="true">/news/use-any-folder-in-dropbox/</guid>
+        
+        
+      </item>
     
       <item>
         <title>3 Must Have &amp;lt;meta&gt; Tags</title>
@@ -514,25 +551,6 @@ the favicon for your site instead of the UpDog logo: &lt;img src=&quot;https://d
         <pubDate>Mon, 09 May 2016 00:00:00 -0400</pubDate>
         <link>/news/custom-favicons/</link>
         <guid isPermaLink="true">/news/custom-favicons/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Custom 404 Pages</title>
-        <description>&lt;p&gt;You can now have custom 404 pages for your site!&lt;/p&gt;
-
-&lt;p&gt;Instead of responding with Dropbox’s error: &lt;code class=&quot;highlighter-rouge&quot;&gt;file not found&lt;/code&gt;,
-you can create a &lt;code class=&quot;highlighter-rouge&quot;&gt;404.html&lt;/code&gt; file and put whatever message you
-like in there.&lt;/p&gt;
-
-&lt;p&gt;Here’s an example: &lt;a href=&quot;https://jshawl.updog.co/non-existent-folder/&quot;&gt;https://jshawl.updog.co/non-existent-folder/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Have a 404 page you’d like to show off? &lt;a href=&quot;/contact&quot;&gt;let us know&lt;/a&gt; and we’ll feature it here!&lt;/p&gt;
-</description>
-        <pubDate>Wed, 06 Apr 2016 00:00:00 -0400</pubDate>
-        <link>/news/custom-404-pages/</link>
-        <guid isPermaLink="true">/news/custom-404-pages/</guid>
         
         
       </item>
