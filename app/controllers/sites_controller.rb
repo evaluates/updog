@@ -1,4 +1,5 @@
 class SitesController < ApplicationController
+  layout "layouts/application"
   protect_from_forgery except: :load
   def index
     @sites = Site.where( uid: session[:user_id] )
