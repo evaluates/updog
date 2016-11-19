@@ -1,0 +1,6 @@
+<h1>Index of <%= @path %></h1>
+<% @entries.each do |entry| %>
+  <li class='<%= entry[".tag"] %>'>
+    <%= link_to entry["name"], entry["path_lower"]%>
+  </li>
+<% end %>

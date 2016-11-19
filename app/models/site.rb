@@ -19,6 +19,34 @@ class Site < ActiveRecord::Base
     User.find_by( uid: self.uid )
   end
 
+  def index path
+    path = path.gsub('/directory-index.html','')
+    url = 'https://api.dropboxapi.com/2/files/list_folder'
+    if self.db_path && self.db_path != ""
+      at = self.creator && self.creator.full_access_token
+    else
+      at = self.creator && self.creator.access_token
+    end
+    old_path = path
+    if path == "/"
+      new_path = ""
+    else
+      new_path = path
+    end
+
+    opts = {
+      headers: {
+	'Authorization' => "Bearer #{at}",
+	'Content-Type' => 'application/json',
+      },
+      body: {
+	path: new_path
+      }.to_json
+    }
+    res = HTTParty.post(url, opts)
+    res.merge("path" => path)
+  end
+
   def content uri
     path = URI.unescape(uri)
     expires_in = self.creator && self.creator.is_pro?  ? 5.seconds : 30.seconds

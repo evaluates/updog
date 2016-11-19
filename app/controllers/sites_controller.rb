@@ -50,7 +50,7 @@ class SitesController < ApplicationController
 	@content = {html: File.read(Rails.root.to_s + '/public/md.css').html_safe, status: 200}
       end
     else
-      @content = try_files [uri, uri + '/index.html', '/404.html'], @site
+      @content = try_files [uri, uri + '/index.html', uri + '/directory-index.html', '/404.html'], @site
       @content[:html] = markdown(@content[:html]) if render_markdown? @site, request
     end
     ct = mime(request, @site)
@@ -103,6 +103,13 @@ class SitesController < ApplicationController
       return try_files uris, site
     end
     status = uris[0] == "/404.html" ? 404 : 200
+    if uris[0].match "/directory-index.html"
+      index = site.index(uris[0])
+      @entries = index["entries"]
+      @path = index["path"]
+      html = render_to_string "sites/directory_index", layout: false
+      return {html: html, status: status}
+    end
     {html: out, status: status}
   end
 
