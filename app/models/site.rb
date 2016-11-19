@@ -24,15 +24,15 @@ class Site < ActiveRecord::Base
     url = 'https://api.dropboxapi.com/2/files/list_folder'
     if self.db_path && self.db_path != ""
       at = self.creator && self.creator.full_access_token
+      folder = self.db_path
     else
       at = self.creator && self.creator.access_token
+      folder = '/' + self.name
     end
     old_path = path
-    if path == "/"
-      new_path = ""
-    else
-      new_path = path
-    end
+    document_root = self.document_root || ''
+    file_path = folder + '/' + document_root + '/' + path
+    file_path = file_path.gsub(/\/+/,'/')
 
     opts = {
       headers: {
@@ -40,10 +40,11 @@ class Site < ActiveRecord::Base
 	'Content-Type' => 'application/json',
       },
       body: {
-	path: new_path
+	path: file_path
       }.to_json
     }
     res = HTTParty.post(url, opts)
+    res["entries"] = res["entries"].select{|entry| entry["name"] != 'directory-index.html'}
     res.merge("path" => path)
   end
 
