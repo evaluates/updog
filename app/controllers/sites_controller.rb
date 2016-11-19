@@ -53,17 +53,18 @@ class SitesController < ApplicationController
       @content = try_files [uri, uri + '/index.html', '/404.html'], @site
       @content[:html] = markdown(@content[:html]) if render_markdown? @site, request
     end
-    ct = mime(request)
+    ct = mime(request, @site)
     respond_to do |format|
       format.all { render({:layout => false, :content_type => ct}.merge(@content)) }
     end
   end
 
-  def mime request
+  def mime request, site
     extname = File.extname(request.env['PATH_INFO'])[1..-1]
     mime_type = Mime::Type.lookup_by_extension(extname)
     mime_type.to_s unless mime_type.nil?
     mime_type.nil? ? 'text/html; charset=utf-8' : mime_type.to_s
+    site.render_markdown && !request.env['REQUEST_URI'].match(/raw$/) ? 'text/html; charset=utf-8' : 'text/plain'
   end
 
   def render_markdown? site, request
