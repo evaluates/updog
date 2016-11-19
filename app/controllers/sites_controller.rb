@@ -1,3 +1,6 @@
+require 'kramdown'
+require 'rouge'
+
 class SitesController < ApplicationController
   layout "layouts/application"
   protect_from_forgery except: :load
@@ -30,42 +33,77 @@ class SitesController < ApplicationController
     redirect_to sites_path, :notice => "Deleted. #{undo_link}?"
   end
   def load
-    request.env["referrer"] = request.referer
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
+    @site.clicks.create(data:{
+      path: request.env["REQUEST_URI"],
+      ip: request.env["REMOTE_ADDR"],
+      referer: request.env["HTTP_REFERER"]
+    })
     if !@site
      render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true
      return
     end
-    begin
-      @content = @site.content request.env
-      raise @content if @content["error"]
-    rescue Exception => err
-      @content = err
-      if err.to_s.match("not_file")
-	   return redirect_to request.env['REQUEST_URI'] + "/"
+    uri = request.env['PATH_INFO']
+    if uri == '/markdown.css'
+      @content = try_files [uri], @site
+      if @content[:html] == "Not Found"
+	@content = {html: File.read(Rails.root.to_s + '/public/md.css').html_safe, status: 200}
       end
-      if err.to_s.match("not_found")
-      	if request.env['PATH_INFO'] == '/markdown.css'
-      	  @content = File.read(Rails.root.to_s + '/public/md.css').html_safe
-      	else
-      	  request.env['PATH_INFO'] = "/404.html"
-          @content = @site.content request.env
-          @content = "Not found" if @content.match(/{\".tag\": \"not_found\"}/)
-          status = 404
-          logger.error err.message
-      	end
-      end
+    else
+      @content = try_files [uri, uri + '/index.html', '/404.html'], @site
+      @content[:html] = markdown(@content[:html]) if render_markdown? @site, request
     end
-    extname = File.extname(request.env['PATH_INFO'])[1..-1]
-    mime_type = Mime::Type.lookup_by_extension(extname)
-    content_type = mime_type.to_s unless mime_type.nil?
-    content_type = mime_type.nil? ? 'text/html; charset=utf-8' : mime_type.to_s
-    content_type = "text/html; charset=utf-8" if extname == "md" && !params.key?(:raw) && @site.creator.is_pro? && @site.render_markdown
-    status ||= 200
+    ct = mime(request)
     respond_to do |format|
-      format.all { render :html => @content, :layout => false, :content_type => content_type, :status => status }
+      format.all { render({:layout => false, :content_type => ct}.merge(@content)) }
     end
   end
+
+  def mime request
+    extname = File.extname(request.env['PATH_INFO'])[1..-1]
+    mime_type = Mime::Type.lookup_by_extension(extname)
+    mime_type.to_s unless mime_type.nil?
+    mime_type.nil? ? 'text/html; charset=utf-8' : mime_type.to_s
+  end
+
+  def render_markdown? site, request
+    can_render_markdown?(site) && should_render_markdown?(request)
+  end
+
+  def can_render_markdown? site
+    site.creator.is_pro && site.render_markdown
+  end
+
+  def should_render_markdown? request
+    uri = request.env['REQUEST_URI']
+    uri.match(/\.(md|markdown)$/) && !uri.match(/raw/)
+  end
+
+  def markdown content
+    md = Kramdown::Document.new(content.force_encoding('utf-8'),
+      input: 'GFM',
+      syntax_highlighter: 'rouge',
+      syntax_highlighter_opts: {
+	formatter: Rouge::Formatters::HTML
+    }).to_html
+    preamble = "<!doctype html><html><head><meta name='viewport' content='width=device-width'><meta charshet='utf-8'><link rel='stylesheet' type='text/css' href='/markdown.css'></head><body>"
+    footer = "</body></html>"
+    (preamble + md + footer).html_safe
+  end
+
+  def try_files uris, site
+    out = site.content uris[0]
+    if out.match(/{\".tag\":/) || out.match('Error in call to API function')
+      uris.shift
+      if uris.length == 0
+	return { html: "Not Found", status: 404 }
+      end
+      return try_files uris, site
+    end
+    status = uris[0] == "/404.html" ? 404 : 200
+    {html: out, status: status}
+  end
+
   def create
     @site = Site.new site_params.merge( uid: session[:user_id] )
     if @site.save

@@ -1,6 +1,3 @@
-require 'kramdown'
-require 'rouge'
-
 class Site < ActiveRecord::Base
   belongs_to :user, :foreign_key => :uid, :primary_key => :uid
   has_many :clicks
@@ -22,18 +19,8 @@ class Site < ActiveRecord::Base
     User.find_by( uid: self.uid )
   end
 
-  def content env
-    self.clicks.create(data:{
-      path: env["REQUEST_URI"],
-      ip: env["REMOTE_ADDR"],
-      referer: env["HTTP_REFERER"]
-    })
-    if env['REQUEST_URI'][-1] == "/" && env['PATH_INFO'] != '/404.html'
-      path = env['PATH_INFO'] + "/index.html"
-    else
-      path = env['PATH_INFO']
-    end
-    path = URI.unescape(path)
+  def content uri
+    path = URI.unescape(uri)
     expires_in = self.creator && self.creator.is_pro?  ? 5.seconds : 30.seconds
     Rails.cache.fetch("#{cache_key}/#{path}", expires_in: expires_in) do
       if self.db_path && self.db_path != ""
@@ -63,23 +50,8 @@ class Site < ActiveRecord::Base
       res = HTTParty.post(url, opts)
       oat = res.body.html_safe
       oat = "Not found - Please Reauthenticate Dropbox" if oat.match("Invalid authorization value")
-      if file_path.match(/\.(md|markdown)$/) && !env['QUERY_STRING'].match(/raw/) && self.creator.is_pro? && self.render_markdown
-	      oat = markdown(oat)
-      end
       oat
     end
-  end
-
-  def markdown content
-    md = Kramdown::Document.new(content.force_encoding('utf-8'),
-      input: 'GFM',
-      syntax_highlighter: 'rouge',
-      syntax_highlighter_opts: {
-	formatter: Rouge::Formatters::HTML
-    }).to_html
-    preamble = "<!doctype html><html><head><meta name='viewport' content='width=device-width'><meta charshet='utf-8'><link rel='stylesheet' type='text/css' href='/markdown.css'></head><body>"
-    footer = "</body></html>"
-    (preamble + md + footer).html_safe
   end
 
   def domain_isnt_updog
