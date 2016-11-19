@@ -265,6 +265,9 @@ table td{
   p{
     margin-bottom:3em;
   }
+  .float-right{
+    margin-top:.65em;
+  }
 }
 
 .dropbox {
@@ -324,4 +327,7 @@ code{
 }
 pre code{
   word-wrap:normal;
+}
+.float-right{
+  float:right;
 }

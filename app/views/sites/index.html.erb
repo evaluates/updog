@@ -20,13 +20,18 @@
   <% else %>
 
   <div class='wrapper index'>
+    <a href='/auth/dropbox' class='float-right dropbox'><span class='fa fa-dropbox'></span> Log In with Dropbox</a>
     <h2>Real.</h2>
     <h2>Simple.</h2>
     <h2>Hosting.</h2>
-    <p>Publish your own website for free using Dropbox.</p>
-    <a href='/auth/dropbox' class='dropbox'><span class='fa fa-dropbox'></span> Log In with Dropbox</a>
     <br>
-    <br>
+    <p>Publish your own website for free using Dropbox.
+    </p>
+    <h3><i class='fa fa-line-chart'></i>
+      <%= number_with_delimiter(@count, :delimiter => ',') %>
+      requests served, and counting!
+    </h3>
+    <p>Unlimited file transfer and <em>no</em> storage limits.</p>
     <h3><i class='fa fa-refresh'></i> Instantly Sync Your Website</h3>
     <p>Add HTML, CSS, and JS files to your dropbox folder. We'll connect those to a free domain name.</p>
     <h3><i class='fa fa-cloud-download'></i> No Software Required</h3>

@@ -6,6 +6,7 @@ class SitesController < ApplicationController
   protect_from_forgery except: :load
   def index
     @sites = Site.where( uid: session[:user_id] )
+    @count = File.read(Rails.root.join("tmp/request-count.txt"))
   end
   def edit
     @site = Site.find_by( uid: session[:user_id], id: params[:id] )
