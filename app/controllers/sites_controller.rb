@@ -63,8 +63,9 @@ class SitesController < ApplicationController
     extname = File.extname(request.env['PATH_INFO'])[1..-1]
     mime_type = Mime::Type.lookup_by_extension(extname)
     mime_type.to_s unless mime_type.nil?
-    mime_type.nil? ? 'text/html; charset=utf-8' : mime_type.to_s
-    site.render_markdown && !request.env['REQUEST_URI'].match(/raw$/) ? 'text/html; charset=utf-8' : 'text/plain'
+    mime_type = 'text/html; charset=utf-8' if mime_type.nil?
+    mime_type = 'text/html; charset=utf-8' if render_markdown?(site, request)
+    mime_type.to_s
   end
 
   def render_markdown? site, request
