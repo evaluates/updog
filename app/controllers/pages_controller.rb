@@ -82,7 +82,7 @@ class PagesController < ApplicationController
       @users = @users.map{|k,v|
         k = k.to_time.to_i * 1000
         [k, v]
-      }
+      }.sort_by{|k| k[0]}
       @sites = Site.created_today
       @popular_sites = Site.popular
       @revenue = User.where(is_pro: true).count * 5
