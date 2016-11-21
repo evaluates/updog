@@ -1,9 +1,6 @@
 <div class='wrapper'>
   <%= Click.all.count %> requests served, and counting.
-  <h2><%= @users.count %> New Users</h2>
-  <% @users.each do |user| %>
-    <%= user.email %> <br>
-  <% end %>
+  <%= @users.inspect %>
   <h2><%= @sites.length %> New Sites</h2>
   <% @sites.each do |site| %>
     <a href='http://<%= site.link %>'>http://<%= site.link %></a> - <%= site.creator.email %><br>
@@ -20,4 +17,23 @@
   <strong>% Pro users since launch: </strong><%= @pct_new_pro %><br>
   <strong>Num users: </strong><%= @num_users %><br>
   <strong>Num paying users: </strong><%= @paying_users %>
+<div id="container" style="height: 400px; min-width: 310px"></div>
+  <script src='http://code.highcharts.com/stock/highstock.js'></script>
+  <script>
+    Highcharts.stockChart('container', {
+	  rangeSelector: {
+	      selected: 1
+	  },
+	  title: {
+	      text: 'AAPL Stock Price'
+	  },
+	  series: [{
+	      name: 'New Users',
+	      data: <%= @users.to_json.html_safe %>,
+	      tooltip: {
+		  valueDecimals: 0
+	      }
+	  }]
+      });
+  </script>
 </div>

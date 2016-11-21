@@ -78,7 +78,11 @@ class PagesController < ApplicationController
       upgrade_times = upgrades.map {|u|
 	u.created_at - u.user.created_at
       }
-      @users = User.created_today
+      @users = User.group("DATE(created_at)").count
+      @users = @users.map{|k,v|
+        k = k.to_time.to_i * 1000
+        [k, v]
+      }
       @sites = Site.created_today
       @popular_sites = Site.popular
       @revenue = User.where(is_pro: true).count * 5
@@ -95,7 +99,11 @@ class PagesController < ApplicationController
   def median(array)
     sorted = array.sort
     len = sorted.length
-    (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
+    begin
+      (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
+    rescue
+      0
+    end
   end
 
 end
