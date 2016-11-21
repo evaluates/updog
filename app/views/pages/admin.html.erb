@@ -1,6 +1,5 @@
 <div class='wrapper'>
   <%= Click.all.count %> requests served, and counting.
-  <%= @users.inspect %>
   <h2><%= @sites.length %> New Sites</h2>
   <% @sites.each do |site| %>
     <a href='http://<%= site.link %>'>http://<%= site.link %></a> - <%= site.creator.email %><br>
@@ -18,7 +17,7 @@
   <strong>Num users: </strong><%= @num_users %><br>
   <strong>Num paying users: </strong><%= @paying_users %>
 <div id="container" style="height: 400px; min-width: 310px"></div>
-  <script src='http://code.highcharts.com/stock/highstock.js'></script>
+  <script src='https://code.highcharts.com/stock/highstock.js'></script>
   <script>
     Highcharts.stockChart('container', {
 	  rangeSelector: {
