@@ -85,6 +85,9 @@ class PagesController < ApplicationController
       }.sort_by{|k| k[0]}
       @sites = Site.created_today
       @popular_sites = Site.popular
+      @daily_revenue = Upgrading.group("DATE(created_at)").count.map{|k,v|
+        [k.to_time.to_i, v * 5]
+      }
       @revenue = User.where(is_pro: true).count * 5
       @avg_pro_time = upgrade_times.inject{|sum,el| sum + el}.to_f / upgrades.count
       @mean_pro_time = median upgrade_times
