@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161113170604) do
+ActiveRecord::Schema.define(version: 20161202014000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,13 +37,19 @@ ActiveRecord::Schema.define(version: 20161113170604) do
     t.string  "transaction_id"
   end
 
+  create_table "reviews", force: :cascade do |t|
+    t.integer "rating"
+    t.text    "comment"
+    t.integer "user_id"
+  end
+
   create_table "sites", force: :cascade do |t|
     t.integer  "uid"
-    t.string   "name"
+    t.string   "name",            limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "subdomain"
-    t.string   "domain"
+    t.string   "subdomain",       limit: 255
+    t.string   "domain",          limit: 255
     t.string   "document_root"
     t.boolean  "render_markdown"
     t.string   "db_path"
@@ -63,22 +69,22 @@ ActiveRecord::Schema.define(version: 20161113170604) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "provider"
+    t.string   "provider",          limit: 255
     t.integer  "uid"
-    t.string   "name"
-    t.string   "email"
+    t.string   "name",              limit: 255
+    t.string   "email",             limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "access_token"
+    t.string   "access_token",      limit: 255
     t.boolean  "is_pro"
     t.string   "full_access_token"
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string   "item_type",  null: false
-    t.integer  "item_id",    null: false
-    t.string   "event",      null: false
-    t.string   "whodunnit"
+    t.string   "item_type",  limit: 255, null: false
+    t.integer  "item_id",                null: false
+    t.string   "event",      limit: 255, null: false
+    t.string   "whodunnit",  limit: 255
     t.text     "object"
     t.datetime "created_at"
   end

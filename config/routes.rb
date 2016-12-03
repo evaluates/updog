@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get '/news/:path', to: 'news#show'
   get '/news', to: 'news#index'
   resources :payments
+  resources :reviews
   resources :payment_notifications, only: [:create]
   get '/about', to: 'pages#about'
   get '/tos', to: 'pages#tos'

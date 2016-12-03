@@ -1,0 +1,18 @@
+.stars{
+  font-size:0;
+}
+.stars i {
+  color:#ccc;
+  font-size:1rem;
+  display:inline-block;
+  padding-right:.25em;
+}
+
+.stars i.active,
+.stars:hover i:hover{
+  color:#FFCD42;
+  cursor:pointer;
+  &:hover ~ i{
+    color:#ccc;
+  }
+}
