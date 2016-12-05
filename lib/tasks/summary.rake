@@ -15,7 +15,7 @@ namespace :stats do
   task collect: :environment do
     new_users = User.created_on(Time.now).count
     new_upgrades = Upgrading.created_on(Time.now).count
-    percent_pro = User.count.to_f / Upgrading.count.to_f
+    percent_pro = (User.where(is_pro: true).count.to_f / User.count.to_f) * 100
     Stat.create(new_users: new_users, new_upgrades: new_upgrades, percent_pro: percent_pro)
   end
 end
