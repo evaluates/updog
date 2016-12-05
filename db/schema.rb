@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161202014000) do
+ActiveRecord::Schema.define(version: 20161205164149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,14 @@ ActiveRecord::Schema.define(version: 20161202014000) do
     t.string   "document_root"
     t.boolean  "render_markdown"
     t.string   "db_path"
+  end
+
+  create_table "stats", force: :cascade do |t|
+    t.integer  "new_users"
+    t.integer  "new_upgrades"
+    t.float    "percent_pro"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "subscriptions", force: :cascade do |t|

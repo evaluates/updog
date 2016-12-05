@@ -10,3 +10,12 @@ namespace :request_count do
     File.write(Rails.root.join('tmp/request-count.txt'),Click.all.count)
   end
 end
+namespace :stats do
+  desc "Collect Stats"
+  task collect: :environment do
+    new_users = User.created_on(Time.now).count
+    new_upgrades = Upgrading.created_on(Time.now).count
+    percent_pro = User.count.to_f / Upgrading.count.to_f
+    Stat.create(new_users: new_users, new_upgrades: new_upgrades, percent_pro: percent_pro)
+  end
+end
