@@ -1,0 +1,49 @@
+<div class='wrapper'>
+  <h2>Frequently Asked Questions</h2>
+  <dl class='faq'>
+    <dt>What's UpDog?</dt>
+    <dd>Nothing much, you? :)</dd>
+    <dt>How much does UpDog cost?</dt>
+    <dd>UpDog provides free hosting for one site, and includes:
+      <ul>
+	<li>A custom domain name</li>
+	<li>Custom 404 pages</li>
+	<li>Custom Favicons</li>
+      </ul>
+      UpDog Pro is a $5 monthly charge, which gives you access to priority
+      support as well as these awesome features:
+      <ul>
+	<li>Unlimited Sites</li>
+	<li>Support for automatic markdown rendering</li>
+	<li>Lower cache times</li>
+	<li>Custom document roots</li>
+	<li>Use any folder in Dropbox</li>
+	<li>Support for contact forms</li>
+      </ul>
+      <dt>Is UpDog secure?</dt>
+      <dd>Yes! SSL certificates (https) are provided for all *.updog.co domains.
+      We do not store or duplicate your content on our servers. When a request
+      is made to UpDog, the request is forwarded directly to Dropbox to retrieve
+      a file's contents. The only people who can see your content are those with
+      whom you've shared an updog link.
+      </dd>
+      <dt>Will you help me set up a custom domain?</dt>
+      <dd>Yes! Shoot me an email at jesse@updog.co</dd>
+
+      <dt>Can I delete my account?</dt>
+      <dd>You can revoke this application's access to your Dropbox
+      account at any time by visiting <a href='https://www.dropbox.com/account/#apps'>https://www.dropbox.com/account/#apps</a>
+      and clicking the "x" on the far right.</dd>
+      <dt>Can I use an apex domain with UpDog?</dt>
+      <dd>At this time, apex (or bare) domains are not supported with UpDog. You must use a subdomain, like www.
+      With your domain registrar, you can forward bare domains to your updog domain: example.com -> www.example.com
+      </dd>
+    </dd>
+  </dl>
+  <script>
+    $(".faq dt").each(function(i){
+      $(this).attr("id", i)
+      $(this).html("<a href='#"+i+"'>"+$(this).html()+"</a>")
+    })
+  </script>
+</div>

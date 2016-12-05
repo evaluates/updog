@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :reviews
   resources :payment_notifications, only: [:create]
   get '/about', to: 'pages#about'
+  get '/faq', to: 'pages#faq'
   get '/tos', to: 'pages#tos'
   get '/source', to: 'pages#source'
   get '/contact', to: 'pages#contact'
