@@ -89,18 +89,7 @@ class PagesController < ApplicationController
       }.sort_by{|k| k[0]}
       @sites = Site.created_today
       @popular_sites = Site.popular
-      daily_revenue = Upgrading.group("DATE(created_at)").count.map{|k,v|
-        [k.to_time.to_i * 1000, v * 5]
-      }.sort_by{|k| k[0]}
-      @daily_revenue = []
-      daily_revenue.each_with_index do |r,i|
-	nextr = daily_revenue[i+1]
-	plus_one_day = ((r[0].to_i / 1000) + 1.day) * 1000
-        @daily_revenue << r
-	if nextr && nextr[0] != plus_one_day
-	  @daily_revenue << [plus_one_day, 0]
-	end
-      end
+
       @revenue = User.where(is_pro: true).count * 5
       @avg_pro_time = upgrade_times.inject{|sum,el| sum + el}.to_f / upgrades.count
       @mean_pro_time = median upgrade_times
@@ -109,6 +98,7 @@ class PagesController < ApplicationController
       @paying_users = pros.count
       @stats = Stat.all
       @pct_pro = @stats.map{|stat| [stat.date.to_i * 1000, stat.percent_pro] }
+      @daily_revenue = @stats.map{|stat| [stat.date.to_i * 1000, stat.new_upgrades * 5] }
     else
       redirect_to root_path
     end
