@@ -16,6 +16,20 @@ namespace :stats do
     new_users = User.created_on(Time.now).count
     new_upgrades = Upgrading.created_on(Time.now).count
     percent_pro = (User.where(is_pro: true).count.to_f / User.count.to_f) * 100
-    Stat.create(new_users: new_users, new_upgrades: new_upgrades, percent_pro: percent_pro)
+    Stat.create(new_users: new_users, new_upgrades: new_upgrades, percent_pro: percent_pro, date: Time.now.beginning_of_day)
+  end
+  desc "Collect Old Stats"
+  task retro: :environment do
+    time = Date.parse("2016-10-15")
+    Stat.destroy_all
+    while time < Time.now
+      p time
+      time += 1.day
+      new_users = User.created_on(time).count
+      new_upgrades = Upgrading.created_on(time).count
+      users = User.where('created_at < ?', time)
+      percent_pro = (users.where(is_pro: true).count.to_f / users.count.to_f) * 100
+      Stat.create(new_users: new_users, new_upgrades: new_upgrades, percent_pro: percent_pro, date: time.beginning_of_day)
+    end
   end
 end

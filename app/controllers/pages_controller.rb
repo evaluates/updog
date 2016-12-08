@@ -104,10 +104,11 @@ class PagesController < ApplicationController
       @revenue = User.where(is_pro: true).count * 5
       @avg_pro_time = upgrade_times.inject{|sum,el| sum + el}.to_f / upgrades.count
       @mean_pro_time = median upgrade_times
-      @pct_pro = ((pros.count.to_f / User.all.count.to_f) * 100).round(2)
       @pct_new_pro = ((new_users.where(is_pro:true).count.to_f / new_users.count.to_f) * 100).round(2)
       @num_users = User.all.count
       @paying_users = pros.count
+      @stats = Stat.all
+      @pct_pro = @stats.map{|stat| [stat.date.to_i * 1000, stat.percent_pro] }
     else
       redirect_to root_path
     end
