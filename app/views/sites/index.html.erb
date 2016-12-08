@@ -1,19 +1,27 @@
 <% if current_user %>
   <div class='wrapper'>
-      <div class='sites'>
-	<%= render 'create' %>
-    <% if @sites.length != 0 %>
-      <h2>Your Sites:</h2>
-    <ul>
-	<% @sites.each do |s| %>
-	  <li class='cf'>
-
-	  <div class='left'><%= link_to s.name, site_path( s ) %> </div> <div class='right'> <%= link_to 'Settings', edit_site_path( s ), :class => 'btn-edit' %>
-    </div>
-	  </li>
-	<% end %>
-      </ul>
-    <% end %>
+    <div class='sites'>
+      <%= render 'create' %>
+      <% if @sites.length != 0 %>
+        <h2>Your Sites:</h2>
+        <ul>
+        <% @sites.each do |s| %>
+          <li class='cf'>
+            <div class='left'><%= link_to s.name, site_path( s ) %> </div> <div class='right'> <%= link_to 'Settings', edit_site_path( s ), :class => 'btn-edit' %>
+            </div>
+          </li>
+        <% end %>
+        </ul>
+      <% end %>
+      <% if @sites.count == 0 %>
+      <br>
+      <p>
+        Learn more about creating a site by viewing the video below:
+      </p>
+      <br>
+      <iframe src="https://player.vimeo.com/video/194891291?byline=0&portrait=0" width="640" height="359" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+      <p><a href="https://vimeo.com/194891291">Creating Your First UpDog Site</a> from <a href="https://vimeo.com/user34026330">Jesse Shawl</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+      <% end %>
     </div>
   </div>
 
