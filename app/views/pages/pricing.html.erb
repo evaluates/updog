@@ -58,6 +58,12 @@
       <td>
       </td>
       <td style='text-align:center;'>
+	<%= form_tag @paypal_url do %>
+	   <%= hidden_field_tag :cmd, "_s-xclick" %>
+	   <%= hidden_field_tag :encrypted, @encrypted %>
+	  <input type='image' src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/buy-logo-medium.png" alt="Buy now with PayPal" />
+	<% end %>
+	<br>
 	<form action="/checkout" class='checkout' method="post" style='display:inline-block;'>
 	  <noscript>You must <a href="http://www.enable-javascript.com" target="_blank">enable JavaScript</a> in your web browser in order to pay via Stripe.</noscript>
 	  <input
@@ -85,13 +91,6 @@
 	    });
 	  </script>
 	</form>
-	<br>
-	<br>
-	<%= form_tag @paypal_url do %>
-	   <%= hidden_field_tag :cmd, "_s-xclick" %>
-	   <%= hidden_field_tag :encrypted, @encrypted %>
-	  <input type='image' src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/buy-logo-medium.png" alt="Buy now with PayPal" />
-	<% end %>
       <% end %>
 	  </td>
 	</tr>
