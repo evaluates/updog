@@ -1,3 +1,4 @@
+require 'split/dashboard'
 Split::Dashboard.use Rack::Auth::Basic do |username, password|
   # Protect against timing attacks:
   # - Use & (do not use &&) so that it doesn't short circuit.
