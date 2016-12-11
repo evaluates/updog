@@ -1,5 +1,6 @@
 class Site < ActiveRecord::Base
   belongs_to :user, :foreign_key => :uid, :primary_key => :uid
+  attr_accessor :passcode
   has_many :clicks
   has_many :contacts
   has_paper_trail
@@ -10,6 +11,19 @@ class Site < ActiveRecord::Base
   validate :domain_is_a_subdomain
   before_validation :namify
   after_create :notify_drip
+
+  before_save :encrypt_password
+  after_save :clear_password
+
+  def encrypt_password
+    if passcode.present?
+      self.encrypted_passcode= Digest::SHA2.hexdigest(passcode)
+    end
+  end
+
+  def clear_password
+    self.passcode = nil
+  end
 
   def to_param
       "#{id}-#{name.parameterize}"

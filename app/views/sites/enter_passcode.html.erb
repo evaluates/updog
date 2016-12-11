@@ -1,0 +1,7 @@
+<form action="/verify" method="post">
+  <input type="text" name="passcode" value="" placeholder="enter passcode">
+</form>
+<pre>
+  <%= session["passcode_for_17"] %>
+  <%= @site.encrypted_passcode %>
+</pre>

@@ -74,7 +74,9 @@
     <% else %>
       <%= f.check_box :render_markdown, checked: true %>
     <% end %>
-      <br><br>
+    <%= f.label :passcode %>
+    <%= f.text_field :passcode %>
+    <br><br>
   <% end %>
   <%= f.submit 'Save', :class => 'btn-create' %>
   <div class='instructions'>

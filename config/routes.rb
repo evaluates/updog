@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   match 'auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   match '/', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :put, :patch, :delete]
   match '/*req', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :put, :patch, :delete]
+  post '/verify', to: 'sites#passcode_verify'
   match '/', to: 'sites#send_contact', constraints: { subdomain: /.+/}, via: [:post]
   match '/*req', to: 'sites#send_contact', constraints: { subdomain: /.+/}, via: [:post]
   root 'sites#index'

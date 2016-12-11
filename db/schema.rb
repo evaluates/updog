@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161211143815) do
+ActiveRecord::Schema.define(version: 20161211162759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,14 +45,15 @@ ActiveRecord::Schema.define(version: 20161211143815) do
 
   create_table "sites", force: :cascade do |t|
     t.integer  "uid"
-    t.string   "name",            limit: 255
+    t.string   "name",               limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "subdomain",       limit: 255
-    t.string   "domain",          limit: 255
+    t.string   "subdomain",          limit: 255
+    t.string   "domain",             limit: 255
     t.string   "document_root"
     t.boolean  "render_markdown"
     t.string   "db_path"
+    t.string   "encrypted_passcode"
   end
 
   create_table "stats", force: :cascade do |t|

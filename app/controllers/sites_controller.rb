@@ -3,7 +3,7 @@ require 'rouge'
 
 class SitesController < ApplicationController
   layout "layouts/application"
-  protect_from_forgery except: :load
+  protect_from_forgery except: [:load, :passcode_verify]
   def index
     @sites = Site.where( uid: session[:user_id] )
     @count = File.read(Rails.root.join("tmp/request-count.txt"))
@@ -33,6 +33,7 @@ class SitesController < ApplicationController
     @site.destroy
     redirect_to sites_path, :notice => "Deleted. #{undo_link}?"
   end
+
   def load
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
     @site.clicks.create(data:{
@@ -43,6 +44,12 @@ class SitesController < ApplicationController
     if !@site
      render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true
      return
+    end
+    puts "***" * 80
+    puts "session['passcode_for_#{@site.id}'] = " + (session["passcode_for_#{@site.id}"] || '')
+    puts "***" * 80
+    if @site.encrypted_passcode != "" && @site.encrypted_passcode != session["passcode_for_#{@site.id}"]
+      return render 'enter_passcode', layout: false
     end
     uri = request.env['PATH_INFO']
     if uri == '/markdown.css'
@@ -207,6 +214,15 @@ class SitesController < ApplicationController
     response.headers['Has_more'] = res["has_more"].to_s
     render json: folders, content_type: 'application/json'
   end
+  def passcode_verify
+    @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
+    passcode = params[:passcode]
+    session["passcode_for_#{@site.id}"] = Digest::SHA2.hexdigest(passcode)
+    puts "***" * 80
+    puts "session['passcode_for_#{@site.id}'] = " + session["passcode_for_#{@site.id}"]
+    puts "***" * 80
+    redirect_to "/"
+  end
 
   private
   def headers
@@ -216,7 +232,7 @@ class SitesController < ApplicationController
     }
   end
   def site_params
-    params.require(:site).permit(:name, :domain, :document_root, :render_markdown, :db_path)
+    params.require(:site).permit(:name, :domain, :document_root, :render_markdown, :db_path, :passcode)
   end
   def undo_link
     view_context.link_to("undo", revert_version_path(@site.versions.last), :method => :post)

@@ -12,6 +12,7 @@ gem 'rouge'
 gem 'redis-rails'
 gem 'split'
 gem 'stripe'
+gem 'thin'
 gem 'unicorn'
 
 group :development, :test do
