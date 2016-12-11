@@ -11,7 +11,7 @@
       <tbody>
 	<tr class='pricing'>
 	  <td>Free!</td>
-	  <td>$5 monthly*</td>
+	  <td>$<%= @price %> one time ever!*</td>
 	</tr>
 	<tr>
 	  <td>1 Site</td>
@@ -65,7 +65,7 @@
 	      value="Pay with card"
 	      data-name="UpDog Pro"
 	      data-key="<%= ENV['stripe_publishable_key'] %>"
-	      data-amount=500
+	      data-amount=<%= @price.to_f * 100 %>
 	      class='btn-create trigger-checkout'
 	      data-currency='USD'
 	  />

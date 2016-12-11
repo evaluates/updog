@@ -3,7 +3,7 @@ class PaymentNotificationsController < ApplicationController
   def create
     params.each { |k, v| params[k] = v.force_encoding('ISO-8859-1').encode('UTF-8') }
     PaymentNotification.create!(:params => params, :user_id => params[:invoice], :status => params[:payment_status], :transaction_id => params[:txn_id])
-    User.find(params[:invoice]).create_upgrading! source: 'paypal'
+    User.find(params[:invoice]).create_upgrading! source: 'paypal', price: params[:mc_gross]
     render :nothing => true
   end
 end

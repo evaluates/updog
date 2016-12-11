@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount Split::Dashboard, at: 'splitabresults'
   match 'auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   match '/', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :put, :patch, :delete]
   match '/*req', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :put, :patch, :delete]

@@ -9,6 +9,8 @@ gem 'gibbon'
 gem 'rails_12factor'
 gem 'kramdown'
 gem 'rouge'
+gem 'redis-rails'
+gem 'split', require: 'split/dashboard'
 gem 'stripe'
 gem 'unicorn'
 
