@@ -78,9 +78,19 @@ class Site < ActiveRecord::Base
       logger.info "Db path: #{self.db_path}"
       res = HTTParty.post(url, opts)
       oat = res.body.html_safe
+      oat = res.body.gsub("</body>","#{injectee}</body>").html_safe if inject?
       oat = "Not found - Please Reauthenticate Dropbox" if oat.match("Invalid authorization value")
       oat
     end
+  end
+
+  def inject?
+    !self.creator.is_pro && self.creator.id > 1547
+  end
+
+  def injectee
+    href = "https://updog.co/?utm_source=#{self.name}&utm_campaign=stamp"
+    "<div style='position:relative;'><a style='position:absolute;margin-bottom:-2px;bottom:0;border: 2px solid black;right:15px;font-size:.75em;background:#fff;display:flex;align-items:center;text-decoration:none;border-radius:5px 5px 0 0;padding:0em .5em;' href='#{href}'><img style='display:inline-block;height:15px;border-radius:5px 0 0 0 ;' src=\"https://s3-us-west-2.amazonaws.com/s.cdpn.io/8431/logo_copy.png\" alt=\"\" /><span style='color:#000;display:inline-block;'> Hosted on UpDog</span></a></div>"
   end
 
   def domain_isnt_updog
