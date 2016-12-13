@@ -17,73 +17,61 @@
     <ul>
       <li>Unlimited sites</li>
       <li>5 second cache time</li>
-      <li>5 second cache time</li>
       <li><a href='/news/use-any-folder-in-dropbox/'>Use any folder in Dropbox</a></li>
       <li>Unlimited site folder sharing</li>
       <li><a href='/news/deploy-jekyll/'>Custom document root</a></li>
       <li><a href='https://jshawl.updog.co/markdown-example.md'>Support for markdown rendering</a></li>
   	  <li><a href='/news/how-to-add-a-contact-form-to-your-website/'>Process contact forms</a></li>
+      <li>Remove "Hosted on UpDog" footer</li>
     </ul>
+    <% if current_user %>
+      <% if current_user.is_pro %>
+        Thank you for upgrading to Pro!
+      <% else %>
+      <div style='text-align:center'>
+        <%= form_tag @paypal_url do %>
+           <%= hidden_field_tag :cmd, "_s-xclick" %>
+           <%= hidden_field_tag :encrypted, @encrypted %>
+          <input type='image' src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/buy-logo-medium.png" alt="Buy now with PayPal" />
+        <% end %>
+        <form action="/checkout" class='checkout' method="post" style='display:inline-block;'>
+          <noscript>You must <a href="http://www.enable-javascript.com" target="_blank">enable JavaScript</a> in your web browser in order to pay via Stripe.</noscript>
+          <input
+              type="submit"
+              value="Pay with card"
+              data-name="UpDog Pro"
+              data-key="<%= ENV['stripe_publishable_key'] %>"
+              data-amount=<%= @price.to_f * 100 %>
+              class='btn-create trigger-checkout'
+              data-currency='USD'
+          />
+          <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+          <script src="https://checkout.stripe.com/v2/checkout.js"></script>
+          <script>
+            $('.trigger-checkout').on('click', function(event) {
+          event.preventDefault();
+          var $button = $(this),
+              $form = $button.parents('form');
+          var opts = $.extend({}, $button.data(), {
+              token: function(result) {
+            $form.append($('<input>').attr({ type: 'hidden', name: 'stripeToken', value: result.id })).submit();
+              }
+          });
+          StripeCheckout.open(opts);
+            });
+          </script>
+        </form>
+      </div>
+      <% end %>
+    <% else %>
+    <div style='text-align:center'>
+      <br>
+      <a href='/auth/dropbox' class='dropbox'><span class='fa fa-dropbox'></span> Log In to Upgrade</a>
+    </div>
+    <% end %>
   </div>
 
-      <% if @current_user %>
-	<tr>
-      <% if current_user.is_pro %>
-      <td>
-	Free!
-      </td>
-      <td>
-	Thank you for upgrading to Pro!
-      </td>
-      <% else %>
-      <td>
-      </td>
-      <td style='text-align:center;'>
-	<%= form_tag @paypal_url do %>
-	   <%= hidden_field_tag :cmd, "_s-xclick" %>
-	   <%= hidden_field_tag :encrypted, @encrypted %>
-	  <input type='image' src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/buy-logo-medium.png" alt="Buy now with PayPal" />
-	<% end %>
-	<br>
-	<form action="/checkout" class='checkout' method="post" style='display:inline-block;'>
-	  <noscript>You must <a href="http://www.enable-javascript.com" target="_blank">enable JavaScript</a> in your web browser in order to pay via Stripe.</noscript>
-	  <input
-	      type="submit"
-	      value="Pay with card"
-	      data-name="UpDog Pro"
-	      data-key="<%= ENV['stripe_publishable_key'] %>"
-	      data-amount=<%= @price.to_f * 100 %>
-	      class='btn-create trigger-checkout'
-	      data-currency='USD'
-	  />
-	  <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-	  <script src="https://checkout.stripe.com/v2/checkout.js"></script>
-	  <script>
-	    $('.trigger-checkout').on('click', function(event) {
-		event.preventDefault();
-		var $button = $(this),
-		    $form = $button.parents('form');
-		var opts = $.extend({}, $button.data(), {
-		    token: function(result) {
-			$form.append($('<input>').attr({ type: 'hidden', name: 'stripeToken', value: result.id })).submit();
-		    }
-		});
-		StripeCheckout.open(opts);
-	    });
-	  </script>
-	</form>
-      <% end %>
-	  </td>
-	</tr>
-  <% else %>
-  <tr>
-    <td></td>
-    <td><a href='/auth/dropbox' class='dropbox'><span class='fa fa-dropbox'></span> Log In to Upgrade</a></td>
-  </tr>
-  <% end %>
-      </tbody>
-    </table>
-    <p>*We offer a no-questions-asked refund policy on all purchases. <a href='/contact'>Contact us</a> at any time
+    <p style='clear:both;'><br><br>*We offer a no-questions-asked refund policy on all purchases. <a href='/contact'>Contact us</a> at any time
     if you'd like your money back.
     </p>
   </div>

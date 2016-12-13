@@ -28,7 +28,7 @@ body{
 
 .wrapper{
   width:80%;
-  max-width:40em;
+  max-width:45em;
   margin:auto;
 
   @media (max-width:40em){
@@ -341,4 +341,8 @@ pre code{
 }
 ul{
   text-align:left;
+}
+
+.pricing{
+  margin:.5em;
 }
