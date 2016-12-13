@@ -74,8 +74,14 @@
     <% else %>
       <%= f.check_box :render_markdown, checked: true %>
     <% end %>
+    <% if params[:passcode] %>
+    <br><br>
     <%= f.label :passcode %>
-    <%= f.text_field :passcode %>
+    <% if @site.encrypted_passcode %>
+      This site is currently protected with a passcode. <%= link_to "Remove passcode", site_password_path(@site), method: :delete %>.<br>
+    <% end %>
+    <%= f.text_field :passcode, placeholder: 'Enter new passcode' %>
+    <% end %>
     <br><br>
   <% end %>
   <%= f.submit 'Save', :class => 'btn-create' %>

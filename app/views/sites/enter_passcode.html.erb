@@ -1,7 +1,46 @@
-<form action="/verify" method="post">
-  <input type="text" name="passcode" value="" placeholder="enter passcode">
-</form>
-<pre>
-  <%= session["passcode_for_17"] %>
-  <%= @site.encrypted_passcode %>
-</pre>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>UpDog</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <style media="screen">
+      body, html{
+        height:100%;
+        margin:0;
+      }
+      body{
+        font-family: 'Open Sans', sans-serif;
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      h2, form{
+        width:100%;
+        text-align:center;
+      }
+      img{
+        max-width:80px;
+      }
+      input, button{
+        font:inherit;
+        background:#fff;
+        border: 2px solid #000;
+        padding:.5em 1em;
+      }
+      button{
+        cursor:pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="/verify" method="post">
+      <a href="https://updog.co/"><img src='https://updog.co/logo.png'></a>
+      <h2>This site is protected with a passcode.</h2>
+      <%= flash[:alert] %>
+      <input type="password" name="passcode" value="" placeholder="enter passcode">
+      <button type="submit" name="button">Submit</button>
+    </form>
+  </body>
+</html>

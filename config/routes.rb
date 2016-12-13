@@ -31,5 +31,7 @@ Rails.application.routes.draw do
   post '/webhook', to: 'webhook#post'
   post "/versions/:id/revert", to: "versions#revert", as: "revert_version"
   post "/checkout", to: "payments#checkout"
-  resources :sites, path: ''
+  resources :sites, path: '' do
+    delete 'password'
+  end
 end

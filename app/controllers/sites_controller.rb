@@ -45,10 +45,10 @@ class SitesController < ApplicationController
      render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true
      return
     end
-    puts "***" * 80
-    puts "session['passcode_for_#{@site.id}'] = " + (session["passcode_for_#{@site.id}"] || '')
-    puts "***" * 80
     if @site.encrypted_passcode != "" && @site.encrypted_passcode != session["passcode_for_#{@site.id}"]
+      if session["passcode_for_#{@site.id}"]
+        flash[:alert] = "Passcode incorrect"
+      end
       return render 'enter_passcode', layout: false
     end
     uri = request.env['PATH_INFO']
@@ -218,10 +218,13 @@ class SitesController < ApplicationController
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
     passcode = params[:passcode]
     session["passcode_for_#{@site.id}"] = Digest::SHA2.hexdigest(passcode)
-    puts "***" * 80
-    puts "session['passcode_for_#{@site.id}'] = " + session["passcode_for_#{@site.id}"]
-    puts "***" * 80
     redirect_to "/"
+  end
+
+  def password # for deletin
+    @site = Site.find_by( uid: session[:user_id], id: params[:site_id] )
+    @site.update(encrypted_passcode: nil)
+    redirect_to :back
   end
 
   private
