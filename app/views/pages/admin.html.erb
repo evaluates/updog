@@ -1,5 +1,16 @@
 <div class='wrapper'>
-  <%= Click.all.count %> requests served, and counting.
+  <form>
+    <input type="search" name="email">
+  </form>
+  <% if @user %>
+    <%= @user.email %>
+    <% if @user.is_pro %>
+      <small>(pro)</small>:
+    <% end %>
+    <% @user.sites.each do |site| %>
+      <%= site.subdomain %> | <%= site.domain %>
+    <% end %>
+  <% end %>
   <h2><%= @sites.length %> New Sites</h2>
   <% @sites.each do |site| %>
     <a href='http://<%= site.link %>'>http://<%= site.link %></a> - <%= site.creator.email %><br>

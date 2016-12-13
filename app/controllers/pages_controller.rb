@@ -101,6 +101,9 @@ class PagesController < ApplicationController
       @stats = Stat.all
       @pct_pro = @stats.map{|stat| [stat.date.to_i * 1000, stat.percent_pro] }
       @daily_revenue = @stats.map{|stat| [stat.date.to_i * 1000, stat.new_upgrades * 5] }
+      if params[:email]
+        @user = User.find_by(email: URI.decode(params[:email]))
+      end
     else
       redirect_to root_path
     end
