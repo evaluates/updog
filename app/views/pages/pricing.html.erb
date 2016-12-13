@@ -1,50 +1,31 @@
 <div class='wrapper'>
   <h2>Pricing</h2>
-  <div class='frhul'>
-    <table>
-      <thead>
-	<tr>
-	  <th>Basic</th>
-	  <th>Pro</th>
-	</tr>
-      </thead>
-      <tbody>
-	<tr class='pricing'>
-	  <td>Free!</td>
-	  <td>$<%= @price %> one time ever!*</td>
-	</tr>
-	<tr>
-	  <td>1 Site</td>
-	  <td>Unlimited sites</td>
-	</tr>
-	<tr>
-	  <td>30 second cache time</td>
-	  <td>5 second cache time</td>
-	</tr>
-	<tr>
-	  <td>Use folders created by this application</td>
-	  <td><a href='/news/use-any-folder-in-dropbox/'>Use any folder in Dropbox</a></td>
-	</tr>
-	<tr>
-	  <td class='no'>No site folder sharing</td>
-	  <td>Unlimited site folder sharing</td>
-	</tr>
-	<tr>
-	  <td class='no'>No custom document root</td>
-	  <td><a href='/news/deploy-jekyll/'>Custom document root</a></td>
-	</tr>
-	<tr>
-	  <td class='no'>No support for markdown rendering</td>
-	  <td><a href='https://jshawl.updog.co/markdown-example.md'>Support for markdown rendering</a></td>
-	</tr>
-	<tr>
-	  <td class='no'>No contact forms</td>
-	  <td><a href='/news/how-to-add-a-contact-form-to-your-website/'>Process contact forms</a></td>
-	</tr>
-	<tr>
-	  <td>We will help you transfer your site from a web host.</td>
-	  <td>We will help you transfer your site from a web host.</td>
-	</tr>
+  <div class="left fifty">
+    <h3 class='pricing'>Basic: Free</h3>
+    <ul>
+      <li>1 Site</li>
+      <li>30 second cache time</li>
+      <li>Use folders created by this application</li>
+      <li class='no'>No site folder sharing</li>
+      <li class='no'>No custom document root</li>
+      <li class='no'>No support for markdown rendering</li>
+  	  <li class='no'>No contact forms</li>
+    </ul>
+  </div>
+  <div class="left fifty">
+    <h3 class='pricing'>Pro: $<%= @price %> one time ever!*</h3>
+    <ul>
+      <li>Unlimited sites</li>
+      <li>5 second cache time</li>
+      <li>5 second cache time</li>
+      <li><a href='/news/use-any-folder-in-dropbox/'>Use any folder in Dropbox</a></li>
+      <li>Unlimited site folder sharing</li>
+      <li><a href='/news/deploy-jekyll/'>Custom document root</a></li>
+      <li><a href='https://jshawl.updog.co/markdown-example.md'>Support for markdown rendering</a></li>
+  	  <li><a href='/news/how-to-add-a-contact-form-to-your-website/'>Process contact forms</a></li>
+    </ul>
+  </div>
+
       <% if @current_user %>
 	<tr>
       <% if current_user.is_pro %>

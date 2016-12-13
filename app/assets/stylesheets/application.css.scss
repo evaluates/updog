@@ -229,7 +229,7 @@ nav{
 table, td, th{
   border:1px solid #ddd;
   border-collapse:collapse;
-  padding:1em;
+  padding:.5em 1em;
 }
 table{
   width:100%;
@@ -308,7 +308,7 @@ footer{
   }
 }
 
-.pricing td{
+.pricing{
   padding:.5em 1em;
   background: #007ee5;
   color:#fff;
@@ -330,4 +330,15 @@ pre code{
 }
 .float-right{
   float:right;
+}
+
+.fifty{
+  width:50%;
+  box-sizing: border-box;
+  @media all and(max-width:40em){
+    width:100%;
+  }
+}
+ul{
+  text-align:left;
 }
