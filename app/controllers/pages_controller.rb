@@ -82,7 +82,7 @@ class PagesController < ApplicationController
       new_users = User.where('created_at > ?', Date.parse('2016-10-17'))
       pros = User.where(is_pro:true)
       upgrade_times = upgrades.map {|u|
-	u.created_at - u.user.created_at
+        u.created_at - u.user.created_at
       }
       @users = User.group("DATE(created_at)").count
       @users = @users.map{|k,v|
