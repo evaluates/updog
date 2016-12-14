@@ -47,7 +47,7 @@ class SitesController < ApplicationController
     end
     if @site.encrypted_passcode != "" && @site.encrypted_passcode != session["passcode_for_#{@site.id}"]
       if session["passcode_for_#{@site.id}"]
-        flash[:alert] = "Passcode incorrect"
+        flash.now[:alert] = "Passcode incorrect"
       end
       return render 'enter_passcode', layout: false
     end
