@@ -218,7 +218,7 @@ class SitesController < ApplicationController
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
     passcode = params[:passcode]
     session["passcode_for_#{@site.id}"] = Digest::SHA2.hexdigest(passcode)
-    redirect_to "/"
+    redirect_to :back
   end
 
   def password # for deletin
