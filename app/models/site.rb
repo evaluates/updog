@@ -99,7 +99,7 @@ class Site < ActiveRecord::Base
   end
 
   def inject?
-    !self.creator.is_pro
+    !self.creator.is_pro && self.creator.id > 1547
   end
 
   def injectee
