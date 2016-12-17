@@ -4,7 +4,7 @@ class PaymentsController < ApplicationController
     begin
       charge = Stripe::Charge.create(
         :source => params[:stripeToken],
-	      :amount => @price * 100,
+	      :amount => (@price * 100).to_i,
 	      :currency => "usd"
       )
       current_user.update!(is_pro: true)
