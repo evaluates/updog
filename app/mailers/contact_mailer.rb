@@ -11,9 +11,10 @@ class ContactMailer < ActionMailer::Base
   def send_welcome(email)
     mail subject: "Welcome to UpDog!", to: email
   end
-  def receipt(email, id)
+  def receipt(email, id, price)
     @id = id
     @time = Time.now
+    @price = price
     mail subject: "UpDog Payment Receipt", to: email
   end
   def user_mailer(email, link, input)

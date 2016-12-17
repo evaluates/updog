@@ -10,7 +10,7 @@ class PaymentsController < ApplicationController
       current_user.update!(is_pro: true)
       current_user.create_upgrading! source: 'stripe', price: (@price / 100.to_f)
       flash[:notice] = "Card charged successfully!"
-      ContactMailer.receipt(current_user.email, charge[:id]).deliver_now!
+      ContactMailer.receipt(current_user.email, charge[:id], @price).deliver_now!
       redirect_to '/thanks'
     rescue => e
       flash[:notice] = e.message

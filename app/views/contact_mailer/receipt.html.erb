@@ -4,13 +4,13 @@
     <meta name='viewport' content='width=device-width'>
   </head>
 <body style='max-width:100%'>
-<p>This is a receipt for your payment of $5 to UpDog.</p>
+<p>This is a receipt for your payment of $<%= @price %> to UpDog.</p>
 
 <pre>
 -----------------------
 
 UpDog Receipt - <%= @time %>
-Amount: $5.00
+Amount: $<%= @price %>
 ID: <%= @id %>
 
 UpDog Co
