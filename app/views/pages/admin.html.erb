@@ -20,6 +20,8 @@
     <a href='http://<%= site.link %>'>http://<%= site.link %></a> - <%= site.creator.email %> - <%= site.clicks_today.count %> clicks<br>
   <% end %>
   <h2>Stats</h2>
+    <strong>Average time it takes to go pro: </strong> <%= distance_of_time_in_words @avg_pro_time %><br>
+    <strong>Mean time it takes to go pro: </strong> <%= distance_of_time_in_words @mean_pro_time %><br>
   <strong>Total Revenue: </strong> $<%= @revenue %><br>
   <strong>% Pro users since launch: </strong><%= @pct_new_pro %><br>
   <strong>Num users: </strong><%= @num_users %><br>
