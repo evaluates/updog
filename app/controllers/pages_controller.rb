@@ -9,7 +9,7 @@ class PagesController < ApplicationController
   end
 
   def faq
-
+    @price = ab_test(:price, '4.99', '5', '9.99', '14.99', '19.99')
   end
 
   def feedback
