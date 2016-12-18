@@ -6,8 +6,8 @@
 </description>
     <link>/news/</link>
     <atom:link href="/news/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 18 Dec 2016 06:53:42 -0600</pubDate>
-    <lastBuildDate>Sun, 18 Dec 2016 06:53:42 -0600</lastBuildDate>
+    <pubDate>Sun, 18 Dec 2016 07:00:34 -0600</pubDate>
+    <lastBuildDate>Sun, 18 Dec 2016 07:00:34 -0600</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -19,7 +19,7 @@
 &lt;p&gt;You asked, we listened!&lt;/p&gt;
 
 &lt;p&gt;A few members have asked for the ability to password protect the sites
-they’ve created on updog.co, and now they can!&lt;/p&gt;
+they’ve created on updog.co, and now &lt;em&gt;all&lt;/em&gt; Pro members can!&lt;/p&gt;
 
 &lt;p&gt;When you create a site on updog.co, your site is only accessible
 to those with whom you share the URL. In some cases, you might want

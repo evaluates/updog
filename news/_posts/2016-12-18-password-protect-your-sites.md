@@ -9,7 +9,7 @@ layout: post
 You asked, we listened!
 
 A few members have asked for the ability to password protect the sites
-they've created on updog.co, and now they can!
+they've created on updog.co, and now _all_ Pro members can!
 
 When you create a site on updog.co, your site is only accessible
 to those with whom you share the URL. In some cases, you might want
