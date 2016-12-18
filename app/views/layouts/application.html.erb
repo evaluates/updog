@@ -30,6 +30,10 @@
   <!-- End Facebook Pixel Code -->
 </head>
 <body>
+  <div class='poll'>
+    <div class='wrapper'>
+      Would you like to use a cloud drive other than Dropbox? <a href='https://updog.typeform.com/to/S4IieD'>Take this one-question survey.</a></div>
+    </div>
   <header>
   <div class='wrapper'>
     <h1><a href='/<%= @admin %>'><span>&#10145;</span> UpDog</a></h1>
@@ -60,8 +64,8 @@
 
 <footer>
   <div class='wrapper'>
-   &copy; UpDog <%= DateTime.now.strftime("%Y") %> | 
-   <%= link_to "View Source", '/source' %> | 
+   &copy; UpDog <%= DateTime.now.strftime("%Y") %> |
+   <%= link_to "View Source", '/source' %> |
    <a href='/feedback'>Feedback</a> |
    <a href='/tos'>Terms of Service &amp; Privacy Policy</a>
   </div>
@@ -77,12 +81,12 @@
 <!-- Drip -->
 <script type="text/javascript">
   var _dcq = _dcq || [];
-  var _dcs = _dcs || {}; 
+  var _dcs = _dcs || {};
   _dcs.account = '8064476';
-  
+
   (function() {
     var dc = document.createElement('script');
-    dc.type = 'text/javascript'; dc.async = true; 
+    dc.type = 'text/javascript'; dc.async = true;
     dc.src = '//tag.getdrip.com/8064476.js';
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(dc, s);

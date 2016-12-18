@@ -14,6 +14,9 @@
  *= require_self
  */
 
+$blue: #007ee5;
+$green: #54C65D;
+
 a{
   color:#007ee5;
 }
@@ -345,4 +348,13 @@ ul{
 
 .pricing{
   margin:.5em;
+}
+
+.poll{
+  background:$green;
+  color:#fff;
+  padding:.5em 0;
+  a{
+    color: #fff;
+  }
 }
