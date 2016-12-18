@@ -7,7 +7,6 @@ Mime::Type.register "text/plain", :md
 Mime::Type.register "audio/mpeg", :mp3
 Mime::Type.register "application/epub+zip", :epub
 Mime::Type.register "text/plain", :txt
-Mime::Type.register "application/zip", :zip
 Mime::Type.register "application/zip", :htmlz
 Mime::Type.register "application/x-mobipocket", :prc
 Mime::Type.register "application/pdb", :pdb
@@ -17,7 +16,6 @@ Mime::Type.register "application/x-sony-bbeb", :lrf
 Mime::Type.register "application/x-bbeb-book", :lrx
 Mime::Type.register "text/fb2", :fb2
 Mime::Type.register "application/rar", :rar
-Mime::Type.register "application/pdf", :pdf
 Mime::Type.register "text/rtf", :rtf
 Mime::Type.register "application/x-ms-reader", :lit
 Mime::Type.register "application/msword", :doc
