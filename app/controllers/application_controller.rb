@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   def current_user
     User.find_by( access_token: session['access_token'] )
   end
+  
   private
   def set_admin
     @admin = "admin" if current_user && current_user.email == "jesseshawl@gmail.com"

@@ -75,12 +75,17 @@
       <%= f.check_box :render_markdown, checked: true %>
     <% end %>
     <br><br>
+    <div class="password-protect">
+      <h2><i class='fa fa-lock'></i> Password Protection</h2>
+    <%= f.label :username %>
+    <%= f.text_field :username %>
     <%= f.label :passcode %>
     <% if @site.encrypted_passcode %>
       This site is currently protected with a passcode. <%= link_to "Remove passcode", site_password_path(@site), method: :delete %>.<br>
     <% end %>
     <%= f.password_field :passcode, placeholder: 'Enter new passcode' %>
     <br><br>
+    </div>
   <% end %>
   <%= f.submit 'Save', :class => 'btn-create' %>
   <div class='instructions'>

@@ -1,9 +1,12 @@
 require 'kramdown'
 require 'rouge'
+require 'digest'
 
 class SitesController < ApplicationController
   layout "layouts/application"
   protect_from_forgery except: [:load, :passcode_verify]
+  before_filter :authenticate, only: [:load]
+
   def index
     @sites = Site.where( uid: session[:user_id] )
     @count = File.read(Rails.root.join("tmp/request-count.txt"))
@@ -34,6 +37,20 @@ class SitesController < ApplicationController
     redirect_to sites_path, :notice => "Deleted. #{undo_link}?"
   end
 
+  def authenticate
+    @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
+    if @site.username.present?
+      authenticate_or_request_with_http_basic do |name, password|
+        name == @site.username && Digest::SHA2.hexdigest(password) == @site.encrypted_passcode
+      end
+    elsif @site.encrypted_passcode != "" && @site.encrypted_passcode != session["passcode_for_#{@site.id}"]
+      if session["passcode_for_#{@site.id}"]
+        flash.now[:alert] = "Passcode incorrect"
+      end
+      return render 'enter_passcode', layout: false
+    end
+  end
+
   def load
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
     @site.clicks.create(data:{
@@ -44,12 +61,6 @@ class SitesController < ApplicationController
     if !@site
      render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true
      return
-    end
-    if @site.encrypted_passcode != "" && @site.encrypted_passcode != session["passcode_for_#{@site.id}"]
-      if session["passcode_for_#{@site.id}"]
-        flash.now[:alert] = "Passcode incorrect"
-      end
-      return render 'enter_passcode', layout: false
     end
     uri = request.env['PATH_INFO']
     if uri == '/markdown.css'
@@ -130,7 +141,7 @@ class SitesController < ApplicationController
       begin
       	url = 'https://api.dropboxapi.com/2/files/create_folder'
       	opts = {
-        	headers: headers,
+        	headers: db_headers,
       	  body: {
       	    path: @site.name
       	  }.to_json
@@ -227,15 +238,16 @@ class SitesController < ApplicationController
     redirect_to :back
   end
 
+
   private
-  def headers
+  def db_headers
     {
       'Authorization' => "Bearer #{session["access_token"]}",
       'Content-Type' => 'application/json'
     }
   end
   def site_params
-    params.require(:site).permit(:name, :domain, :document_root, :render_markdown, :db_path, :passcode)
+    params.require(:site).permit(:name, :domain, :document_root, :render_markdown, :db_path, :passcode, :username)
   end
   def undo_link
     view_context.link_to("undo", revert_version_path(@site.versions.last), :method => :post)

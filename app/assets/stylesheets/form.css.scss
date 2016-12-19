@@ -4,6 +4,14 @@ form label{
   margin-top:.5em;
 }
 
-input[type="text"]{
+input[type="text"],
+input[type="password"]{
   padding:.5em 1em;
+}
+
+.password-protect{
+  border:1px solid #ccc;
+  padding:1em;
+  margin-bottom:1em;
+  border-radius:5px;
 }
