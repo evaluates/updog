@@ -8,6 +8,7 @@ Bundler.require(*Rails.groups)
 
 module LoginWithDropbox
   class Application < Rails::Application
+    config.active_record.raise_in_transactional_callbacks = true
     config.action_mailer.smtp_settings = {
       address: "smtp.gmail.com",
       port: 587,

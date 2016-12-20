@@ -65,25 +65,26 @@ class SitesController < ApplicationController
     uri = request.env['PATH_INFO']
     if uri == '/markdown.css'
       @content = try_files [uri], @site
-      if @content[:html] == "Not Found"
-	@content = {html: File.read(Rails.root.to_s + '/public/md.css').html_safe, status: 200}
+      if @content[:status] == 404
+	       @content = {html: File.read(Rails.root.to_s + '/public/md.css').html_safe, status: 200}
       end
     else
       @content = try_files [uri, uri + '/index.html', uri + '/directory-index.html', '/404.html'], @site
       @content[:html] = markdown(@content[:html]) if render_markdown? @site, request
     end
-    ct = mime(request, @site)
+    ct = mime(request, @site, @content[:status])
     respond_to do |format|
       format.all { render({:layout => false, :content_type => ct}.merge(@content)) }
     end
   end
 
-  def mime request, site
+  def mime request, site, status
     extname = File.extname(request.env['PATH_INFO'])[1..-1]
     mime_type = Mime::Type.lookup_by_extension(extname)
     mime_type.to_s unless mime_type.nil?
     mime_type = 'text/html; charset=utf-8' if mime_type.nil?
     mime_type = 'text/html; charset=utf-8' if render_markdown?(site, request)
+    mime_type = 'text/html; charset=utf-8' if status == 404
     mime_type.to_s
   end
 
@@ -117,7 +118,7 @@ class SitesController < ApplicationController
     if out.match(/{\".tag\":/) || out.match('Error in call to API function')
       uris.shift
       if uris.length == 0
-	return { html: "Not Found", status: 404 }
+	       return { html: File.read(Rails.public_path + 'load-404.html').html_safe, status: 404 }
       end
       return try_files uris, site
     end
