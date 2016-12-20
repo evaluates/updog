@@ -13,11 +13,11 @@
   <% end %>
   <h2><%= @sites.length %> New Sites</h2>
   <% @sites.each do |site| %>
-    <a href='http://<%= site.link %>'>http://<%= site.link %></a> - <%= site.creator.email %><br>
+    <a href='http://<%= site.link %>'>http://<%= site.link %></a> - <%= site.creator.email if site.creator %><br>
   <% end %>
   <h2>Popular Sites</h2>
   <% @popular_sites.each do |site| %>
-    <a href='http://<%= site.link %>'>http://<%= site.link %></a> - <%= site.creator.email %> - <%= site.clicks_today.count %> clicks<br>
+    <a href='http://<%= site.link %>'>http://<%= site.link %></a> - <%= site.creator.email if site.creator %> - <%= site.clicks_today.count %> clicks<br>
   <% end %>
   <h2>Stats</h2>
     <strong>Average time it takes to go pro: </strong> <%= distance_of_time_in_words @avg_pro_time %><br>
