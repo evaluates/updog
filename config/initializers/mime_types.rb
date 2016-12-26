@@ -26,3 +26,4 @@ Mime::Type.register "application/x-chm", :chm
 Mime::Type.register "application/octet-stream", :azw3
 Mime::Type.register "application/octet-stream", :kf8
 Mime::Type.register "image/vnd.djvu", :djvu
+Mime::Type.register "application/x-shockwave-flash", :swf
