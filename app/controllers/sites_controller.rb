@@ -13,6 +13,7 @@ class SitesController < ApplicationController
   end
   def edit
     @site = current_user.sites.find(params[:id])
+    @identity = current_user.identities.find_by(provider: 'dropbox')
     session[:back_to] = request.url
   end
   def new
@@ -26,6 +27,7 @@ class SitesController < ApplicationController
   end
   def show
     @site = current_user.sites.find(params[:id])
+    @identity = current_user.identities.find_by(provider: 'dropbox')
     unless @site
       return render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true, status: 404
     end

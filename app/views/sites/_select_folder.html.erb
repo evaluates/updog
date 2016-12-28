@@ -1,10 +1,10 @@
-<% if !current_user.full_access_token %>
+<% if !@identity.full_access_token %>
   <a href='/auth/dropbox?full=true' class='dropbox'><i class='fa fa-dropbox'></i> Link Entire Dropbox</a>
   <br>
   <br>
 <% else %>
   <label>Select a Folder</label>
-  <input type="hidden" name="site[db_path]" id="db_path" value="">
+  <input type="hidden" name="site[db_path]" id="db_path" value="<%= @site.db_path %>">
   <% if @site.db_path && @site.db_path != "" %>
     <p>Current folder is <%= @site.db_path %></p>
   <% end %>
@@ -16,7 +16,7 @@
     </div>
   </div>
   <script>
-    var token = '<%= current_user.full_access_token %>'
+    var token = '<%= @identity.full_access_token %>'
     var folders = document.getElementById('folders')
     var container = document.getElementById('db-chooser')
     var $back = $(".back")
