@@ -19,6 +19,7 @@ class SitesController < ApplicationController
   def new
     session[:back_to] = request.url
     @sites = current_user.sites
+    @identity = current_user.identities.find_by(provider: 'dropbox')
     return redirect_to root_path if !current_user
     unless current_user.is_pro? || @sites.length == 0
       redirect_to root_path
