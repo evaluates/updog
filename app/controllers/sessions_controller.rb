@@ -77,7 +77,7 @@ class SessionsController < ApplicationController
         # No user associated with the identity so we need to create a new one
         user = User.create!(uid: uid, email: email)
         if @identity.nil?
-          @identity = Identity.create(user: user, provider: 'dropbox', name: name, email: email)
+          @identity = Identity.create(user: user, provider: 'dropbox', name: name, email: email, uid: uid)
         end
         @identity.user = current_user
         @identity.save
