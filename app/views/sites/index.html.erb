@@ -36,7 +36,7 @@
     <p>Publish your own website for free using Dropbox.
     </p>
     <h3><i class='fa fa-line-chart'></i>
-      <%= number_with_delimiter(@count, :delimiter => ',') %>
+       <span class='js-request-count'><%= number_with_delimiter(@count, :delimiter => ',') %></span>
       requests served, and counting!
     </h3>
     <p>Unlimited file transfer and <em>no</em> storage limits.</p>
@@ -47,4 +47,29 @@
     <h3><i class='fa fa-usd'></i> Straight-forward, Simple Pricing</h3>
     <p>Basic accounts are free, <em>forever</em>. Upgrade to a pro membership for a one-time fee.</p>
   </div>
+  <script>
+    $count = $(".js-request-count")
+    var num = parseInt($count.html().replace(/,/g,''))
+    var from = num - 180
+    increment()
+    function increment(){
+      var delay = Math.floor(Math.random() * 800)
+      setTimeout(function(){
+        $count.html(commafy(from++))
+        increment()
+      }, delay)
+    }
+    function commafy(int){
+      var str = "" + int
+      var out = ""
+      var digits = str.split("").reverse()
+      for(var i = 0; i < digits.length; i++){
+        if(i%3===0 && i !== 0){
+          out += ","
+        }
+        out += digits[i]
+      }
+      return out.split("").reverse().join("")
+    }
+  </script>
   <% end %>
