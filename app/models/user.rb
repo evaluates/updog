@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   has_many :sites, :foreign_key => :uid, :primary_key => :uid
+  has_many :identities
   has_one :upgrading
   def self.subscribe email
     begin

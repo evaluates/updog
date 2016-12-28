@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161219212542) do
+ActiveRecord::Schema.define(version: 20161228121550) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,20 @@ ActiveRecord::Schema.define(version: 20161219212542) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "identities", force: :cascade do |t|
+    t.integer  "uid"
+    t.string   "provider"
+    t.string   "name"
+    t.string   "email"
+    t.string   "access_token"
+    t.string   "full_access_token"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "identities", ["user_id"], name: "index_identities_on_user_id", using: :btree
 
   create_table "payment_notifications", force: :cascade do |t|
     t.text    "params"
@@ -103,4 +117,5 @@ ActiveRecord::Schema.define(version: 20161219212542) do
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
+  add_foreign_key "identities", "users"
 end
