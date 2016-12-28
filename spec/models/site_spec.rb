@@ -3,6 +3,13 @@ ActiveRecord::Base.logger = nil
 
 
 describe Site do
+  before do
+    Site.destroy_all
+    Identity.destroy_all
+    User.destroy_all
+    u = User.create
+    u.identities.create(access_token:ENV['db_access_token'])
+  end
   it "should have a name" do
     s = Site.new( name: 'jjohn' )
     expect(s.name).to eq('jjohn')

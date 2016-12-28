@@ -4,7 +4,10 @@ describe SitesController do
   describe "GET load" do
     before do
       Site.destroy_all
-      u = User.create(access_token:ENV['db_access_token'])
+      Identity.destroy_all
+      User.destroy_all
+      u = User.create
+      u.identities.create(access_token:ENV['db_access_token'])
       u.sites.create(domain:'www.jomdog.com', name:'jom')
       @request.host = 'www.jomdog.com'
       @request.env['PATH_INFO'] = '/index.html'

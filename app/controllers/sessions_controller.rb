@@ -60,10 +60,8 @@ class SessionsController < ApplicationController
     res = HTTParty.post(url, opts)
     name = res['display_name']
     email = res['email']
-    @identity = Identity.find_by(uid: uid, provider: 'dropbox')
-    if @identity.nil?
-      @identity = Identity.create(uid: uid, provider: 'dropbox')
-    end
+    @identity = Identity.find_by(user_id: uid, provider: 'dropbox')
+    binding.pry
     if current_user
       if @identity.user == current_user
         flash[:notice] = "Already linked that account!"
@@ -73,17 +71,20 @@ class SessionsController < ApplicationController
         flash[:notice] = "Successfully linked that account!"
       end
     else
-      if @identity.user.present?
+      if @identity && @identity.user
         session["user_id"] = @identity.uid
         flash[:notice] = "Signed in!"
       else
         # No user associated with the identity so we need to create a new one
         user = User.create!
+        if @identity.nil?
+          @identity = Identity.create(user_id: uid, provider: 'dropbox', name: name, email: email)
+        end
         @identity.user = current_user
         @identity.save
       end
     end
-    if @identity.user.blacklisted?
+    if current_user && current_user.blacklisted?
       @identity.user.destroy
       raise 'An error has occured'
     end

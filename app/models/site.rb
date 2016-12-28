@@ -30,11 +30,11 @@ class Site < ActiveRecord::Base
   end
 
   def creator
-    identity.user
+    self.identity.user
   end
 
   def identity
-    Identity.find_by(uid: self.uid)
+    Identity.find_by(uid: self.uid, provider: self.provider)
   end
 
   def index path
