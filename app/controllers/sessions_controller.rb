@@ -60,7 +60,7 @@ class SessionsController < ApplicationController
     res = HTTParty.post(url, opts)
     name = res['display_name']
     email = res['email']
-    @identity = Identity.find_by(user_id: uid, provider: 'dropbox')
+    @identity = Identity.find_by(uid: uid, provider: 'dropbox')
     if current_user
       if @identity.user == current_user
         flash[:notice] = "Already linked that account!"
