@@ -86,10 +86,10 @@ class Site < ActiveRecord::Base
       	  }.to_json
       	}
       }
-      logger.info "Requesting https://#{self.name}.updog.co#{file_path.gsub(self.name+'/','')}"
-      logger.info "Dropbox file path: #{file_path}"
-      logger.info "Document root: #{self.document_root}"
-      logger.info "Db path: #{self.db_path}"
+      Rails.logger.info "Requesting https://#{self.name}.updog.co#{file_path.gsub(self.name+'/','')}"
+      Rails.logger.info "Dropbox file path: #{file_path}"
+      Rails.logger.info "Document root: #{self.document_root}"
+      Rails.logger.info "Db path: #{self.db_path}"
       res = HTTParty.post(url, opts)
       oat = res.body.html_safe
       oat = res.body.gsub("</body>","#{injectee}</body>").html_safe if inject?
