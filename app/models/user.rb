@@ -2,7 +2,8 @@ class User < ActiveRecord::Base
   has_many :sites, :foreign_key => :uid, :primary_key => :uid
   has_many :identities
   has_one :upgrading
-  def self.subscribe email
+  after_create :subscribe
+  def subscribe
     begin
       Drip.subscribe email
       gibbon = Gibbon::Request.new(api_key: ENV['mailchimp_api_key'])
@@ -12,15 +13,6 @@ class User < ActiveRecord::Base
       logger.error e.message
       logger.error e.backtrace.join("\n")
     end
-  end
-  def self.create_with_omniauth( email, uid, name )
-  	self.subscribe email
-  	create! do |user|
-  	  user.email = email
-  	  user.provider = 'dropbox'
-  	  user.uid = uid
-  	  user.name = name
-  	end
   end
   def blacklisted?
     email_without_dots = self.email.gsub(/\./,'')
