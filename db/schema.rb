@@ -59,11 +59,11 @@ ActiveRecord::Schema.define(version: 20161228145650) do
 
   create_table "sites", force: :cascade do |t|
     t.integer  "uid"
-    t.string   "name",               limit: 255
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "subdomain",          limit: 255
-    t.string   "domain",             limit: 255
+    t.string   "subdomain"
+    t.string   "domain"
     t.string   "document_root"
     t.boolean  "render_markdown"
     t.string   "db_path"
@@ -96,20 +96,20 @@ ActiveRecord::Schema.define(version: 20161228145650) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "provider",   limit: 255
+    t.string   "provider"
     t.integer  "uid"
-    t.string   "name",       limit: 255
-    t.string   "email",      limit: 255
+    t.string   "name"
+    t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "is_pro"
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string   "item_type",  limit: 255, null: false
-    t.integer  "item_id",                null: false
-    t.string   "event",      limit: 255, null: false
-    t.string   "whodunnit",  limit: 255
+    t.string   "item_type",  null: false
+    t.integer  "item_id",    null: false
+    t.string   "event",      null: false
+    t.string   "whodunnit"
     t.text     "object"
     t.datetime "created_at"
   end
