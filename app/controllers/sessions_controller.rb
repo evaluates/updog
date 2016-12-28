@@ -61,28 +61,18 @@ class SessionsController < ApplicationController
     name = res['display_name']
     email = res['email']
     @identity = Identity.find_by(uid: uid, provider: 'dropbox')
-    if current_user
-      if @identity.user == current_user
-        flash[:notice] = "Already linked that account!"
-      else
-        @identity.user = current_user
-        @identity.save
-        flash[:notice] = "Successfully linked that account!"
-      end
+    if @identity && @identity.user
+      session["user_id"] = @identity.uid
+      flash[:notice] = "Signed in!"
     else
-      if @identity && @identity.user
-        session["user_id"] = @identity.uid
-        flash[:notice] = "Signed in!"
-      else
-        # No user associated with the identity so we need to create a new one
-        user = User.create!(uid: uid, email: email)
-        if @identity.nil?
-          @identity = Identity.create(user_id: user.id, provider: 'dropbox', name: name, email: email, uid: uid)
-        end
-        @identity.user = current_user
-        @identity.save
-      end
+      # No user associated with the identity so we need to create a new one
+      user = User.create!(uid: uid, email: email)
+      @identity = Identity.create!(user_id: user.id, provider: 'dropbox', name: name, email: email, uid: uid)
+      session["user_id"] = @identity.uid
+      flash[:notice] = "Signed in!"
     end
+    @identity.uid = session["user_id"]
+    @identity.save
     if current_user && current_user.blacklisted?
       @identity.user.destroy
       raise 'An error has occured'
