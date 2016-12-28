@@ -7,40 +7,40 @@ describe Site do
     Site.destroy_all
     Identity.destroy_all
     User.destroy_all
-    u = User.create
-    u.identities.create(access_token:ENV['db_access_token'])
+    @u = User.create
+    @u.identities.create!(access_token:ENV['db_access_token'], provider: 'dropbox', email:'test@test.test')
   end
   it "should have a name" do
     s = Site.new( name: 'jjohn' )
     expect(s.name).to eq('jjohn')
   end
   it "should have a domain" do
-    s = Site.create( name: 'jjohn' )
+    s = @u.sites.create(provider:'dropbox', name: 'jjohn')
     expect(s.subdomain).to eq('jjohn.updog.co')
     s.destroy
   end
   it "should have a subdomain" do
-    s = Site.create( name: '&& Pizzal -' )
+    s = @u.sites.create(provider:'dropbox', name: '&& Pizzal -' )
     expect(s.subdomain).to eq('pizzal.updog.co')
     s.destroy
   end
   it "should replace non-word chars" do
-    s = Site.create( name: 'Jimmy Johns' )
+    s = @u.sites.create(provider:'dropbox', name: 'Jimmy Johns' )
     expect(s.name).to eq('jimmy-johns')
     s.destroy
   end
   it "should not end with a hyphen" do
-    s = Site.create( name: 'Jimmy Johns!' )
+    s = @u.sites.create(provider:'dropbox', name: 'Jimmy Johns!' )
     expect(s.name).to eq('jimmy-johns')
     s.destroy
   end
   it "should not end with a hyphen" do
-    s = Site.create( name: 'Jimmy Johns!!!' )
+    s = @u.sites.create(provider:'dropbox', name: 'Jimmy Johns!!!' )
     expect(s.name).to eq('jimmy-johns')
     s.destroy
   end
   it "should not start with a hyphen" do
-    s = Site.create( name: '!!!Jimmy Johns!!!' )
+    s = @u.sites.create(provider:'dropbox', name: '!!!Jimmy Johns!!!' )
     expect(s.name).to eq('jimmy-johns')
     s.destroy
   end

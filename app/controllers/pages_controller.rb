@@ -14,6 +14,7 @@ class PagesController < ApplicationController
 
   def feedback
   end
+  
   def feedback_create
     ContactMailer.feedback_create(params).deliver_now!
     flash[:notice] = "Feedback sent successfully!"
@@ -21,6 +22,19 @@ class PagesController < ApplicationController
   end
 
   def tos
+  end
+
+  def account
+    if current_user.nil?
+      return redirect_to root_path
+    end
+    identities = current_user.identities
+    @google = identities.find_by_provider('google')
+    @dropbox = identities.find_by_provider('dropbox')
+    @identities = [
+      {provider: 'Google', account: @google},
+      {provider: 'Dropbox', account: @dropbox}
+    ]
   end
 
   def pricing
