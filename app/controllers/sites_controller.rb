@@ -39,6 +39,7 @@ class SitesController < ApplicationController
 
   def authenticate
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
+    return nil unless @site
     if @site.username.present?
       authenticate_or_request_with_http_basic do |name, password|
         name == @site.username && Digest::SHA2.hexdigest(password) == @site.encrypted_passcode
@@ -53,15 +54,15 @@ class SitesController < ApplicationController
 
   def load
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
+    if !@site
+     render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true
+     return
+    end
     @site.clicks.create(data:{
       path: request.env["REQUEST_URI"],
       ip: request.env["REMOTE_ADDR"],
       referer: request.env["HTTP_REFERER"]
     })
-    if !@site
-     render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true
-     return
-    end
     uri = request.env['PATH_INFO']
     if uri == '/markdown.css'
       @content = try_files [uri], @site
