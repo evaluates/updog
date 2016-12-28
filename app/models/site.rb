@@ -30,17 +30,21 @@ class Site < ActiveRecord::Base
   end
 
   def creator
-    User.find_by( uid: self.uid )
+    identity.user
+  end
+
+  def identity
+    Identity.find_by(uid: self.uid)
   end
 
   def index path
     path = path.gsub('/directory-index.html','')
     url = 'https://api.dropboxapi.com/2/files/list_folder'
     if self.db_path && self.db_path != ""
-      at = self.creator && self.creator.full_access_token
+      at = self.identity && self.identity.full_access_token
       folder = self.db_path
     else
-      at = self.creator && self.creator.access_token
+      at = self.identity && self.identity.access_token
       folder = '/' + self.name
     end
     old_path = path
@@ -67,10 +71,10 @@ class Site < ActiveRecord::Base
     expires_in = self.creator && self.creator.is_pro?  ? 5.seconds : 30.seconds
     Rails.cache.fetch("#{cache_key}/#{path}", expires_in: expires_in) do
       if self.db_path && self.db_path != ""
-        at = self.creator && self.creator.full_access_token
+        at = self.identity && self.identity.full_access_token
         folder = self.db_path
       else
-        at = self.creator && self.creator.access_token
+        at = self.identity && self.identity.access_token
         folder = '/' + self.name
       end
       document_root = self.document_root || ''
@@ -142,7 +146,7 @@ class Site < ActiveRecord::Base
 
   private
   def notify_drip
-    Drip.event self.creator.email, 'created a site'
+    Drip.event self.identity.email, 'created a site'
   end
    def  namify
     self.name.downcase!

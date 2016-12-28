@@ -8,16 +8,16 @@ class SitesController < ApplicationController
   before_filter :authenticate, only: [:load]
 
   def index
-    @sites = Site.where( uid: session[:user_id] )
+    @sites = current_user.sites if current_user
     @count = File.read(Rails.root.join("tmp/request-count.txt"))
   end
   def edit
-    @site = Site.find_by( uid: session[:user_id], id: params[:id] )
+    @site = current_user.sites.find(params[:id])
     session[:back_to] = request.url
   end
   def new
     session[:back_to] = request.url
-    @sites = Site.where( uid: session[:user_id] )
+    @sites = current_user.sites
     return redirect_to root_path if !current_user
     unless current_user.is_pro? || @sites.length == 0
       redirect_to root_path
@@ -25,14 +25,14 @@ class SitesController < ApplicationController
     @site = Site.new
   end
   def show
-    @site = Site.find_by( uid: session[:user_id], id: params[:id] )
+    @site = current_user.sites.find(params[:id])
     unless @site
       return render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true, status: 404
     end
     @sites = current_user && current_user.sites || []
   end
   def destroy
-    @site = Site.find_by( uid: session[:user_id], id: params[:id] )
+    @site = current_user.sites.find(params[:id])
     @site.destroy
     redirect_to sites_path, :notice => "Deleted. #{undo_link}?"
   end
@@ -107,7 +107,7 @@ class SitesController < ApplicationController
       input: 'GFM',
       syntax_highlighter: 'rouge',
       syntax_highlighter_opts: {
-	formatter: Rouge::Formatters::HTML
+	    formatter: Rouge::Formatters::HTML
     }).to_html
     preamble = "<!doctype html><html><head><meta name='viewport' content='width=device-width'><meta charshet='utf-8'><link rel='stylesheet' type='text/css' href='/markdown.css'></head><body>"
     footer = "</body></html>"
@@ -170,8 +170,8 @@ class SitesController < ApplicationController
     end
   end
   def update
-    @site = Site.find_by( uid: session[:user_id], id: params[:id] )
-    if @site.update site_params.merge( uid: session[:user_id] )
+    @site = current_user.sites.find(params[:id])
+    if @site.update site_params
       redirect_to @site
     else
       render :edit

@@ -60,20 +60,42 @@ class SessionsController < ApplicationController
     res = HTTParty.post(url, opts)
     name = res['display_name']
     email = res['email']
-    user = User.find_by_provider_and_uid('dropbox', uid) || User.create_with_omniauth(email, uid, name)
-    if user.blacklisted?
-      user.destroy
+    @identity = Identity.find_by(uid: uid, provider: 'dropbox')
+    if @identity.nil?
+      @identity = Identity.create(uid: uid, provider: 'dropbox')
+    end
+    if current_user
+      if @identity.user == current_user
+        flash[:notice] = "Already linked that account!"
+      else
+        @identity.user = current_user
+        @identity.save
+        flash[:notice] = "Successfully linked that account!"
+      end
+    else
+      if @identity.user.present?
+        session["user_id"] = @identity.uid
+        flash[:notice] = "Signed in!"
+      else
+        # No user associated with the identity so we need to create a new one
+        user = User.create!
+        @identity.user = current_user
+        @identity.save
+      end
+    end
+    if @identity.user.blacklisted?
+      @identity.user.destroy
       raise 'An error has occured'
     end
     if params[:full]
-      user.full_access_token = access_token
+      @identity.full_access_token = access_token
     else
       session[:user_id] = uid
       session[:access_token] = access_token
       session[:user_name] = name
-      user.access_token = access_token
+      @identity.access_token = access_token
     end
-    user.save
+    @identity.save
     if session[:back_to]
       redirect_to session[:back_to]
     else

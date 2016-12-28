@@ -39,7 +39,7 @@
   <a href='/pricing'>Pricing</a>
   <a href='/faq'>FAQs</a>
     <% if current_user %>
-	<%= link_to 'Logout &nbsp;'.html_safe + current_user.name, '/logout' %>
+	   <%= link_to 'Logout &nbsp;'.html_safe + current_user.name, '/logout' %>
     <% else %>
       <a href='http://updog.co/auth/dropbox'>Log in</a>
     <% end %>
@@ -49,10 +49,10 @@
 
 <section class='main'>
 <div class='wrapper'>
-  <% if notice %>
-  <div class='notice'>
-    <%=  notice.html_safe %>
-  </div>
+  <% unless flash.empty? %>
+    <div class='notice'>
+      <%=  flash[:notice].html_safe %>
+    </div>
   <% end %>
 </div>
     <%= yield %>
