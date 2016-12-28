@@ -135,7 +135,7 @@ class SitesController < ApplicationController
   end
 
   def create
-    @site = Site.new site_params.merge( uid: session[:user_id], provider: 'dropbox' )
+    @site = Site.new site_params.merge( uid: current_user.uid, provider: 'dropbox' )
     if @site.save
       if params[:db_path] == ""
         return redirect_to @site

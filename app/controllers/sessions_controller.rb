@@ -61,7 +61,6 @@ class SessionsController < ApplicationController
     name = res['display_name']
     email = res['email']
     @identity = Identity.find_by(user_id: uid, provider: 'dropbox')
-    binding.pry
     if current_user
       if @identity.user == current_user
         flash[:notice] = "Already linked that account!"
@@ -76,9 +75,9 @@ class SessionsController < ApplicationController
         flash[:notice] = "Signed in!"
       else
         # No user associated with the identity so we need to create a new one
-        user = User.create!
+        user = User.create!(uid: uid, email: email)
         if @identity.nil?
-          @identity = Identity.create(user_id: uid, provider: 'dropbox', name: name, email: email)
+          @identity = Identity.create(user: user, provider: 'dropbox', name: name, email: email)
         end
         @identity.user = current_user
         @identity.save
