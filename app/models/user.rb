@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_many :sites, :foreign_key => :uid, :primary_key => :uid
+  has_many :sites
   has_many :identities
   has_one :upgrading
   after_create :subscribe
@@ -21,5 +21,11 @@ class User < ActiveRecord::Base
   end
   def self.created_on datetime
     where("created_at > ? and created_at < ?", datetime.beginning_of_day, datetime.end_of_day)
+  end
+  def email
+    identities.map(&:email).compact.first
+  end
+  def name
+    identities.map(&:name).compact.first
   end
 end

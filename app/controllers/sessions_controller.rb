@@ -16,6 +16,39 @@ class SessionsController < ApplicationController
     end
   end
   def create
+    if params[:provider] == "dropbox"
+      uid, name, email, access_token, full_access_token = dropbox_info params
+    end
+    @identity = Identity.find_by(uid: uid, provider: params[:provider])
+    if current_user.nil? && @identity.nil?
+      set_current_user User.create
+    end
+    if @identity.nil?
+      @identity = current_user.identities.create(
+        uid: uid,
+        provider: params[:provider],
+        name: name,
+        email: email
+      )
+    end
+    set_current_user @identity.user
+    if full_access_token.nil?
+      @identity.update(access_token: access_token)
+    else
+      @identity.update(full_access_token: full_access_token)
+    end
+    if current_user && current_user.blacklisted?
+      @identity.user.destroy
+      raise 'An error has occured'
+    end
+    if session[:back_to]
+      redirect_to session[:back_to]
+    else
+      redirect_to '/'
+    end
+  end
+
+  def dropbox_info params
     if params[:full]
       db_key = ENV['db_full_key']
       db_secret = ENV['db_full_secret']
@@ -38,7 +71,11 @@ class SessionsController < ApplicationController
       }
       res = HTTParty.post(url, opts)
       res = JSON.parse(res)
-      access_token = res["access_token"]
+      if params[:full]
+        full_access_token = res["access_token"]
+      else
+        access_token = res["access_token"]
+      end
       account_id = res["account_id"]
       uid = res["uid"]
     rescue => e
@@ -60,38 +97,9 @@ class SessionsController < ApplicationController
     res = HTTParty.post(url, opts)
     name = res['display_name']
     email = res['email']
-    @identity = Identity.find_by(uid: uid, provider: 'dropbox')
-    if @identity && @identity.user
-      session["user_id"] = @identity.uid
-      flash[:notice] = "Signed in!"
-    else
-      # No user associated with the identity so we need to create a new one
-      user = User.create!(uid: uid, email: email)
-      @identity = Identity.create!(user_id: user.id, provider: 'dropbox', name: name, email: email, uid: uid)
-      session["user_id"] = @identity.uid
-      flash[:notice] = "Signed in!"
-    end
-    @identity.uid = session["user_id"]
-    @identity.save
-    if current_user && current_user.blacklisted?
-      @identity.user.destroy
-      raise 'An error has occured'
-    end
-    if params[:full]
-      @identity.full_access_token = access_token
-    else
-      session[:user_id] = uid
-      session[:access_token] = access_token
-      session[:user_name] = name
-      @identity.access_token = access_token
-    end
-    @identity.save
-    if session[:back_to]
-      redirect_to session[:back_to]
-    else
-      redirect_to '/'
-    end
+    return uid, name, email, access_token, full_access_token
   end
+
   def destroy
     session.clear
     redirect_to root_url

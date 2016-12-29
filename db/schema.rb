@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161228145650) do
+ActiveRecord::Schema.define(version: 20161229154126) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20161228145650) do
   end
 
   create_table "identities", force: :cascade do |t|
-    t.integer  "uid"
+    t.string   "uid"
     t.string   "provider"
     t.string   "name"
     t.string   "email"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 20161228145650) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "refresh_token"
   end
 
   add_index "identities", ["user_id"], name: "index_identities_on_user_id", using: :btree
@@ -58,7 +59,6 @@ ActiveRecord::Schema.define(version: 20161228145650) do
   end
 
   create_table "sites", force: :cascade do |t|
-    t.integer  "uid"
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 20161228145650) do
     t.string   "encrypted_passcode"
     t.string   "username"
     t.string   "provider"
+    t.integer  "user_id"
   end
 
   create_table "stats", force: :cascade do |t|
@@ -96,10 +97,6 @@ ActiveRecord::Schema.define(version: 20161228145650) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "provider"
-    t.integer  "uid"
-    t.string   "name"
-    t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "is_pro"

@@ -136,37 +136,41 @@ class SitesController < ApplicationController
     end
     {html: out, status: status}
   end
-
+  def create_folder(name, access_token)
+    url = 'https://api.dropboxapi.com/2/files/create_folder'
+    opts = {
+      headers: db_headers(access_token),
+      body: {
+        path: name
+      }.to_json
+    }
+    HTTParty.post(url, opts)
+  end
+  def create_file(path, content, access_token)
+    url = 'https://content.dropboxapi.com/2/files/upload'
+    opts = {
+        headers: {
+        'Authorization' => "Bearer #{access_token}",
+        'Content-Type' =>  'application/octet-stream',
+        'Dropbox-API-Arg' => {
+          path: path,
+        }.to_json
+      },
+      body: content
+    }
+    HTTParty.post(url, opts)
+  end
   def create
-    @site = Site.new site_params.merge( uid: current_user.uid, provider: 'dropbox' )
+    @site = current_user.sites.create site_params.merge(provider: 'dropbox')
+    @identity = current_user.identities.find_by(provider: 'dropbox')
     if @site.save
-      if params[:db_path] == ""
+      if params[:site][:db_path].present? # probably using some existing code
         return redirect_to @site
       end
-      begin
-      	url = 'https://api.dropboxapi.com/2/files/create_folder'
-      	opts = {
-        	headers: db_headers,
-      	  body: {
-      	    path: @site.name
-      	  }.to_json
-      	}
-      	HTTParty.post(url, opts)
-      	url = 'https://content.dropboxapi.com/2/files/upload'
-      	opts = {
-        	  headers: {
-      	    'Authorization' => "Bearer #{session["access_token"]}",
-      	    'Content-Type' =>  'application/octet-stream',
-      	    'Dropbox-API-Arg' => {
-      	      path: '/' + @site.name + '/index.html',
-      	    }.to_json
-      	  },
-      	  body: File.read(Rails.public_path + 'welcome/index.html')
-      	}
-      	HTTParty.post(url, opts)
-      rescue => e
-	       p e
-      end
+      path = "/" + @site.name
+      content = File.read(Rails.public_path + 'welcome/index.html')
+      create_folder(path, @identity.access_token)
+      create_file(path + "/index.html", content, @identity.access_token)
       redirect_to @site
     else
       render :new
@@ -245,9 +249,9 @@ class SitesController < ApplicationController
 
 
   private
-  def db_headers
+  def db_headers access_token
     {
-      'Authorization' => "Bearer #{session["access_token"]}",
+      'Authorization' => "Bearer #{access_token}",
       'Content-Type' => 'application/json'
     }
   end

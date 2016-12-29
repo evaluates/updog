@@ -1,5 +1,5 @@
 class Site < ActiveRecord::Base
-  belongs_to :user, :foreign_key => :uid, :primary_key => :uid
+  belongs_to :user
   attr_accessor :passcode
   has_many :clicks
   has_many :contacts
@@ -30,11 +30,11 @@ class Site < ActiveRecord::Base
   end
 
   def creator
-    self.identity.user
+    self.user
   end
 
   def identity
-    Identity.find_by(uid: self.uid, provider: self.provider)
+    Identity.find_by(user: self.user, provider: self.provider)
   end
 
   def index path

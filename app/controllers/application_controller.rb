@@ -5,9 +5,10 @@ class ApplicationController < ActionController::Base
   before_action :set_admin
   helper_method :current_user
   def current_user
-    return nil unless session['user_id']
-    iden = Identity.find_by( uid: session['user_id'] )
-    return iden.user if iden
+    session['user_id'] ? User.find(session['user_id']) : nil
+  end
+  def set_current_user user
+    session["user_id"] = user.id
   end
   private
   def set_admin
