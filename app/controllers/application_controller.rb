@@ -5,7 +5,13 @@ class ApplicationController < ActionController::Base
   before_action :set_admin
   helper_method :current_user
   def current_user
-    session['user_id'] ? User.find(session['user_id']) : nil
+    begin
+      session['user_id'] ? User.find(session['user_id']) : nil
+    rescue
+      session.clear
+      redirect_to root_path
+      return nil
+    end
   end
   def set_current_user user
     session["user_id"] = user.id

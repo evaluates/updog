@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20161229154126) do
   end
 
   create_table "identities", force: :cascade do |t|
-    t.string   "uid"
+    t.integer  "uid"
     t.string   "provider"
     t.string   "name"
     t.string   "email"
@@ -40,7 +40,6 @@ ActiveRecord::Schema.define(version: 20161229154126) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "refresh_token"
   end
 
   add_index "identities", ["user_id"], name: "index_identities_on_user_id", using: :btree
@@ -59,11 +58,11 @@ ActiveRecord::Schema.define(version: 20161229154126) do
   end
 
   create_table "sites", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",               limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "subdomain"
-    t.string   "domain"
+    t.string   "subdomain",          limit: 255
+    t.string   "domain",             limit: 255
     t.string   "document_root"
     t.boolean  "render_markdown"
     t.string   "db_path"
@@ -97,16 +96,18 @@ ActiveRecord::Schema.define(version: 20161229154126) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.integer  "uid"
+    t.string   "email",      limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "is_pro"
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string   "item_type",  null: false
-    t.integer  "item_id",    null: false
-    t.string   "event",      null: false
-    t.string   "whodunnit"
+    t.string   "item_type",  limit: 255, null: false
+    t.integer  "item_id",                null: false
+    t.string   "event",      limit: 255, null: false
+    t.string   "whodunnit",  limit: 255
     t.text     "object"
     t.datetime "created_at"
   end
