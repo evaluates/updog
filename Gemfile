@@ -2,12 +2,14 @@ source 'https://rubygems.org'
 
 gem 'figaro'
 gem 'paper_trail'
+gem 'google_drive'
 gem 'httparty'
 gem 'pry'
 gem 'dalli'
 gem 'gibbon'
 gem 'rails_12factor'
 gem 'kramdown'
+gem 'omniauth-google-oauth2'
 gem 'rouge'
 gem 'redis-rails'
 gem 'split'
@@ -52,4 +54,3 @@ gem 'spring',        group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-

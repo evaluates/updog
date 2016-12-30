@@ -55,6 +55,12 @@
   </ul>
 <% end %>
 <%= form_for @site do |f| %>
+    <div style='display:none'>
+      <label>Where would you like to host your site?</label>
+      <div class='branded-radio'>
+        <%= collection_radio_buttons(:site, :provider, @providers, :to_s, :titlecase) %>
+      </div>
+    </div>
   <% if current_user.is_pro %>
     <%= render 'select_folder' %>
   <% end %>

@@ -1,3 +1,5 @@
+$blue: #007ee5;
+
 form label{
   display:block;
   font-weight:bold;
@@ -14,4 +16,44 @@ input[type="password"]{
   padding:1em;
   margin-bottom:1em;
   border-radius:5px;
+}
+
+.branded-radio{
+  input[type="radio"]{
+    display:none;
+  }
+  input[type="radio"] + label{
+    border: 2px solid $blue;
+    color: $blue;
+    border-radius:3px;
+    padding:.5em 1em .5em 2em;
+    position:relative;
+    cursor:pointer;
+    transition:all .2s ease;
+    font-weight: normal;
+    margin:.5em .5em 1em 0;
+    &:before{
+      content:'';
+      display:block;
+      position:absolute;
+      left:.75em;
+      top:50%;
+      transform:translateY(-50%);
+      height:.5em;
+      width:.5em;
+      background:#fff;
+      border-radius:100%;
+      box-shadow: 0 0 0 3px #fff, 0 0 0 5px $blue;
+      transition:all .2s ease;
+    }
+  }
+
+  input[type="radio"]:checked + label{
+    background: $blue;
+    color:#fff;
+    &:before{
+      border-color:#fff;
+      box-shadow: 0 0 0 3px $blue, 0 0 0 5px #fff;
+    }
+  }
 }

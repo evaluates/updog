@@ -1,0 +1,13 @@
+<div class='wrapper'>
+  <h2>Account</h2>
+  <%= link_to "Log out #{current_user.name}", '/logout' %>
+  <h2>Connected Accounts</h2>
+  <% @identities.each do |identity| %>
+    <h3><%= identity[:provider] %></h3>
+    <% if identity[:account] %>
+    <%= link_to "Unlink #{identity[:provider]}", "/auth/#{identity[:provider].downcase}", method: :delete %>
+    <% else %>
+      <%= link_to "Link #{identity[:provider]}", "/auth/#{identity[:provider].downcase}" %>
+    <% end %>
+  <% end %>
+</div>

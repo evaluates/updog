@@ -13,18 +13,20 @@ class SitesController < ApplicationController
   end
   def edit
     @site = current_user.sites.find(params[:id])
+    @providers = current_user.identities.map(&:provider)
     @identity = current_user.identities.find_by(provider: 'dropbox')
     session[:back_to] = request.url
   end
   def new
     session[:back_to] = request.url
     @sites = current_user.sites
-    @identity = current_user.identities.find_by(provider: 'dropbox')
+    # @identity = current_user.identities.find_by(provider: 'dropbox')
+    @providers = current_user.identities.map(&:provider)
     return redirect_to root_path if !current_user
     unless current_user.is_pro? || @sites.length == 0
       redirect_to root_path
     end
-    @site = Site.new
+    @site = Site.new(provider:@providers.first)
   end
   def show
     begin
@@ -59,8 +61,27 @@ class SitesController < ApplicationController
     end
   end
 
+  def google_session site
+    begin
+      identity = site.user.identities.find_by(provider: site.provider)
+      sesh = GoogleDrive::Session.from_access_token(identity.access_token)
+      dir = sesh.file_by_id(site.google_id)
+    rescue => e
+      if e.to_s == "Unauthorized"
+        identity.refresh_access_token
+        return google_session site
+      else
+        raise e
+      end
+    end
+    dir
+  end
+
   def load
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
+    if @site.provider == "google"
+      dir = google_session @site
+    end
     if !@site
      render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true
      return
@@ -72,12 +93,15 @@ class SitesController < ApplicationController
     })
     uri = request.env['PATH_INFO']
     if uri == '/markdown.css'
-      @content = try_files [uri], @site
+      @content = try_files [uri], @site, dir
       if @content[:status] == 404
 	       @content = {html: File.read(Rails.root.to_s + '/public/md.css').html_safe, status: 200}
       end
     else
-      @content = try_files [uri, uri + '/index.html', uri + '/directory-index.html', '/404.html'], @site
+      if uri[-1] == "/"
+        uri += "index.html"
+      end
+      @content = try_files [uri, '/404.html'], @site, dir
       @content[:html] = markdown(@content[:html]) if render_markdown? @site, request
     end
     ct = mime(request, @site, @content[:status])
@@ -121,14 +145,14 @@ class SitesController < ApplicationController
     (preamble + md + footer).html_safe
   end
 
-  def try_files uris, site
-    out = site.content uris[0]
+  def try_files uris, site, dir = nil
+    out = site.content uris[0], dir
     if out.match(/{\".tag\":/) || out.match('Error in call to API function')
       uris.shift
       if uris.length == 0
 	       return { html: File.read(Rails.public_path + 'load-404.html').html_safe, status: 404 }
       end
-      return try_files uris, site
+      return try_files uris, site, dir
     end
     status = uris[0] == "/404.html" ? 404 : 200
     if uris[0].match "/directory-index.html"
@@ -140,7 +164,7 @@ class SitesController < ApplicationController
     end
     {html: out, status: status}
   end
-  def create_folder(name, access_token)
+  def create_dropbox_folder(name, access_token)
     url = 'https://api.dropboxapi.com/2/files/create_folder'
     opts = {
       headers: db_headers(access_token),
@@ -150,7 +174,7 @@ class SitesController < ApplicationController
     }
     HTTParty.post(url, opts)
   end
-  def create_file(path, content, access_token)
+  def create_dropbox_file(path, content, access_token)
     url = 'https://content.dropboxapi.com/2/files/upload'
     opts = {
         headers: {
@@ -165,19 +189,40 @@ class SitesController < ApplicationController
     HTTParty.post(url, opts)
   end
   def create
-    @site = current_user.sites.create site_params.merge(provider: 'dropbox')
-    @identity = current_user.identities.find_by(provider: 'dropbox')
+    @site = current_user.sites.create site_params
+    @identity = current_user.identities.find_by(provider: @site.provider)
     if @site.save
       if params[:site][:db_path].present? # probably using some existing code
         return redirect_to @site
       end
       path = "/" + @site.name
       content = File.read(Rails.public_path + 'welcome/index.html')
-      create_folder(path, @identity.access_token)
-      create_file(path + "/index.html", content, @identity.access_token)
+      if params[:site][:provider] == "dropbox"
+        create_dropbox_folder(path, @identity.access_token)
+        create_dropbox_file(path + "/index.html", content, @identity.access_token)
+      elsif params[:site][:provider] == "google"
+        google_init @identity, @site
+      end
       redirect_to @site
     else
       render :new
+    end
+  end
+  def google_init identity, site
+    sesh = GoogleDrive::Session.from_access_token(identity.access_token)
+    begin
+      drive = sesh.root_collection
+      dir = drive.subcollections(q:'name = "UpDog" and trashed = false').first || drive.create_subcollection("UpDog")
+      dir = dir.create_subcollection(site.name)
+      site.update(google_id: dir.id)
+      dir.upload_from_file(Rails.public_path.to_s + '/welcome/index.html', 'index.html', convert: false)
+    rescue => e
+      if e.to_s == "Unauthorized"
+        identity.refresh_access_token
+        google_init identity, site
+      else
+        raise e
+      end
     end
   end
   def update
@@ -201,9 +246,9 @@ class SitesController < ApplicationController
       ContactMailer.user_mailer(email, @site.link, @input).deliver_now!
       @site.contacts.create!(params: @input)
       if params[:redirect]
-	redirect_to params[:redirect]
+	       redirect_to params[:redirect]
       else
-	redirect_to :back
+	       redirect_to :back
       end
     rescue
       render nothing: true
@@ -260,7 +305,7 @@ class SitesController < ApplicationController
     }
   end
   def site_params
-    params.require(:site).permit(:name, :domain, :document_root, :render_markdown, :db_path, :passcode, :username)
+    params.require(:site).permit(:name, :domain, :document_root, :render_markdown, :db_path, :passcode, :username, :provider)
   end
   def undo_link
     view_context.link_to("undo", revert_version_path(@site.versions.last), :method => :post)

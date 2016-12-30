@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   mount Split::Dashboard, at: 'splitabresults'
   match 'auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
+  match 'auth/:provider', to: 'sessions#unlink', via: [:delete]
   match '/', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :put, :patch, :delete]
   match '/*req', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :put, :patch, :delete]
   post '/verify', to: 'sites#passcode_verify'
@@ -27,6 +28,7 @@ Rails.application.routes.draw do
   post '/feedback', to: 'pages#feedback_create'
   get '/folders', to: 'sites#folders'
   get '/admin', to: 'pages#admin'
+  get '/account', to: 'pages#account'
   get '/webhook', to: 'webhook#challenge'
   post '/webhook', to: 'webhook#post'
   post "/versions/:id/revert", to: "versions#revert", as: "revert_version"
