@@ -196,26 +196,28 @@ class SitesController < ApplicationController
         return redirect_to @site
       end
       path = "/" + @site.name
-      content = File.read(Rails.public_path + 'welcome/index.html')
+      content = render_to_string(:template => "sites/welcome", :layout => false, locals: {
+          site: @site
+      })
       if params[:site][:provider] == "dropbox"
         create_dropbox_folder(path, @identity.access_token)
         create_dropbox_file(path + "/index.html", content, @identity.access_token)
       elsif params[:site][:provider] == "google"
-        google_init @identity, @site
+        google_init @identity, @site, content
       end
       redirect_to @site
     else
       render :new
     end
   end
-  def google_init identity, site
+  def google_init identity, site, content
     sesh = GoogleDrive::Session.from_access_token(identity.access_token)
     begin
       drive = sesh.root_collection
       dir = drive.subcollections(q:'name = "UpDog" and trashed = false').first || drive.create_subcollection("UpDog")
       dir = dir.create_subcollection(site.name)
       site.update(google_id: dir.id)
-      dir.upload_from_file(Rails.public_path.to_s + '/welcome/index.html', 'index.html', convert: false)
+      dir.upload_from_string(content, 'index.html', convert: false)
     rescue => e
       if e.to_s == "Unauthorized"
         identity.refresh_access_token
