@@ -41,6 +41,8 @@ class SessionsController < ApplicationController
       @identity.user.destroy
       raise 'An error has occured'
     end
+    Rails.logger.info "set_current_user #{@identity.inspect}"
+    Rails.logger.info "set_current_user #{current_user.inspect}"
     if session[:back_to]
       redirect_to session[:back_to]
     else
