@@ -305,6 +305,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   kramdown
+  omniauth
   omniauth-google-oauth2
   paper_trail
   pg
