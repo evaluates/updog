@@ -73,6 +73,7 @@ class SessionsController < ApplicationController
       }
       res = HTTParty.post(url, opts)
       res = JSON.parse(res)
+      Rails.logger.info "#{res}"
       if params[:full]
         full_access_token = res["access_token"]
       else
