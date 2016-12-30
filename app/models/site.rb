@@ -66,79 +66,40 @@ class Site < ActiveRecord::Base
     res.merge("path" => path)
   end
 
-  def content uri, dir = nil
+  def content uri
     path = URI.unescape(uri)
     expires_in = self.creator && self.creator.is_pro?  ? 5.seconds : 30.seconds
     Rails.cache.fetch("#{cache_key}/#{path}", expires_in: expires_in) do
-      if self.provider == 'dropbox'
-        dropbox_content uri, path
-      elsif self.provider == 'google'
-        google_content uri, path, dir
+      if self.db_path && self.db_path != ""
+        at = self.identity && self.identity.full_access_token
+        folder = self.db_path
+      else
+        at = self.identity && self.identity.access_token
+        folder = '/' + self.name
       end
-    end
-  end
-
-  def subcollection_from_uri uri, dir
-    folders = uri.split("/")
-    folders.shift # the empty initial slash
-    folders.pop # the file
-    google_folders = dir.files(q:'mimeType = "application/vnd.google-apps.folder"')
-    last_parent = dir
-    folders.each do |folder|
-      subcollection = google_folders.select{ |gf|
-        gf.parents.include?(last_parent.id) && gf.title == folder
-      }.first
-      last_parent = subcollection
-    end
-    last_parent
-  end
-
-  def title_from_uri uri
-    folders = uri.split("/")
-    folders.pop # the file
-  end
-
-  def google_content uri, path, dir
-    file_path = '/' + self.name + '/' + path
-    file_path = file_path.gsub(/\/+/,'/')
-    folda = subcollection_from_uri(uri, dir) || dir
-    title = title_from_uri(uri)
-    oat = folda.file_by_title(title || '')
-    oat = oat.nil? ? "Error in call to API function" : oat.download_to_string.html_safe
-    oat = oat.gsub("</body>","#{injectee}</body>").html_safe if inject?
-    oat
-  end
-
-  def dropbox_content uri, path
-    if self.db_path && self.db_path != ""
-      at = self.identity && self.identity.full_access_token
-      folder = self.db_path
-    else
-      at = self.identity && self.identity.access_token
-      folder = '/' + self.name
-    end
-    document_root = self.document_root || ''
-    file_path = folder + '/' + document_root + '/' + path
-    file_path = file_path.gsub(/\/+/,'/')
-    url = 'https://content.dropboxapi.com/2/files/download'
-    opts = {
-      headers: {
-        'Authorization' => "Bearer #{at}",
-        'Content-Type' => '',
-        'Dropbox-API-Arg' => {
-          path: file_path
-        }.to_json
+      document_root = self.document_root || ''
+      file_path = folder + '/' + document_root + '/' + path
+      file_path = file_path.gsub(/\/+/,'/')
+      url = 'https://content.dropboxapi.com/2/files/download'
+      opts = {
+      	headers: {
+      	  'Authorization' => "Bearer #{at}",
+      	  'Content-Type' => '',
+      	  'Dropbox-API-Arg' => {
+      	    path: file_path
+      	  }.to_json
+      	}
       }
-    }
-    Rails.logger.info "Requesting https://#{self.name}.updog.co#{file_path.gsub(self.name+'/','')}"
-    Rails.logger.info "Dropbox file path: #{file_path}"
-    Rails.logger.info "Document root: #{self.document_root}"
-    Rails.logger.info "Db path: #{self.db_path}"
-    res = HTTParty.post(url, opts)
-    oat = res.body.html_safe
-    oat = res.body.gsub("</body>","#{injectee}</body>").html_safe if inject?
-    oat = "Not found - Please Reauthenticate Dropbox" if oat.match("Invalid authorization value")
-    oat
+      Rails.logger.info "Requesting https://#{self.name}.updog.co#{file_path.gsub(self.name+'/','')}"
+      Rails.logger.info "Dropbox file path: #{file_path}"
+      Rails.logger.info "Document root: #{self.document_root}"
+      Rails.logger.info "Db path: #{self.db_path}"
+      res = HTTParty.post(url, opts)
+      oat = res.body.html_safe
+      oat = res.body.gsub("</body>","#{injectee}</body>").html_safe if inject?
+      oat = "Not found - Please Reauthenticate Dropbox" if oat.match("Invalid authorization value")
+      oat
+    end
   end
 
   def inject?
@@ -185,7 +146,7 @@ class Site < ActiveRecord::Base
 
   private
   def notify_drip
-    Drip.event self.creator.email, 'created a site'
+    Drip.event self.identity.email, 'created a site'
   end
    def  namify
     self.name.downcase!

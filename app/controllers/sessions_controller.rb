@@ -19,14 +19,6 @@ class SessionsController < ApplicationController
     if params[:provider] == "dropbox"
       uid, name, email, access_token, full_access_token = dropbox_info params
     end
-    if params[:provider] == "google"
-      auth = request.env["omniauth.auth"]
-      uid = auth["uid"]
-      name = auth["info"]["name"]
-      email = auth["info"]["email"]
-      refresh_token = auth["credentials"]["refresh_token"]
-      access_token = auth["credentials"]["token"]
-    end
     @identity = Identity.find_by(uid: uid, provider: params[:provider])
     if current_user.nil? && @identity.nil?
       set_current_user User.create
@@ -35,7 +27,6 @@ class SessionsController < ApplicationController
       @identity = current_user.identities.create(
         uid: uid,
         provider: params[:provider],
-        refresh_token: refresh_token,
         name: name,
         email: email
       )
@@ -72,14 +63,14 @@ class SessionsController < ApplicationController
     begin
       url = "https://api.dropboxapi.com/oauth2/token"
       opts = {
-          body: {
-            code: params[:code],
-        	  grant_type: 'authorization_code',
-        	  client_id: db_key,
-        	  client_secret: db_secret,
-        	  redirect_uri: db_callback
-          }
+        body: {
+          code: params[:code],
+      	  grant_type: 'authorization_code',
+      	  client_id: db_key,
+      	  client_secret: db_secret,
+      	  redirect_uri: db_callback
         }
+      }
       res = HTTParty.post(url, opts)
       res = JSON.parse(res)
       Rails.logger.info "#{res}"
@@ -116,11 +107,4 @@ class SessionsController < ApplicationController
     session.clear
     redirect_to root_url
   end
-
-  def unlink
-    @identity = Identity.find_by(provider:params[:provider], user: current_user)
-    @identity.destroy!
-    redirect_to :back
-  end
-
 end
