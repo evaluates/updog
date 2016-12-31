@@ -288,6 +288,21 @@ table td{
   background: linear-gradient(#168eef, #007ee5);
 }
 
+.google{
+  background-color: #ea4335;
+  background-image: -webkit-linear-gradient(lighten(#ea4335, 5%), #ea4335);
+  background-image: linear-gradient(lighten(#ea4335, 5%), #ea4335);
+  border: 1px solid darken(#ea4335, 5%);
+  text-decoration:none;
+  padding:.5em 1em;
+  border-radius:3px;
+  color: white;
+}
+
+.google:hover{
+  background: linear-gradient(#ea4335, lighten(#ea4335, 5%));
+}
+
 form.center{
   width:150px;
   margin:auto;
@@ -333,6 +348,17 @@ pre code{
 }
 .float-right{
   float:right;
+}
+
+.index{
+  @media all and(max-width:40em){
+    float:none;
+    .google, .dropbox{
+      display: block;
+      margin:0 0 .5em 0;
+      max-width:20em;
+    }
+  }
 }
 
 .fifty{

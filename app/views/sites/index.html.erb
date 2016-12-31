@@ -28,13 +28,15 @@
   <% else %>
 
   <div class='wrapper index'>
-    <a href='/auth/dropbox' class='float-right dropbox'><span class='fa fa-dropbox'></span> Log In with Dropbox</a>
+
     <h2>Real.</h2>
     <h2>Simple.</h2>
     <h2>Hosting.</h2>
+    <p>Publish your own website for free using Dropbox or Google Drive</p>
+      <a href='/auth/dropbox' class='dropbox'><span class='fa fa-dropbox'></span> Log In with Dropbox</a>
+      <a href='/auth/google' class='google'><span class='fa fa-google'></span> Log In with Google</a>
     <br>
-    <p>Publish your own website for free using Dropbox.
-    </p>
+    <br>
     <h3><i class='fa fa-line-chart'></i>
        <span class='js-request-count'><%= number_with_delimiter(@count, :delimiter => ',') %></span>
       requests served, and counting!
