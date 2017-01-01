@@ -104,7 +104,7 @@ class SitesController < ApplicationController
       @content = try_files [uri, '/404.html'], @site, dir
       @content[:html] = markdown(@content[:html]) if render_markdown? @site, request
     end
-    @content[:html] = @content[:html].gsub("</body>","#{injectee(@site)}</body>").html_safe if @site.inject?
+    @content[:html] = @content[:html].gsub("</body>","#{injectee(@site)}</body>").html_safe if @site.inject? && @content[:stauts] == 200
     ct = mime(request, @site, @content[:status])
     respond_to do |format|
       format.all { render({:layout => false, :content_type => ct}.merge(@content)) }
