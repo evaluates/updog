@@ -79,12 +79,12 @@ class SitesController < ApplicationController
 
   def load
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
-    if @site.provider == "google"
-      dir = google_session @site
-    end
     if !@site
      render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true
      return
+    end
+    if @site.provider == "google"
+      dir = google_session @site
     end
     @site.clicks.create(data:{
       path: request.env["REQUEST_URI"],
