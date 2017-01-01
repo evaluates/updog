@@ -54,11 +54,11 @@ class Site < ActiveRecord::Base
 
     opts = {
       headers: {
-	'Authorization' => "Bearer #{at}",
-	'Content-Type' => 'application/json',
+        'Authorization' => "Bearer #{at}",
+        'Content-Type' => 'application/json',
       },
       body: {
-	path: file_path
+        path: file_path
       }.to_json
     }
     res = HTTParty.post(url, opts)
