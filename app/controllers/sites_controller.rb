@@ -221,7 +221,7 @@ class SitesController < ApplicationController
     rescue => e
       if e.to_s == "Unauthorized"
         identity.refresh_access_token
-        google_init identity, site
+        google_init identity, site, content
       else
         raise e
       end
