@@ -104,10 +104,17 @@ class SitesController < ApplicationController
       @content = try_files [uri, '/404.html'], @site, dir
       @content[:html] = markdown(@content[:html]) if render_markdown? @site, request
     end
+    @content[:html] = @content[:html].gsub("</body>","#{injectee(@site)}</body>").html_safe if @site.inject?
     ct = mime(request, @site, @content[:status])
     respond_to do |format|
       format.all { render({:layout => false, :content_type => ct}.merge(@content)) }
     end
+  end
+
+  def injectee site
+    render_to_string(:template => "sites/injectee", :layout => false, locals: {
+        site: site
+    })
   end
 
   def mime request, site, status
