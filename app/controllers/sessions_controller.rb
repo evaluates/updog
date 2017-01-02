@@ -17,6 +17,7 @@ class SessionsController < ApplicationController
   end
   def create
     if params[:provider] == "dropbox"
+      return redirect_to root_path if params[:error] == "access_denied"
       uid, name, email, access_token, full_access_token = dropbox_info params
     end
     if params[:provider] == "google"
@@ -120,6 +121,7 @@ class SessionsController < ApplicationController
   def unlink
     @identity = Identity.find_by(provider:params[:provider], user: current_user)
     @identity.destroy!
+    session.clear unless current_user.identities.any?
     redirect_to :back
   end
 
