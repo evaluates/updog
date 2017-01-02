@@ -141,7 +141,7 @@ class Site < ActiveRecord::Base
   end
 
   def inject?
-    !self.creator.is_pro && self.creator.id > 1547
+    (!self.creator.is_pro && self.creator.id > 1547) || Rails.env.development?
   end
 
   def domain_isnt_updog
