@@ -124,7 +124,7 @@ class SitesController < ApplicationController
   end
 
   def mime request, site, status
-    extname = File.extname(request.env['PATH_INFO'])[1..-1]
+    extname = File.extname(request.env['REQUEST_PATH'])[1..-1]
     mime_type = Mime::Type.lookup_by_extension(extname)
     mime_type.to_s unless mime_type.nil?
     mime_type = 'text/html; charset=utf-8' if mime_type.nil?
