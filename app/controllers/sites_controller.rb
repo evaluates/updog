@@ -78,6 +78,7 @@ class SitesController < ApplicationController
   end
 
   def load
+
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
     if !@site
      render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true
@@ -91,7 +92,7 @@ class SitesController < ApplicationController
       ip: request.env["REMOTE_ADDR"],
       referer: request.env["HTTP_REFERER"]
     })
-    uri = request.env['PATH_INFO']
+    uri = request.env['REQUEST_PATH']
     if uri == '/markdown.css'
       @content = try_files [uri], @site, dir
       if @content[:status] == 404
@@ -101,7 +102,7 @@ class SitesController < ApplicationController
       if uri[-1] == "/"
         uri += "index.html"
       end
-      @content = try_files [uri, '/404.html'], @site, dir
+      @content = try_files [uri,uri+'/index.html','/404.html'], @site, dir
       @content[:html] = markdown(@content[:html]) if render_markdown? @site, request
     end
     @content[:html] = @content[:html].gsub("</body>","#{injectee(@site)}</body>").html_safe if @site.inject? && @content[:status] == 200
