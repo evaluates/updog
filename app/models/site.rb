@@ -68,13 +68,22 @@ class Site < ActiveRecord::Base
 
   def content uri, dir = nil
     path = URI.unescape(uri)
-    expires_in = self.creator && self.creator.is_pro?  ? 5.seconds : 30.seconds
-    Rails.cache.fetch("#{cache_key}/#{path}", expires_in: expires_in) do
-      if self.provider == 'dropbox'
-        dropbox_content uri, path
-      elsif self.provider == 'google'
-        google_content uri, path, dir
-      end
+    out = Rails.cache.fetch("#{cache_key}/#{path}") do
+      from_api uri, path, dir
+    end
+    if (Time.now - self.updated_at) > 5
+      self.touch
+      ContentWorker.perform_async(self.id, uri, path, cache_key)
+    end
+    out
+  end
+
+  def from_api uri, path, dir
+    puts "CALLING API"
+    if self.provider == 'dropbox'
+      dropbox_content uri, path
+    elsif self.provider == 'google'
+      google_content uri, path, dir
     end
   end
 
@@ -175,6 +184,24 @@ class Site < ActiveRecord::Base
   end
   def clicks_today
     clicks.where('created_at > ?', Time.now.beginning_of_day)
+  end
+
+  def dir
+    if self.provider == 'google'
+      begin
+        identity = self.user.identities.find_by(provider: self.provider)
+        sesh = GoogleDrive::Session.from_access_token(identity.access_token)
+        dir = sesh.file_by_id(self.google_id)
+      rescue => e
+        if e.to_s == "Unauthorized"
+          identity.refresh_access_token
+          return google_session site
+        else
+          raise e
+        end
+      end
+      dir
+    end
   end
 
   private

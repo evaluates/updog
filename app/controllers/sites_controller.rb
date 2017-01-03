@@ -61,21 +61,7 @@ class SitesController < ApplicationController
     end
   end
 
-  def google_session site
-    begin
-      identity = site.user.identities.find_by(provider: site.provider)
-      sesh = GoogleDrive::Session.from_access_token(identity.access_token)
-      dir = sesh.file_by_id(site.google_id)
-    rescue => e
-      if e.to_s == "Unauthorized"
-        identity.refresh_access_token
-        return google_session site
-      else
-        raise e
-      end
-    end
-    dir
-  end
+
 
   def load
 
@@ -84,9 +70,6 @@ class SitesController < ApplicationController
      render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true
      return
     end
-    if @site.provider == "google"
-      dir = google_session @site
-    end
     @site.clicks.create(data:{
       path: request.env["REQUEST_URI"],
       ip: request.env["REMOTE_ADDR"],
@@ -94,7 +77,7 @@ class SitesController < ApplicationController
     })
     uri = request.env['REQUEST_PATH']
     if uri == '/markdown.css'
-      @content = try_files [uri], @site, dir
+      @content = try_files [uri], @site, @site.dir
       if @content[:status] == 404
 	       @content = {html: File.read(Rails.root.to_s + '/public/md.css').html_safe, status: 200}
       end
@@ -102,7 +85,7 @@ class SitesController < ApplicationController
       if uri[-1] == "/"
         uri += "index.html"
       end
-      @content = try_files [uri,uri+'/index.html','/404.html'], @site, dir
+      @content = try_files [uri,uri+'/index.html','/404.html'], @site, @site.dir
       @content[:html] = markdown(@content[:html]) if render_markdown? @site, request
     end
     @content[:html] = @content[:html].gsub("</body>","#{injectee(@site)}</body>").html_safe if @site.inject? && @content[:status] == 200
