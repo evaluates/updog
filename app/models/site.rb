@@ -72,7 +72,6 @@ class Site < ActiveRecord::Base
       from_api uri, path, dir
     end
     if (Time.now - self.updated_at) > 5
-      self.touch
       ContentWorker.perform_async(self.id, uri, path, cache_key)
     end
     out
