@@ -60,7 +60,7 @@
     <%= collection_radio_buttons(:site, :provider, @providers, :to_s, :titlecase) %>
   </div>
   <% if current_user.is_pro %>
-    <div class='js-select-folder' style="<%= 'display:none' if @provider != 'dropbox' %>">
+    <div class='js-select-folder' style="<%= 'display:none' if @site.provider != 'dropbox' %>">
     <%= render 'select_folder' %>
     <script>
     $(".js-toggle-select-folder input").on("change", function(){
