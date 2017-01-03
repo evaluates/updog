@@ -307,7 +307,7 @@ class SitesController < ApplicationController
 
   def password # for deletin
     @site = current_user.sites.find(params[:site_id])
-    @site.update(encrypted_passcode: nil)
+    @site.update(encrypted_passcode: nil, username: nil)
     redirect_to :back
   end
 
