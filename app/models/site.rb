@@ -68,11 +68,13 @@ class Site < ActiveRecord::Base
 
   def content uri, dir = nil
     path = URI.unescape(uri)
+    detection = CharlockHolmes::EncodingDetector.detect(path)
+    utf8_encoded_path = CharlockHolmes::Converter.convert path, detection[:encoding], 'UTF-8'
     out = Rails.cache.fetch("#{cache_key}/#{path}") do
-      from_api uri, path, dir
+      from_api uri, utf8_encoded_path, dir
     end
     if (Time.now - self.updated_at) > 5
-      ContentWorker.perform_async(self.id, uri, path, cache_key)
+      ContentWorker.perform_async(self.id, uri, utf8_encoded_path, cache_key)
     end
     out
   end
@@ -80,7 +82,7 @@ class Site < ActiveRecord::Base
   def from_api uri, path, dir
     puts "CALLING API"
     if self.provider == 'dropbox'
-      dropbox_content uri, path
+      dropbox_content path
     elsif self.provider == 'google'
       google_content uri, path, dir
     end
@@ -117,7 +119,7 @@ class Site < ActiveRecord::Base
     oat
   end
 
-  def dropbox_content uri, path
+  def dropbox_content path
     if self.db_path && self.db_path != ""
       at = self.identity && self.identity.full_access_token
       folder = self.db_path

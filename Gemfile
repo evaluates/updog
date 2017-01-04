@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'charlock_holmes'
 gem 'figaro'
 gem 'paper_trail'
 gem 'google_drive'

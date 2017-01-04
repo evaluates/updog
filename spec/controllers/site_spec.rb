@@ -41,5 +41,12 @@ describe SitesController do
       get :load
       expect(response.header['Content-Type']).to match('text/css')
     end
+    it "handles all the encodings" do
+      user_string = URI.decode('%D0%9C').force_encoding('ISO-8859-1')
+      rails_saw = user_string.force_encoding("ASCII-8BIT")
+      @request.env['REQUEST_PATH'] = rails_saw
+      get :load
+      expect(response.status).to eq(404)
+    end
   end
 end
