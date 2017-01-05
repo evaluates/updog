@@ -18,3 +18,5 @@ sudo: required
 dist: trusty
 addons:
   postgresql: 9.3
+services:
+  - redis-server

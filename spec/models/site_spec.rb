@@ -64,4 +64,33 @@ describe Site do
     s.domain = "www.pizza-jam.co"
     expect(s.valid?).to eq(true)
   end
+  it "encrypts a passcode" do
+    s = Site.new( passcode: "onew" )
+    s.encrypt_password
+    expect(s.encrypted_passcode).not_to be(nil)
+  end
+  it "has a nice url f'sho" do
+    s = @u.sites.create( name: 'hotdog' )
+    expect(s.to_param).to eq("#{s.id}-hotdog")
+  end
+  it "has a link" do
+    s = @u.sites.create( name: 'pizza' )
+    expect(s.link).to eq('pizza.updog.co')
+    s.domain = 'www.pizza.com'
+    expect(s.link).to eq('www.pizza.com')
+  end
+  it "injects a lil html" do
+    s = @u.sites.create( name: 'pizza2' )
+    expect(s.inject?).to eq(true)
+  end
+  it "shows sites created today" do
+    expect(Site.created_today.is_a? ActiveRecord::Relation).to eq(true)
+  end
+  it "shows clicks today" do
+    s = Site.new
+    expect(s.clicks_today.is_a? ActiveRecord::Relation).to eq(true)
+  end
+  it "shows popular sites" do
+    expect(Site.popular.is_a? ActiveRecord::Relation).to eq(true)
+  end
 end

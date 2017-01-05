@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   mount Split::Dashboard, at: 'splitabresults'
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
   match 'auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   match 'auth/:provider', to: 'sessions#unlink', via: [:delete]
   match '/', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :put, :patch, :delete]

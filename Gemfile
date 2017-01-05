@@ -20,8 +20,11 @@ gem 'stripe'
 gem 'thin'
 gem 'unicorn'
 
+
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'
+  gem 'simplecov', :require => false
+  gem 'webmock'
 end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

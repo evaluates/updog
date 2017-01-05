@@ -26,7 +26,7 @@ class Site < ActiveRecord::Base
   end
 
   def to_param
-      "#{id}-#{name.parameterize}"
+    "#{id}-#{name.parameterize}"
   end
 
   def creator
@@ -37,121 +37,12 @@ class Site < ActiveRecord::Base
     Identity.find_by(user: self.user, provider: self.provider)
   end
 
-  def index path
-    path = path.gsub('/directory-index.html','')
-    url = 'https://api.dropboxapi.com/2/files/list_folder'
-    if self.db_path && self.db_path != ""
-      at = self.identity && self.identity.full_access_token
-      folder = self.db_path
-    else
-      at = self.identity && self.identity.access_token
-      folder = '/' + self.name
-    end
-    old_path = path
-    document_root = self.document_root || ''
-    file_path = folder + '/' + document_root + '/' + path
-    file_path = file_path.gsub(/\/+/,'/')
-
-    opts = {
-      headers: {
-        'Authorization' => "Bearer #{at}",
-        'Content-Type' => 'application/json',
-      },
-      body: {
-        path: file_path
-      }.to_json
-    }
-    res = HTTParty.post(url, opts)
-    res["entries"] = res["entries"].select{|entry| entry["name"] != 'directory-index.html'}
-    res.merge("path" => path)
-  end
-
-  def content uri, dir = nil
-    path = URI.unescape(uri)
-    detection = CharlockHolmes::EncodingDetector.detect(path)
-    utf8_encoded_path = CharlockHolmes::Converter.convert path, detection[:encoding], 'UTF-8'
-    out = Rails.cache.fetch("#{cache_key}/#{path}") do
-      from_api uri, utf8_encoded_path, dir
-    end
-    if (Time.now - self.updated_at) > 5
-      ContentWorker.perform_async(self.id, uri, utf8_encoded_path, cache_key)
-    end
-    out
-  end
-
-  def from_api uri, path, dir
-    puts "CALLING API"
-    if self.provider == 'dropbox'
-      dropbox_content path
-    elsif self.provider == 'google'
-      google_content uri, path, dir
-    end
-  end
-
-  def subcollection_from_uri uri, dir
-    folders = uri.split("/")
-    folders.shift # the empty initial slash
-    folders.pop # the file
-    google_folders = dir.files(q:'mimeType = "application/vnd.google-apps.folder"')
-    last_parent = dir
-    folders.each do |folder|
-      subcollection = google_folders.select{ |gf|
-        gf.parents.include?(last_parent.id) && gf.title == folder
-      }.first
-      last_parent = subcollection
-    end
-    last_parent
-  end
-
-  def title_from_uri uri
-    folders = uri.split("/")
-    folders.pop # the file
-  end
-
-  def google_content uri, path, dir
-    file_path = '/' + self.name + '/' + path
-    file_path = file_path.gsub(/\/+/,'/')
-    folda = subcollection_from_uri(uri, dir) || dir
-    title = title_from_uri(uri)
-    oat = folda.file_by_title(title || '')
-    oat = oat.nil? ? "Error in call to API function" : oat.download_to_string.html_safe
-    oat = oat.gsub("</body>","#{injectee}</body>").html_safe if inject?
-    oat
-  end
-
-  def dropbox_content path
-    if self.db_path && self.db_path != ""
-      at = self.identity && self.identity.full_access_token
-      folder = self.db_path
-    else
-      at = self.identity && self.identity.access_token
-      folder = '/' + self.name
-    end
-    document_root = self.document_root || ''
-    file_path = folder + '/' + document_root + '/' + path
-    file_path = file_path.gsub(/\/+/,'/')
-    url = 'https://content.dropboxapi.com/2/files/download'
-    opts = {
-      headers: {
-        'Authorization' => "Bearer #{at}",
-        'Content-Type' => '',
-        'Dropbox-API-Arg' => {
-          path: file_path
-        }.to_json
-      }
-    }
-    Rails.logger.info "Requesting https://#{self.name}.updog.co#{file_path.gsub(self.name+'/','')}"
-    Rails.logger.info "Dropbox file path: #{file_path}"
-    Rails.logger.info "Document root: #{self.document_root}"
-    Rails.logger.info "Db path: #{self.db_path}"
-    res = HTTParty.post(url, opts)
-    oat = res.body.html_safe
-    oat = "Not found - Please Reauthenticate Dropbox" if oat.match("Invalid authorization value")
-    oat
+  def content path, dir = nil
+    Resource.new(self, path).contents
   end
 
   def inject?
-    (!self.creator.is_pro && self.creator.id > 1547) || Rails.env.development?
+    (!self.creator.is_pro && self.creator.id > 1547) || !Rails.env.production?
   end
 
   def domain_isnt_updog
@@ -187,22 +78,26 @@ class Site < ActiveRecord::Base
     clicks.where('created_at > ?', Time.now.beginning_of_day)
   end
 
-  def dir
+  def google_session
     if self.provider == 'google'
+      identity = self.user.identities.find_by(provider: self.provider)
       begin
-        identity = self.user.identities.find_by(provider: self.provider)
         sesh = GoogleDrive::Session.from_access_token(identity.access_token)
-        dir = sesh.file_by_id(self.google_id)
+        sesh.root_collection # literally anything to trigger auth
       rescue => e
         if e.to_s == "Unauthorized"
           identity.refresh_access_token
-          return google_session site
+          return google_session
         else
-          raise e
+          Rails.logger.warn e
         end
       end
-      dir
+      sesh
     end
+  end
+
+  def dir
+    google_session.file_by_id(self.google_id) if self.provider == 'google'
   end
 
   private

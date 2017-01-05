@@ -15,11 +15,43 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 ENV["RAILS_ENV"] ||= 'test'
+require 'simplecov'
+SimpleCov.start
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
+require 'webmock/rspec'
+
+WebMock.disable_net_connect!(allow_localhost: true)
+def fixture file
+  begin
+    File.read("#{Rails.root}/spec/fixtures/#{file}")
+  rescue Errno::ENOTDIR
+    File.read("#{Rails.root}/spec/fixtures/doesnotexist")
+  rescue Errno::ENOENT
+    File.read("#{Rails.root}/spec/fixtures/doesnotexist")
+  end
+end
+def stub name, path, status
+  path = path.gsub(/\?(.*)/,'')
+  stub_request(:post, "https://content.dropboxapi.com/2/files/download").
+  with(headers: {'Dropbox-Api-Arg'=>'{"path":"/'+name + path+'"}'}).
+  to_return(:status => status, :body => fixture(path))
+end
+
+def stub404 name, path, status
+  stub name, path, 409
+  stub name, path + '/index.html', 409
+  stub name, '/404.html', 409
+end
+
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
-
+  config.before do
+    stub_request(:post, /https:\/\/api\.getdrip\.com\/v2\/(.*)\/campaigns\/(.*)\/subscribers/).
+      to_return(:status => 200, :body => "", :headers => {})
+    stub_request(:post, /https:\/\/api\.getdrip\.com\/v2\/(.*)\/events/).
+       to_return(:status => 200, :body => "", :headers => {})
+  end
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
 =begin

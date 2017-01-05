@@ -1,5 +1,7 @@
 # UpDog
 
+[![Build Status](https://travis-ci.org/jshawl/updog.svg?branch=master)](https://travis-ci.org/jshawl/updog)
+
 ## Local Setup
 
     $ git clone git@github.com:jshawl/updog.git

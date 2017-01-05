@@ -1,8 +1,11 @@
 class ContentWorker
   include Sidekiq::Worker
-  def perform site_id, uri, path, cache_key
+  sidekiq_options :retry => false
+  def perform site_id, path, cache_key
     @site = Site.find(site_id)
-    Rails.cache.write("#{cache_key}/#{path}",@site.from_api(uri, path, @site.dir))
+    @content = @site.content(path)
+    @resource = Resource.new @site, path
+    Rails.cache.write("#{cache_key}/#{path}", @resource.from_api)
     @site.touch
   end
 end

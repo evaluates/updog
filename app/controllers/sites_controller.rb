@@ -1,5 +1,3 @@
-require 'kramdown'
-require 'rouge'
 require 'digest'
 
 class SitesController < ApplicationController
@@ -61,10 +59,7 @@ class SitesController < ApplicationController
     end
   end
 
-
-
   def load
-
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
     if !@site
      render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true
@@ -75,23 +70,10 @@ class SitesController < ApplicationController
       ip: request.env["REMOTE_ADDR"],
       referer: request.env["HTTP_REFERER"]
     })
-    uri = request.env['REQUEST_PATH']
-    if uri == '/markdown.css'
-      @content = try_files [uri], @site, @site.dir
-      if @content[:status] == 404
-	       @content = {html: File.read(Rails.root.to_s + '/public/md.css').html_safe, status: 200}
-      end
-    else
-      if uri[-1] == "/"
-        uri += "index.html"
-      end
-      @content = try_files [uri,uri+'/index.html','/404.html'], @site, @site.dir
-      @content[:html] = markdown(@content[:html]) if render_markdown? @site, request
-    end
+    @content = @site.content( request.env['REQUEST_URI'] )
     @content[:html] = @content[:html].gsub("</body>","#{injectee(@site)}</body>").html_safe if @site.inject? && @content[:status] == 200
-    ct = mime(request, @site, @content[:status])
     respond_to do |format|
-      format.all { render({:layout => false, :content_type => ct}.merge(@content)) }
+      format.all { render({layout: false}.merge(@content)) }
     end
   end
 
@@ -106,84 +88,6 @@ class SitesController < ApplicationController
     )
   end
 
-  def mime request, site, status
-    extname = File.extname(request.env['REQUEST_PATH'])[1..-1]
-    mime_type = Mime::Type.lookup_by_extension(extname)
-    mime_type.to_s unless mime_type.nil?
-    mime_type = 'text/html; charset=utf-8' if mime_type.nil?
-    mime_type = 'text/html; charset=utf-8' if render_markdown?(site, request)
-    mime_type = 'text/html; charset=utf-8' if status == 404
-    mime_type.to_s
-  end
-
-  def render_markdown? site, request
-    can_render_markdown?(site) && should_render_markdown?(request)
-  end
-
-  def can_render_markdown? site
-    site.creator.is_pro && site.render_markdown
-  end
-
-  def should_render_markdown? request
-    uri = request.env['REQUEST_URI']
-    uri.match(/\.(md|markdown)$/) && !uri.match(/raw/)
-  end
-
-  def markdown content
-    md = Kramdown::Document.new(content.force_encoding('utf-8'),
-      input: 'GFM',
-      syntax_highlighter: 'rouge',
-      syntax_highlighter_opts: {
-	    formatter: Rouge::Formatters::HTML
-    }).to_html
-    preamble = "<!doctype html><html><head><meta name='viewport' content='width=device-width'><meta charshet='utf-8'><link rel='stylesheet' type='text/css' href='/markdown.css'></head><body>"
-    footer = "</body></html>"
-    (preamble + md + footer).html_safe
-  end
-
-  def try_files uris, site, dir = nil
-    out = site.content uris[0], dir
-    if out.match(/{\".tag\":/) || out.match('Error in call to API function')
-      uris.shift
-      if uris.length == 0
-	       return { html: File.read(Rails.public_path + 'load-404.html').html_safe, status: 404 }
-      end
-      return try_files uris, site, dir
-    end
-    status = uris[0] == "/404.html" ? 404 : 200
-    if uris[0].match "/directory-index.html"
-      index = site.index(uris[0])
-      @entries = index["entries"]
-      @path = index["path"]
-      html = render_to_string "sites/directory_index", layout: false
-      return {html: html, status: status}
-    end
-    {html: out, status: status}
-  end
-  def create_dropbox_folder(name, access_token)
-    url = 'https://api.dropboxapi.com/2/files/create_folder'
-    opts = {
-      headers: db_headers(access_token),
-      body: {
-        path: name
-      }.to_json
-    }
-    HTTParty.post(url, opts)
-  end
-  def create_dropbox_file(path, content, access_token)
-    url = 'https://content.dropboxapi.com/2/files/upload'
-    opts = {
-        headers: {
-        'Authorization' => "Bearer #{access_token}",
-        'Content-Type' =>  'application/octet-stream',
-        'Dropbox-API-Arg' => {
-          path: path,
-        }.to_json
-      },
-      body: content
-    }
-    HTTParty.post(url, opts)
-  end
   def create
     @site = current_user.sites.create site_params
     @identity = current_user.identities.find_by(provider: @site.provider)
@@ -196,33 +100,17 @@ class SitesController < ApplicationController
           site: @site
       })
       if params[:site][:provider] == "dropbox"
-        create_dropbox_folder(path, @identity.access_token)
-        create_dropbox_file(path + "/index.html", content, @identity.access_token)
+        Resource.create_dropbox_folder(path, @identity.access_token)
+        Resource.create_dropbox_file(path + "/index.html", content, @identity.access_token)
       elsif params[:site][:provider] == "google"
-        google_init @identity, @site, content
+        Resource.google_init @identity, @site, content
       end
       redirect_to @site
     else
       render :new
     end
   end
-  def google_init identity, site, content
-    sesh = GoogleDrive::Session.from_access_token(identity.access_token)
-    begin
-      drive = sesh.root_collection
-      dir = drive.subcollections(q:'name = "UpDog" and trashed = false').first || drive.create_subcollection("UpDog")
-      dir = dir.create_subcollection(site.name)
-      site.update(google_id: dir.id)
-      dir.upload_from_string(content, 'index.html', convert: false)
-    rescue => e
-      if e.to_s == "Unauthorized"
-        identity.refresh_access_token
-        google_init identity, site, content
-      else
-        raise e
-      end
-    end
-  end
+  
   def update
     @site = current_user.sites.find(params[:id])
     if @site.update site_params
@@ -264,7 +152,7 @@ class SitesController < ApplicationController
     opts = {
       headers: {
         'Authorization' => 'Bearer ' + at,
-	'Content-Type' => 'application/json'
+	      'Content-Type' => 'application/json'
       },
       body: {
         path: path,
@@ -294,18 +182,14 @@ class SitesController < ApplicationController
     redirect_to :back
   end
 
-
   private
-  def db_headers access_token
-    {
-      'Authorization' => "Bearer #{access_token}",
-      'Content-Type' => 'application/json'
-    }
-  end
+
   def site_params
     params.require(:site).permit(:name, :domain, :document_root, :render_markdown, :db_path, :passcode, :username, :provider)
   end
+
   def undo_link
     view_context.link_to("undo", revert_version_path(@site.versions.last), :method => :post)
   end
+
 end
