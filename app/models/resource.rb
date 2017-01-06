@@ -116,7 +116,6 @@ class Resource
     Rails.logger.info "Db path: #{self.site.db_path}"
     res = HTTParty.post(url, opts)
     oat = res.body.html_safe
-    oat.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
     oat = "Not found - Please Reauthenticate Dropbox" if oat.match("Invalid authorization value")
     oat
   end
