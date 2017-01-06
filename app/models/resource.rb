@@ -153,7 +153,7 @@ class Resource
   end
 
   def cache_key
-    @site.updated_at.utc.to_s(:number)
+    @site.updated_at.utc.to_s(:number) + @site.id.to_s
   end
 
   def markdown content

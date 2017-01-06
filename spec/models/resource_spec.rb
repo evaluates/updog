@@ -20,14 +20,15 @@ describe Resource do
       @resource = Resource.new @u.sites.first, '/?say=what'
       expect(@resource.path).to eq("/index.html")
     end
+
     it "has contents" do
       stub @resource.site.name, @resource.path, 200
       expect(@resource.contents[:html]).to eq(fixture("index.html"))
-      sleep 6
-      expect(@resource.contents[:html]).to eq(fixture("index.html"))
+      out = Rails.cache.fetch("#{@resource.cache_key}/#{@resource.uri}")
+      expect(out[:html]).to eq(fixture("index.html"))
     end
     it "has a cache key" do
-      expect(@resource.cache_key).to eq(@resource.site.updated_at.utc.to_s(:number))
+      expect(@resource.cache_key).to eq(@resource.site.updated_at.utc.to_s(:number) + @resource.site.id.to_s)
     end
     it "has an access_token" do
       @resource.site.db_path = 'whatwhat'
