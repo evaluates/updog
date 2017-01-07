@@ -8,10 +8,15 @@ class Resource
   def initialize site, uri
     @site = site
     @uri = uri
-    @path = strip_query_string uri
-    @path += "index.html" if @path[-1] == "/"
-    detection = CharlockHolmes::EncodingDetector.detect(@path)
-    @path = CharlockHolmes::Converter.convert @path, detection[:encoding], 'UTF-8'
+    @path = sanitize_uri uri
+  end
+
+  def sanitize_uri uri
+    path = strip_query_string uri
+    path += "index.html" if path[-1] == "/"
+    detection = CharlockHolmes::EncodingDetector.detect(path)
+    path = CharlockHolmes::Converter.convert path, detection[:encoding], 'UTF-8'
+    URI.decode(path)
   end
 
   def contents
