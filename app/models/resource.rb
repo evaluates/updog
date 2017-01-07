@@ -34,7 +34,14 @@ class Resource
 
   def from_api
     if @site.provider == 'google'
-      @folders = google_folders
+      begin
+        @folders = google_folders
+      rescue Google::Apis::RateLimitError => e
+        Rails.logger.info e
+        Rails.logger.info "URI: #{@uri}"
+        Rails.logger.info "Site: #{@site.inspect}"
+        return {status: 500, html: 'Too many requests. Try again later.'}
+      end
     end
     if @path == '/markdown.css'
       out = try_files [@path], @site, @site.dir, @folders
@@ -72,7 +79,6 @@ class Resource
 
   def google_folders
     folders = []
-
     begin
       (files, page_token) = @site.google_session.files(
         page_token: page_token,

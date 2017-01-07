@@ -1,5 +1,5 @@
 require 'spec_helper'
-
+require 'google_drive'
 describe Resource do
   describe ".new" do
     before do
@@ -163,6 +163,11 @@ describe Resource do
       it "contstructs a names query based on path" do
         expect(@resource.name_query).to eq("name = 'index.html'")
         expect(@resource2.name_query).to eq("name = 'a' or name = 'really' or name = 'long' or name = 'url' or name = 'index.html'")
+      end
+      it "handles rate limit violations gracefully" do
+        @resource = Resource.new @site, '/?something=brand-new'
+        allow(@resource).to receive(:google_folders) { raise Google::Apis::RateLimitError.new 'Rate limit exceeded'}
+        expect{@resource.contents}.not_to raise_error
       end
     end
   end
