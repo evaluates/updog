@@ -20,6 +20,7 @@ describe Resource do
       @resource = Resource.new @u.sites.first, '/?say=what'
       expect(@resource.path).to eq("/index.html")
     end
+
     it "has contents" do
       stub @resource.site.name, @resource.path, 200
       expect(@resource.contents[:html]).to eq(fixture("index.html"))
@@ -30,11 +31,6 @@ describe Resource do
       @resource = Resource.new @u.sites.first, '/a%20file.txt'
       stub @resource.site.name, @resource.path, 200
       expect(@resource.contents[:html]).to eq(fixture("a\ file.txt"))
-    end
-    it "has contents when path has query string" do
-      @resource = Resource.new @u.sites.first, '/download%20certificate.png?raw=1'
-      stub @resource.site.name, @resource.path, 200
-      expect(@resource.contents[:html]).to eq(fixture("download\ certificate.png"))
     end
     it "has a cache key" do
       expect(@resource.cache_key).to eq(@resource.site.updated_at.utc.to_s(:number) + @resource.site.id.to_s)
