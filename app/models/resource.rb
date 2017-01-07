@@ -66,12 +66,16 @@ class Resource
     elsif site.provider == 'google'
       out = google_content dir, folders
     end
-    if out.match(/{\".tag\":/) || out.match('Error in call to API function')
-      uris.shift
-      if uris.length == 0
-         return { html: File.read(Rails.public_path + 'load-404.html').html_safe, status: 404 }
+    begin
+      if out.match(/{\".tag\":/) || out.match('Error in call to API function')
+        uris.shift
+        if uris.length == 0
+           return { html: File.read(Rails.public_path + 'load-404.html').html_safe, status: 404 }
+        end
+        return try_files uris, site, dir, folders
       end
-      return try_files uris, site, dir, folders
+    rescue ArgumentError
+      return {html: out, status: 200}
     end
     status = uris[0] == "/404.html" ? 404 : 200
     {html: out, status: status}
@@ -127,7 +131,11 @@ class Resource
     Rails.logger.info "Db path: #{self.site.db_path}"
     res = HTTParty.post(url, opts)
     oat = res.body.html_safe
-    oat = "Not found - Please Reauthenticate Dropbox" if oat.match("Invalid authorization value")
+    begin
+      oat = "Not found - Please Reauthenticate Dropbox" if oat.match("Invalid authorization value")
+    rescue ArgumentError
+      return oat
+    end
     oat
   end
 
