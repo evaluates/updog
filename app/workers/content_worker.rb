@@ -5,7 +5,8 @@ class ContentWorker
     @site = Site.find(site_id)
     @content = @site.content(path)
     @resource = Resource.new @site, path
-    Rails.cache.write("#{cache_key}/#{path}", @resource.from_api)
+    content = @resource.from_api
     @site.touch
+    Rails.cache.write("#{@resource.cache_key}/#{path}", content)
   end
 end
