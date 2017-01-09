@@ -20,6 +20,7 @@ SimpleCov.start
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'webmock/rspec'
+require 'capybara/rails'
 
 WebMock.disable_net_connect!(allow_localhost: true)
 def fixture file
@@ -112,4 +113,10 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 =end
+end
+require 'capybara/rspec'
+require 'rack_session_access/capybara'
+
+Rails.application.config do
+  config.middleware.use RackSessionAccess::Middleware
 end

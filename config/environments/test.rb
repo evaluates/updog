@@ -21,7 +21,6 @@ Rails.application.configure do
   config.action_controller.perform_caching = false
 
   # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
@@ -35,6 +34,8 @@ Rails.application.configure do
   config.active_support.deprecation = :stderr
 
   config.cache_store = :dalli_store
+  config.action_dispatch.show_exceptions = true
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 end

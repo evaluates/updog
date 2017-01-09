@@ -93,4 +93,39 @@ describe Site do
   it "shows popular sites" do
     expect(Site.popular.is_a? ActiveRecord::Relation).to eq(true)
   end
-end
+  describe "CNAME configuration" do
+    context "site has no domain" do
+      it "doesn't do anything" do
+        @s = Site.new name: 'pizza'
+        expect(@s.domain_configuration).to be(nil)
+        @s = Site.new name: 'pizza', domain: ''
+        expect(@s.domain_configuration).to be(nil)
+      end
+    end
+    it "gets a cname from a domain" do
+      @s = Site.new name: 'pizza', domain: 'www.jshawl.xyz'
+      expect(@s.domain_cname).to eq("updog.co")
+    end
+    context "domain is configured correctly" do
+      it "shows error when there is no CNAME entry" do
+        @s = Site.new name: 'pizza', domain: 'www.pizza.com'
+        allow(@s).to receive(:domain_cname){nil}
+        expect(@s.domain_configuration[:text]).to eq("There is no CNAME entry for #{@s.domain}")
+        expect(@s.domain_configuration[:klass]).to eq("red")
+      end
+      it "shows error when there is a CNAME entry but it's not updog.co" do
+        @s = Site.new name: 'pizza', domain: 'www.google.com'
+        allow(@s).to receive(:domain_cname){'notupdog.co'}
+        expect(@s.domain_configuration[:text]).to eq("The CNAME entry for #{@s.domain} does not point to updog.co")
+        expect(@s.domain_configuration[:klass]).to eq("red")
+      end
+      it "shows no error when there is a CNAME entry that's updog.co" do
+        @s = Site.new name: 'pizza', domain: 'www.google.com'
+        allow(@s).to receive(:domain_cname){'updog.co'}
+        expect(@s.domain_configuration[:text]).to eq("You have configured your domain correctly.")
+        expect(@s.domain_configuration[:klass]).to eq("green")
+      end
+    end
+  end
+
+ end

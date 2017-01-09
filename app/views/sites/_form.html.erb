@@ -79,7 +79,23 @@
     <%= f.text_field :name %>
   </div>
   <br>
-  <%= f.label :domain %>
+  <%= f.label :domain do %>
+    Domain
+    <% if @site.domain.present? %>
+      <span class='domain-configuration-status <%= @site.domain_configuration[:klass] %>'
+            data-text='<%= @site.domain_configuration[:text] %>'>
+      </span>
+
+    <% end %>
+  <% end %>
+  <div class='domain-configuration-reason' style='display:none;'></div>
+  <script>
+    $(".domain-configuration-status").on("click", function(){
+      $(".domain-configuration-reason").toggle().html(
+        $(this).data("text")
+      )
+    })
+  </script>
   <%= f.text_field :domain %> (optional) <small data-toggle=".instructions">What is this?</small><br><br>
   <% if current_user.is_pro %>
     <%= f.label :document_root %>

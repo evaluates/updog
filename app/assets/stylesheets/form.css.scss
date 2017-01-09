@@ -57,3 +57,20 @@ input[type="password"]{
     }
   }
 }
+
+.domain-configuration-status{
+  height:.8em;
+  width:.8em;
+  border-radius: 100%;
+  cursor: pointer;
+  display: inline-block;
+  &.green{
+    background: green;
+  }
+  &.red{
+    background: red;
+  }
+}
+.domain-configuration-reason{
+  margin-bottom:.5em;
+}

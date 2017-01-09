@@ -1,3 +1,5 @@
+require 'resolv'
+
 class Site < ActiveRecord::Base
   belongs_to :user
   attr_accessor :passcode
@@ -98,6 +100,28 @@ class Site < ActiveRecord::Base
 
   def dir
     google_session.file_by_id(self.google_id) if self.provider == 'google'
+  end
+
+  def domain_cname
+    Resolv::DNS.open do |dns|
+      records = dns.getresources(self.domain, Resolv::DNS::Resource::IN::CNAME)
+      value = records.empty? ? nil : records.select{|record|
+        record.name.to_s == 'updog.co'
+      }.first
+      value.name.to_s unless value.nil?
+    end
+  end
+
+  def domain_configuration
+    return nil unless self.domain.present?
+    case
+    when domain_cname.nil?
+      {text:"There is no CNAME entry for #{self.domain}", klass: 'red'}
+    when domain_cname != 'updog.co'
+      {text:"The CNAME entry for #{self.domain} does not point to updog.co", klass: 'red'}
+    else
+      {text:"You have configured your domain correctly.", klass: 'green'}
+    end
   end
 
   private

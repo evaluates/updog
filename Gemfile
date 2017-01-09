@@ -22,6 +22,9 @@ gem 'unicorn'
 
 
 group :development, :test do
+  gem 'capybara'
+  gem 'launchy'
+  gem 'rack_session_access'
   gem 'rspec-rails', '~> 3.0'
   gem 'simplecov', :require => false
   gem 'webmock'

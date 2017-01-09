@@ -95,6 +95,7 @@ class SitesController < ApplicationController
       if params[:site][:db_path].present? # probably using some existing code
         return redirect_to @site
       end
+      return redirect_to @site if Rails.env.test?
       path = "/" + @site.name
       content = render_to_string(:template => "sites/welcome", :layout => false, locals: {
           site: @site
@@ -110,7 +111,7 @@ class SitesController < ApplicationController
       render :new
     end
   end
-  
+
   def update
     @site = current_user.sites.find(params[:id])
     if @site.update site_params
