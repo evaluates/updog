@@ -19,13 +19,15 @@ class SitesController < ApplicationController
     session[:back_to] = request.url
     return redirect_to root_path unless current_user
     @sites = current_user.sites
-    @identity = current_user.identities.first
     @providers = current_user.identities.map(&:provider)
     unless current_user.is_pro? || @sites.length == 0
       redirect_to root_path
     end
-    @site = Site.new(provider:@providers.first)
+    provider = (@providers.include? 'dropbox') ? 'dropbox' : 'google'
+    @site = Site.new(provider:provider)
+    @identity = current_user.identities.find_by(provider: provider)
   end
+
   def show
     begin
       @site = current_user.sites.find(params[:id])
@@ -33,9 +35,6 @@ class SitesController < ApplicationController
       return render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true, status: 404, content_type: 'text/html'
     end
     @identity = current_user.identities.find_by(provider: 'dropbox')
-    unless @site
-      return render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true, status: 404
-    end
     @sites = current_user && current_user.sites || []
   end
   def destroy
@@ -91,11 +90,11 @@ class SitesController < ApplicationController
   def create
     @site = current_user.sites.create site_params
     @identity = current_user.identities.find_by(provider: @site.provider)
+    @providers = current_user.identities.map(&:provider)
     if @site.save
       if params[:site][:db_path].present? # probably using some existing code
         return redirect_to @site
       end
-      return redirect_to @site if Rails.env.test?
       path = "/" + @site.name
       content = render_to_string(:template => "sites/welcome", :layout => false, locals: {
           site: @site
@@ -108,12 +107,15 @@ class SitesController < ApplicationController
       end
       redirect_to @site
     else
+
       render :new
     end
   end
 
   def update
     @site = current_user.sites.find(params[:id])
+    @providers = current_user.identities.map(&:provider)
+    @identity = current_user.identities.find_by(provider:@site.provider)
     if @site.update site_params
       redirect_to @site
     else

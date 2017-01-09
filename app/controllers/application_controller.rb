@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
   def current_user
     if Rails.env.test?
-      return User.last
+      session['user_id'] = cookies[:stub_user_id]
     end
     begin
       session['user_id'] ? User.find(session['user_id']) : nil

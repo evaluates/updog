@@ -16,4 +16,6 @@ class User < ActiveRecord::Base
   def name
     identities.map(&:name).compact.first
   end
+  def full_access_token
+  end
 end

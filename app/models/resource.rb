@@ -7,8 +7,8 @@ class Resource
 
   def initialize site, uri
     @site = site
-    @uri = uri
-    @path = sanitize_uri uri
+    @uri = uri || '/'
+    @path = sanitize_uri @uri
   end
 
   def sanitize_uri uri
@@ -265,6 +265,7 @@ class Resource
   end
 
   def self.google_init identity, site, content
+    return nil if Rails.env.test?
     sesh = GoogleDrive::Session.from_access_token(identity.access_token)
     begin
       drive = sesh.root_collection
