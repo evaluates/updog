@@ -20,7 +20,10 @@ describe Resource do
       @resource = Resource.new @u.sites.first, '/?say=what'
       expect(@resource.path).to eq("/index.html")
     end
-
+    it "removes duplicate slashes" do
+      @resource = Resource.new @u.sites.first, '//'
+      expect(@resource.path).to eq("/index.html")
+    end
     it "has contents" do
       stub @resource.site.name, @resource.path, 200
       expect(@resource.contents[:html]).to eq(fixture("index.html"))
@@ -167,6 +170,7 @@ describe Resource do
       it "handles rate limit violations gracefully" do
         @resource = Resource.new @site, '/?something=brand-new'
         allow(@resource).to receive(:google_folders) { raise Google::Apis::RateLimitError.new 'Rate limit exceeded'}
+        allow(@resource.site).to receive(:dir) { raise Google::Apis::RateLimitError.new 'Rate limit exceeded'}
         expect{@resource.contents}.not_to raise_error
       end
     end

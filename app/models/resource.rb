@@ -14,8 +14,11 @@ class Resource
   def sanitize_uri uri
     path = strip_query_string uri
     path += "index.html" if path[-1] == "/"
-    detection = CharlockHolmes::EncodingDetector.detect(path)
-    path = CharlockHolmes::Converter.convert path, detection[:encoding], 'UTF-8'
+    begin
+      detection = CharlockHolmes::EncodingDetector.detect(path)
+      path = CharlockHolmes::Converter.convert path, detection[:encoding], 'UTF-8'
+    rescue
+    end
     URI.decode(path)
   end
 
@@ -33,29 +36,29 @@ class Resource
   end
 
   def from_api
-    if @site.provider == 'google'
-      begin
-        @folders = google_folders
-      rescue Google::Apis::RateLimitError => e
-        Rails.logger.info e
-        Rails.logger.info "URI: #{@uri}"
-        Rails.logger.info "Site: #{@site.inspect}"
-        return {status: 500, html: 'Too many requests. Try again later.'}
+    begin
+      if @site.provider == 'google'
+          @folders = google_folders
       end
-    end
-    if @path == '/markdown.css'
-      out = try_files [@path], @site, @site.dir, @folders
-      if out[:status] == 404
-         out = {
-           html: File.read(Rails.root.to_s + '/public/md.css').html_safe,
-           status: 200
-         }
+      if @path == '/markdown.css'
+        out = try_files [@path], @site, @site.dir, @folders
+        if out[:status] == 404
+           out = {
+             html: File.read(Rails.root.to_s + '/public/md.css').html_safe,
+             status: 200
+           }
+        end
+      else
+        out = try_files [@path,@path+'/index.html','/404.html'], @site, @site.dir, @folders
       end
-    else
-      out = try_files [@path,@path+'/index.html','/404.html'], @site, @site.dir, @folders
+      out[:content_type] = mime out[:status]
+      out[:html] = markdown out[:html] if render_markdown?
+    rescue Google::Apis::RateLimitError => e
+      Rails.logger.info e
+      Rails.logger.info "URI: #{@uri}"
+      Rails.logger.info "Site: #{@site.inspect}"
+      out = {status: 500, html: 'Too many requests. Try again later.'}
     end
-    out[:content_type] = mime out[:status]
-    out[:html] = markdown out[:html] if render_markdown?
     out
   end
 
@@ -142,6 +145,7 @@ class Resource
   end
 
   def strip_query_string uri
+    uri = uri.gsub(/\/+/,'/')
     begin
       stripped = URI.parse(uri).path
     rescue URI::InvalidURIError => e
@@ -220,7 +224,11 @@ class Resource
   end
 
   def download_to_string file
-    file.download_to_string.html_safe
+    begin
+      file.download_to_string.html_safe
+    rescue Google::Apis::ClientError => e
+      e
+    end
   end
 
   def self.create_dropbox_folder(name, access_token)
