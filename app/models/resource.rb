@@ -23,15 +23,20 @@ class Resource
   end
 
   def contents
-    puts "__: site updated at #{@site.updated_at}"
-    if (Time.now - @site.updated_at) > 5
-      puts "cache is stale, updating async"
-      ContentWorker.perform_async(@site.id, @uri, cache_key)
-    end
-    puts "__: should be in #{cache_key}/#{@uri}"
-    Rails.cache.fetch("#{cache_key}/#{@uri}") do
-      puts "__: not in cache #{cache_key}/#{@uri}"
-      from_api
+    begin
+      puts "__: site updated at #{@site.updated_at}"
+      if (Time.now - @site.updated_at) > 5
+        puts "cache is stale, updating async"
+        ContentWorker.perform_async(@site.id, @uri, cache_key)
+      end
+      puts "__: should be in #{cache_key}/#{@uri}"
+      Rails.cache.fetch("#{cache_key}/#{@uri}") do
+        puts "__: not in cache #{cache_key}/#{@uri}"
+        from_api
+      end
+    rescue
+      Rails.logger.info "contents error: site: #{@site.link}#{@uri}"
+      {html: "An unknown error occurred. Please try again later.", status: 500}
     end
   end
 
