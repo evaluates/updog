@@ -1,6 +1,6 @@
 class PaymentsController < ApplicationController
   def checkout
-    @price = ab_test(:price, '4.99', '5', '9.99', '14.99', '19.99').to_f
+    @price = 19.99
     begin
       charge = Stripe::Charge.create(
         :source => params[:stripeToken],

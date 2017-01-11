@@ -9,7 +9,7 @@ class PagesController < ApplicationController
   end
 
   def faq
-    @price = ab_test(:price, '4.99', '5', '9.99', '14.99', '19.99')
+    @price = '19.99'
   end
 
   def feedback
@@ -41,7 +41,7 @@ class PagesController < ApplicationController
     @current_user = current_user
     @paypal_url = ENV['paypal_url']
     @encrypted = paypal_encrypted
-    @price = ab_test(:price, '4.99', '5', '9.99', '14.99', '19.99')
+    @price = '19.99'
   end
 
   def paypal_encrypted
@@ -54,7 +54,7 @@ class PagesController < ApplicationController
       :notify_url => ENV['paypal_notify'],
       :cert_id => ENV['paypal_cert_id'],
       :invoice => id,
-      "amount_1" => ab_test(:price, '4.99', '5', '9.99', '14.99', '19.99'),
+      "amount_1" => '19.99',
       "item_name_1" => "UpDog Pro",
       "item_number_1" => 1,
       "quantity_1" => 1
@@ -70,7 +70,6 @@ class PagesController < ApplicationController
   end
 
   def thanks
-    ab_finished(:price, reset: false)
   end
 
   def contact_create
