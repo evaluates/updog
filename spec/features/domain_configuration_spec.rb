@@ -98,7 +98,6 @@ describe "Checking a domain's configuration", :type => :feature do
   it "can load dropbox folders for selection" do
     stub_request(:post, "https://content.dropboxapi.com/2/files/download").to_return(:status => 200, :body => "[]", :headers => {})
     visit folders_path + "?path=/&access_token=abc"
-    save_and_open_page
     expect(page).to have_content('[]')
   end
   it "can authenticate requests" do
@@ -113,6 +112,13 @@ describe "Checking a domain's configuration", :type => :feature do
     fill_in 'passcode', with: 'bar'
     find('button').click
     expect(page).to have_content('ok')
+  end
+  it "redirects to dropbox for zip files" do
+      Capybara.app_host = "http://#{@site.domain}/"
+      stub_request(:post, "https://api.dropboxapi.com/2/files/get_temporary_link").
+         to_return(:status => 200, :body => fixture('get_temporary_link.json'), :headers => {})
+      visit '/a.zip'
+      expect(current_url).to match('dl.dropboxusercontent.com')
   end
 end
 

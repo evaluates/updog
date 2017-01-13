@@ -69,7 +69,12 @@ class SitesController < ApplicationController
       ip: request.env["REMOTE_ADDR"],
       referer: request.env["HTTP_REFERER"]
     })
-    @content = @site.content( request.env['REQUEST_URI'] )
+    uri = request.env['REQUEST_URI'] || request.env['PATH_INFO']
+    if uri && uri.match(/(\.zip)/)
+      @resource = Resource.new(@site, uri)
+      return redirect_to @resource.get_temporary_link
+    end
+    @content = @site.content( uri )
     @content[:html] = @content[:html].gsub("</body>","#{injectee(@site)}</body>").html_safe if @site.inject? && @content[:status] == 200
     respond_to do |format|
       format.all { render({layout: false}.merge(@content)) }

@@ -70,6 +70,12 @@ describe Resource do
       folders = @resource.folders_from_uri('/index.html')
       expect(folders).to eq([])
     end
+    it "can get a temporary dropbox link" do
+      @resource = Resource.new @u.sites.first, '/a%20file.zip'
+      stub_request(:post, "https://api.dropboxapi.com/2/files/get_temporary_link").
+         to_return(:status => 200, :body => fixture('get_temporary_link.json'), :headers => {})
+      expect(@resource.get_temporary_link).to match('dl.dropboxusercontent.com')
+    end
     it "handles invalid byte sequences" #do
     #   @resource = Resource.new @u.sites.first, '/invalidbytesequence.jpg'
     #   stub @resource.site.name, @resource.path, 200

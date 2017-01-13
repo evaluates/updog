@@ -141,6 +141,21 @@ class Resource
     oat
   end
 
+  def get_temporary_link
+    url = 'https://api.dropboxapi.com/2/files/get_temporary_link'
+    document_root = self.site.document_root || ''
+    file_path = folder + '/' + document_root + '/' + @path
+    file_path = file_path.gsub(/\/+/,'/')
+    opts = {
+      headers: self.class.db_headers(self.site.identity.access_token),
+      body: {
+        path: file_path
+      }.to_json
+    }
+    res = HTTParty.post(url, opts).body
+    JSON.parse(res)["link"]
+  end
+
   def mime status
     extname = File.extname(strip_query_string(@path))[1..-1]
     mime_type = Mime::Type.lookup_by_extension(extname)
