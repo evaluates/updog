@@ -34,8 +34,10 @@ class Resource
         puts "__: not in cache #{cache_key}/#{@uri}"
         from_api
       end
-    rescue
+    rescue => e
       Rails.logger.info "contents error: site: #{@site.link}#{@uri}"
+      Rails.logger.error e.message
+      Rails.logger.error e.backtrace.join("\n")
       {html: "An unknown error occurred. Please try again later.", status: 500}
     end
   end
