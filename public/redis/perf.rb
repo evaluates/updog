@@ -2,10 +2,12 @@ require 'pry'
 require 'json'
 
 class RedisPerf
+  @@file = 'data.js'
+  @@preamble = 'var d = '
   def initialize
     @stats = %x[redis-cli info]
-    if File.exist? 'data.json'
-      @data = JSON.parse(File.read('data.json'))
+    if File.exist? 'data.js'
+      @data = JSON.parse(File.read(@@file).gsub(@@preamble,''))
     else
       @data = []
     end
@@ -27,7 +29,7 @@ class RedisPerf
       hitrate: rate,
       ts: Time.now.to_i
     }
-    File.write('data.json', JSON.pretty_generate(@data))
+    File.write(@@file, @@preamble + JSON.pretty_generate(@data))
   end
 end
 
