@@ -30,10 +30,6 @@ describe Resource do
       out = Rails.cache.fetch("#{@resource.cache_key}/#{@resource.uri}")
       expect(out[:html]).to eq(fixture("index.html"))
     end
-    it "handles contents errors gracefully" do
-      allow(@resource).to receive(:from_api){ Error.new 'shit' }
-      expect(@resource.contents[:html]).to eq('An unknown error occurred. Please try again later.')
-    end
     it "has contents when path has space" do
       @resource = Resource.new @u.sites.first, '/a%20file.txt'
       stub @resource.site.name, @resource.path, 200

@@ -70,11 +70,18 @@ class SitesController < ApplicationController
       referer: request.env["HTTP_REFERER"]
     })
     uri = request.env['REQUEST_URI'] || request.env['PATH_INFO']
-    if uri && uri.match(/(\.zip|\.epub)/)
-      @resource = Resource.new(@site, uri)
+    @resource = Resource.new(@site, uri)
+    if uri && uri.match(/(\.zip|\.epub)/) && @site.provider == 'dropbox'
       return redirect_to @resource.get_temporary_link
     end
-    @content = @site.content( uri )
+    begin
+      @content = @site.content( uri )
+    rescue
+      if @site.provider == 'dropbox'
+        return redirect_to @resource.get_temporary_link
+      end
+      raise 'Content Error' 
+    end
     @content[:html] = @content[:html].gsub("</body>","#{injectee(@site)}</body>").html_safe if @site.inject? && @content[:status] == 200
     respond_to do |format|
       format.all { render({layout: false}.merge(@content)) }
