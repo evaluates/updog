@@ -120,6 +120,13 @@ describe "Checking a domain's configuration", :type => :feature do
       visit '/a.zip'
       expect(current_url).to match('dl.dropboxusercontent.com')
   end
+  it "redirects to dropbox for epub files" do
+      Capybara.app_host = "http://#{@site.domain}/"
+      stub_request(:post, "https://api.dropboxapi.com/2/files/get_temporary_link").
+         to_return(:status => 200, :body => fixture('get_temporary_link.json'), :headers => {})
+      visit '/a.epub'
+      expect(current_url).to match('dl.dropboxusercontent.com')
+  end
 end
 
 def log_in current_user

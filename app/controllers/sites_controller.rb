@@ -70,7 +70,7 @@ class SitesController < ApplicationController
       referer: request.env["HTTP_REFERER"]
     })
     uri = request.env['REQUEST_URI'] || request.env['PATH_INFO']
-    if uri && uri.match(/(\.zip)/)
+    if uri && uri.match(/(\.zip|\.epub)/)
       @resource = Resource.new(@site, uri)
       return redirect_to @resource.get_temporary_link
     end
