@@ -51,8 +51,6 @@ class SessionsController < ApplicationController
       @identity.user.destroy
       raise 'An error has occured'
     end
-    Rails.logger.info "set_current_user #{@identity.inspect}"
-    Rails.logger.info "set_current_user #{current_user.inspect}"
     if session[:back_to]
       redirect_to session[:back_to]
     else
@@ -83,7 +81,6 @@ class SessionsController < ApplicationController
         }
       res = HTTParty.post(url, opts)
       res = JSON.parse(res)
-      Rails.logger.info "#{res}"
       if params[:full]
         full_access_token = res["access_token"]
       else

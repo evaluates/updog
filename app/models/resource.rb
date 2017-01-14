@@ -55,8 +55,7 @@ class Resource
       out[:html] = markdown out[:html] if render_markdown?
     rescue Google::Apis::RateLimitError => e
       Rails.logger.info e
-      Rails.logger.info "URI: #{@uri}"
-      Rails.logger.info "Site: #{@site.inspect}"
+      Rails.logger.info "Site: #{@site.inspect} #{@uri}"
       out = {status: 500, html: 'Too many requests. Try again later.'}
     end
     out
@@ -124,10 +123,6 @@ class Resource
         }.to_json
       }
     }
-    Rails.logger.info "Requesting https://#{self.site.name}.updog.co#{file_path.gsub(self.site.name+'/','')}"
-    Rails.logger.info "Dropbox file path: #{file_path}"
-    Rails.logger.info "Document root: #{self.site.document_root}"
-    Rails.logger.info "Db path: #{self.site.db_path}"
     res = HTTParty.post(url, opts)
     oat = res.body.html_safe
     oat = "Not found - Please Reauthenticate Dropbox" if oat.match("Invalid authorization value")
