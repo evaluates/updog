@@ -23,10 +23,8 @@ class Resource
   end
 
   def contents
-    if (Time.now - @site.updated_at) > 5
-      ContentWorker.perform_async(@site.id, @uri, cache_key)
-    end
-    Rails.cache.fetch("#{cache_key}/#{@uri}") do
+    expires_in = @site.creator && @site.creator.is_pro?  ? 5.seconds : 30.seconds
+    Rails.cache.fetch("#{cache_key}/#{@uri}", expires_in: expires_in) do
       from_api
     end
   end
