@@ -24,7 +24,7 @@
     function getFolders(path){
       var path = path || ''
       folders.innerHTML = '<i class="fa fa-cog"></i>'
-      $.getJSON('/folders?access_token=' + token + '&path=' + path, function(response){
+      $.getJSON('/api/dropbox/folders?access_token=' + token + '&path=' + path, function(response){
         if(path){
           $back.attr('data-path', path)
           $back.removeClass('hidden')

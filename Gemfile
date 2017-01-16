@@ -19,6 +19,7 @@ gem 'split'
 gem 'stripe'
 gem 'thin'
 gem 'unicorn'
+gem 'vuejs-rails'
 
 
 group :development, :test do

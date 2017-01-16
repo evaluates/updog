@@ -79,6 +79,13 @@ describe Resource do
     #     @resource.contents
     #   }.not_to raise_error(ArgumentError)
     # end
+    it "lists a directory index" do
+      @resource = Resource.new @u.sites.first, '/index-me/'
+      stub @resource.site.name, @resource.path, 200
+      stub_request(:post, "https://api.dropboxapi.com/2/files/search").
+        to_return(:status => 200, :body => fixture("search.json"), :headers => {})
+      expect(@resource.contents[:html]).to eq("show folders")
+    end
     context "creating dropbox content" do
       before do
         stub_request(:post, "https://api.dropboxapi.com/2/files/create_folder").

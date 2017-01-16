@@ -1,0 +1,17 @@
+#file-explorer{
+  .tree .tree{
+    padding-left:1em;
+  }
+  .tree{
+    cursor: pointer;
+  }
+  a{text-decoration: none}
+  .line > div{
+    border-bottom: 1px solid #F5F5F5;
+    padding:.25em .5em;
+  }
+  .line:last-child > div{
+    border:none;
+  }
+
+}
