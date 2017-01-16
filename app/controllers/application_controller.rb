@@ -19,45 +19,6 @@ class ApplicationController < ActionController::Base
   def set_current_user user
     session["user_id"] = user.id
   end
-  def dropbox_files path = nil, access_token = nil
-    path = params[:path] || path || ""
-    at = params[:access_token] || access_token || ""
-    if at.blank?
-      return {
-        error: "missing access token"
-      }
-    end
-    url = 'https://api.dropboxapi.com/2/files/list_folder'
-    opts = {
-      headers: {
-        'Authorization' => 'Bearer ' + at,
-        'Content-Type' => 'application/json'
-      },
-      body: {
-        path: path,
-      }.to_json
-    }
-    res = HTTParty.post(url, opts)
-    if res.body.match("Error")
-      return render json: {error: res}
-    end
-    res.body
-    entries = JSON.parse(res.body)["entries"] || []
-    entries.sort_by{ |entry|
-      entry['name']
-    }.reject{|entry|
-      entry["name"] == 'directory-index.html'
-    }
-
-  end
-
-  def dropbox_folders
-    content = dropbox_files
-    content.select{|entry|
-      entry[".tag"] == "folder"
-    }.sort_by{|folder| folder["name"] }
-  end
-
   private
   def set_admin
     @admin = "admin" if current_user && current_user.email == "jesseshawl@gmail.com"

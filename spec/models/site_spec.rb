@@ -79,14 +79,6 @@ describe Site do
     s.domain = 'www.pizza.com'
     expect(s.link).to eq('www.pizza.com')
   end
-  it "has a base path" do
-    s = Site.new(name: 'ohwow')
-    expect(s.base_path).to eq('/ohwow')
-    s.db_path = "/coobly"
-    expect(s.base_path).to eq('/coobly')
-    s.document_root = "/wow"
-    expect(s.base_path).to eq('/wow')
-  end
   it "injects a lil html" do
     s = @u.sites.create( name: 'pizza2' )
     expect(s.inject?).to eq(true)

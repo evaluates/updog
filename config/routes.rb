@@ -29,7 +29,6 @@ Rails.application.routes.draw do
   get '/feedback', to: 'pages#feedback'
   post '/feedback', to: 'pages#feedback_create'
   get '/folders', to: 'sites#folders'
-  get '/files', to: 'sites#files'
   get '/admin', to: 'pages#admin'
   get '/account', to: 'pages#account'
   get '/webhook', to: 'webhook#challenge'
@@ -38,9 +37,5 @@ Rails.application.routes.draw do
   post "/checkout", to: "payments#checkout"
   resources :sites, path: '' do
     delete 'password'
-  end
-  namespace :api do
-    get '/dropbox/files', to: 'dropbox#files'
-    get '/dropbox/folders', to: 'dropbox#folders'
   end
 end

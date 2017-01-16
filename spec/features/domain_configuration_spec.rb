@@ -1,4 +1,4 @@
-describe "Sites Controller", :type => :feature do
+describe "Checking a domain's configuration", :type => :feature do
   before do
     Site.destroy_all
     @u = User.create! is_pro: true
@@ -79,17 +79,6 @@ describe "Sites Controller", :type => :feature do
     @u.sites.create(name:'somethingnotgoogly')
     visit '/'
     expect(page).to have_content('Not Found')
-  end
-  it "redirects to trailing slash" do
-    Capybara.app_host = "http://#{@site.domain}/"
-    stub_request(:post, "https://content.dropboxapi.com/2/files/download").
-      with(:headers => {'Dropbox-Api-Arg'=>/\{"path":"\/jjjjohn\/dir"\}$/}).
-      to_return(:status => 200, :body => "{\"error_summary\": \"path/not_file/.\", \"error\": {\".tag\": \"path\", \"path\": {\".tag\": \"not_file\"}}}", :headers => {})
-    stub_request(:post, "https://content.dropboxapi.com/2/files/download").
-      with(:headers => {'Dropbox-Api-Arg'=>/\{"path":"\/jjjjohn\/dirg"\}$/}).
-      to_return(:status => 200, :body => "ok", :headers => {})
-    visit '/dir'
-    expect(current_path).to eq('/dirg')
   end
   it "can authenticate requests" do
     Capybara.app_host = "http://#{@site.domain}/"

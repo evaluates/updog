@@ -59,7 +59,6 @@ class SitesController < ApplicationController
   end
 
   def load
-
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
     if !@site
      render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true
@@ -77,22 +76,11 @@ class SitesController < ApplicationController
     end
     begin
       @content = @site.content( uri )
-      if @content[:status] == 301
-        location = Rails.env.test? ? uri + 'g' : @content[:location]
-        #TODO fix capybara redirect issue
-        return redirect_to location
-      end
-    rescue => e
-      p e
+    rescue
       if @site.provider == 'dropbox'
         return redirect_to @resource.get_temporary_link
       end
-      raise 'Content Error'
-    end
-    if @content[:html] == 'show folders'
-      @path = URI.decode(uri)
-      @entries = dropbox_files(@site.base_path + uri,@site.identity.access_token)
-      return render 'directory_index', layout: false
+      raise 'Content Error' 
     end
     @content[:html] = @content[:html].gsub("</body>","#{injectee(@site)}</body>").html_safe if @site.inject? && @content[:status] == 200
     respond_to do |format|
@@ -167,7 +155,35 @@ class SitesController < ApplicationController
       render nothing: true
     end
   end
-
+  def folders
+    path = params[:path] || ""
+    at = params[:access_token] || ""
+    if at.blank?
+      return render json: {
+        error: "missing access token"
+      }
+    end
+    url = 'https://api.dropboxapi.com/2/files/list_folder'
+    opts = {
+      headers: {
+        'Authorization' => 'Bearer ' + at,
+	      'Content-Type' => 'application/json'
+      },
+      body: {
+        path: path,
+      }.to_json
+    }
+    res = HTTParty.post(url, opts)
+    if res.body.match("Error")
+      return render json: {error: res}
+    end
+    entries = JSON.parse(res.body)["entries"] || []
+    folders = entries.select{|entry|
+      entry[".tag"] == "folder"
+    }.sort_by{|folder| folder["name"] }
+    response.headers['Has_more'] = res["has_more"].to_s
+    render json: folders, content_type: 'application/json'
+  end
   def passcode_verify
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
     passcode = params[:passcode]

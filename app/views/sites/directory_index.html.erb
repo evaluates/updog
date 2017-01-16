@@ -2,10 +2,6 @@
 <link rel='stylesheet' type='text/css' href='/markdown.css'>
 <h1>Index of <%= @path %></h1>
 <ul>
-  <li><a href='../'>
-    <i class='fa fa-undo'></i>
-    Parent Directory
-  </a></li>
 <% @entries.each do |entry| %>
   <li class='<%= entry[".tag"] %>'>
   <i class='fa fa-<%= entry[".tag"] %>'></i>
