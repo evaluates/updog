@@ -59,6 +59,17 @@ class Site < ActiveRecord::Base
     end
   end
 
+  def base_path
+    case
+    when self.document_root.present?
+      self.document_root
+    when self.db_path.present?
+      self.db_path
+    else
+      "/" + self.name
+    end
+  end
+
   def link
     if self.domain && self.domain != ""
       self.domain

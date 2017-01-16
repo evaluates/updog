@@ -43,7 +43,7 @@ class Resource
            }
         end
       else
-        out = try_files [@path,@path+'/index.html','/404.html'], @site, @site.dir, @folders
+        out = try_files [@path,'/404.html'], @site, @site.dir, @folders
       end
       out[:content_type] = mime out[:status]
       out[:html] = markdown out[:html] if render_markdown?
@@ -58,12 +58,20 @@ class Resource
   def try_files uris, site, dir = nil, folders
     path = uris[0]
     if site.provider == 'dropbox'
-      out = dropbox_content
+      out = dropbox_content path
     elsif site.provider == 'google'
       out = google_content dir, folders
     end
     if out.match(/{\".tag\":/) || out.match('Error in call to API function')
+      if out.match /path\/not_file/
+        return {status: 301, location: path + '/'}
+      end
       uris.shift
+      if path.match(/\/index\.html$/)
+        if directory_index_exists_in_any_parent_folder? path
+          return {html: 'show folders', status: 200}
+        end
+      end
       if uris.length == 0
          return { html: File.read(Rails.public_path + 'load-404.html').html_safe, status: 404 }
       end
@@ -71,6 +79,29 @@ class Resource
     end
     status = uris[0] == "/404.html" ? 404 : 200
     {html: out, status: status}
+  end
+
+  def directory_index_exists_in_any_parent_folder? path
+    url = 'https://api.dropboxapi.com/2/files/search'
+    opts = {
+      headers: {
+        'Authorization' => "Bearer #{@site.identity.access_token}",
+        "Content-Type" => "application/json"
+      },
+      body: {
+        "path": "#{@site.base_path}",
+        "query": "directory-index.html",
+        "start": 0,
+        "max_results": 100,
+        "mode": "filename"
+      }.to_json
+    }
+    res = JSON.parse(HTTParty.post(url, opts).body)
+    allowed = res["matches"].select do |match|
+      found = match["metadata"]["path_lower"].gsub(@site.base_path,'').gsub("directory-index.html",'') # /jom/directory-index.html
+      path.match(/^#{found}/)
+    end
+    allowed.any?
   end
 
   def google_folders
@@ -103,9 +134,9 @@ class Resource
     @site.db_path.present? ? @site.db_path : '/' + @site.name
   end
 
-  def dropbox_content
+  def dropbox_content path
     document_root = self.site.document_root || ''
-    file_path = folder + '/' + document_root + '/' + @path
+    file_path = folder + '/' + document_root + '/' + path
     file_path = file_path.gsub(/\/+/,'/')
     url = 'https://content.dropboxapi.com/2/files/download'
     opts = {

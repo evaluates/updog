@@ -13,7 +13,7 @@ Rails.application.configure do
    :user_name            => ENV['gmail_username'],
    :password             => ENV['gmail_password'],
    :authentication       => "plain",
-   :enable_starttls_auto => true    
+   :enable_starttls_auto => true
   }
 
   # Do not eager load code on boot.
@@ -47,5 +47,5 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-  config.cache_store = :redis_store
+  config.action_controller.perform_caching = false
 end

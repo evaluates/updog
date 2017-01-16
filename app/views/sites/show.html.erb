@@ -31,4 +31,136 @@
   </strong></li>
   <li><a href='http://<%= @site.link %>'> View Site </a></li>
 </ol>
+
+<% if current_user.is_pro %>
+<h3>Need a link?</h3>
+<div id='file-explorer'>
+  <% if @site.db_path.present? %>
+    <file-explorer strip-string='<%= @site.db_path %>'></file-explorer>
+  <% else %>
+    <file-explorer strip-string='/<%= @site.name %>/'></file-explorer>
+  <% end %>
+</div>
+
+<script type="text/x-template" id="folder-template">
+  <div>
+    <div v-if='canShowLink(file)'>
+      <a :href="link(file, '<%= @site.link %>', '<%= @site.db_path %>', '<%= @site.name %>')" >
+        <i :class="fileClass(file)"></i>
+        {{ file.path_lower.replace(stripString,'') }}
+      </a>
+    </div>
+    <div v-else v-on:click='expand(file); open = !open'>
+      <i :class="fileClass(file, open)"></i>
+      {{ file.path_lower.replace(thisStrip,'') }}/
+      <i class="fa fa-cog fa-spin" v-if="waiting && open"></i>
+      <small v-if="empty">
+        (empty)
+      </small>
+    </div>
+    <div v-if="files && open">
+      <file-explorer :expand-files='files' :strip-string='childrenStrip'>
+    </div>
+  </div>
+</script>
+
+<script type="text/x-template" id="file-explorer-template">
+  <div class='file-explorer tree'>
+    <div v-for="file in files" class='line'>
+      <folder :file='file' :strip-string='stripString'></folder>
+    </div>
+
+  </div>
+</script>
+
+  <script>
+  function fileClass(file, open){
+    var str = "fa fa-" + file[".tag"]
+    if(open)
+      str += '-open'
+    return str
+  }
+  function filesFromApi(path, callback){
+    <% if @site.db_path.present? %>
+    url = '/api/dropbox/files?access_token=<%= @identity.full_access_token %>&path=' + path
+    <% else %>
+    url = '/api/dropbox/files?access_token=<%= @identity.access_token %>&path=' + path
+    <% end %>
+    $.ajax({
+      url: url,
+      success: callback
+    });
+  }
+  Vue.component('folder',{
+    template: '#folder-template',
+    props: ['file', 'strip-string'],
+    data: function(){
+      return {
+        files: null,
+        open: false,
+        thisStrip: (this.stripString || '/<%= @site.name %>/'),
+        childrenStrip: '',
+        waiting: false,
+        empty: false
+      }
+    },
+    methods: {
+      fileClass: fileClass,
+      expand: function(file){
+        var self = this
+        self.childrenStrip = file.path_lower + '/'
+        self.waiting = true
+        if(this.files){
+          self.waiting = false
+          return
+        }
+        return filesFromApi(file.path_lower, function(files){
+          self.files = files
+          if(files.length == 0){
+            self.empty = true
+          }
+          self.waiting = false
+        })
+      },
+      canShowLink: function(file){
+        return file[".tag"] == 'file'
+      },
+      link: function (file, url, dbPath, siteName){
+        var replace = dbPath || "/" + siteName + "/"
+        return "http://" + url + "/" + file.path_lower.replace(replace,"")
+      },
+    }
+  })
+  Vue.component('file-explorer',{
+    template: '#file-explorer-template',
+    props: ['expand-files','strip-string'],
+    data: function(){
+      var self = this;
+      return {
+        files: this.expandFiles || this.filesFromApi(this.stripString, function(files){
+          console.log(files)
+          self.files = files
+        }),
+        open: false,
+        strip: this.stripString
+      }
+    },
+    methods: {
+      fileClass: fileClass,
+
+      filesFromApi: filesFromApi
+    }
+  })
+
+  var employees = new Vue({
+    el: '#file-explorer',
+
+  });
+
+
+  </script>
+
+  <% else %>
+
+  <% end %>
 </div>
