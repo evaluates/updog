@@ -89,11 +89,11 @@ class Resource
         "Content-Type" => "application/json"
       },
       body: {
-        "path": "#{@site.base_path}",
-        "query": "directory-index.html",
-        "start": 0,
-        "max_results": 100,
-        "mode": "filename"
+        "path" => "#{@site.base_path}",
+        "query" => "directory-index.html",
+        "start" => 0,
+        "max_results" => 100,
+        "mode" => "filename"
       }.to_json
     }
     res = JSON.parse(HTTParty.post(url, opts).body)
