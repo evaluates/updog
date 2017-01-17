@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  mount Split::Dashboard, at: 'splitabresults'
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
   match 'auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
@@ -42,5 +41,7 @@ Rails.application.routes.draw do
   namespace :api do
     get '/dropbox/files', to: 'dropbox#files'
     get '/dropbox/folders', to: 'dropbox#folders'
+    get '/google/files', to: 'google#files'
+    get '/google/folders', to: 'google#folders'
   end
 end

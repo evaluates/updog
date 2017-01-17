@@ -21,5 +21,6 @@ module LoginWithDropbox
     config.action_mailer.default_url_options = {
         host: "updog.co"
     }
+    config.autoload_paths += %W(#{config.root}/lib)
   end
 end

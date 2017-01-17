@@ -61,10 +61,10 @@ describe Resource do
       expect(title).to eq('index.html')
     end
     it "gets a list of folders from the uri" do
-      folders = @resource.folders_from_uri('/one/two/three/index.html')
-      expect(folders).to eq(%w(one two three))
-      folders = @resource.folders_from_uri('/index.html')
-      expect(folders).to eq([])
+      folders = @resource.folder_names('/one/two/three/index.html')
+      expect(folders).to eq(%w(one two three index.html))
+      folders = @resource.folder_names('/index.html')
+      expect(folders).to eq(%w(index.html))
     end
     it "can get a temporary dropbox link" do
       @resource = Resource.new @u.sites.first, '/a%20file.zip'
@@ -173,12 +173,13 @@ describe Resource do
         allow(@resource).to receive(:google_file_by_title) {"index.html"}
         allow(@resource).to receive(:download_to_string) {fixture("index.html")}
         allow(@resource).to receive(:google_folders) {[]}
+        allow(@resource).to receive(:google_content) {fixture("index.html")}
         allow(@resource.site).to receive(:dir){nil}
         expect(@resource.contents[:html]).to eq(fixture("index.html"))
       end
       it "contstructs a names query based on path" do
-        expect(@resource.name_query).to eq("name = 'index.html'")
-        expect(@resource2.name_query).to eq("name = 'a' or name = 'really' or name = 'long' or name = 'url' or name = 'index.html'")
+        expect(@resource.build_query(@resource.path)).to eq("name = 'index.html'")
+        expect(@resource2.build_query(@resource2.path)).to eq("name = 'a' or name = 'really' or name = 'long' or name = 'url' or name = 'index.html'")
       end
       it "handles rate limit violations gracefully" do
         @resource = Resource.new @site, '/?something=brand-new'

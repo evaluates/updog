@@ -2,7 +2,7 @@ require 'kramdown'
 require 'rouge'
 
 class Resource
-
+  include Udgoogle
   attr_reader :site, :uri, :path
 
   def initialize site, uri
@@ -32,10 +32,11 @@ class Resource
   def from_api
     begin
       if @site.provider == 'google'
-          @folders = google_folders
+        @session = google_session(@site)
+        @folders = google_folders(@session, build_query(@path), @site)
       end
       if @path == '/markdown.css'
-        out = try_files [@path], @site, @site.dir, @folders
+        out = try_files [@path], @site, @site.dir(@folders), @folders, @session
         if out[:status] == 404
            out = {
              html: File.read(Rails.root.to_s + '/public/md.css').html_safe,
@@ -43,7 +44,7 @@ class Resource
            }
         end
       else
-        out = try_files [@path,'/404.html'], @site, @site.dir, @folders
+        out = try_files [@path,'/404.html'], @site, @site.dir(@folders), @folders, @session
       end
       out[:content_type] = mime out[:status]
       out[:html] = markdown out[:html] if render_markdown?
@@ -55,12 +56,12 @@ class Resource
     out
   end
 
-  def try_files uris, site, dir = nil, folders
+  def try_files uris, site, dir = nil, folders, session
     path = uris[0]
     if site.provider == 'dropbox'
       out = dropbox_content path
     elsif site.provider == 'google'
-      out = google_content dir, folders
+      out = google_content dir, folders, session
     end
     if out.match(/{\".tag\":/) || out.match('Error in call to API function')
       if out.match /path\/not_file/
@@ -102,28 +103,6 @@ class Resource
       path.match(/^#{found}/)
     end
     allowed.any?
-  end
-
-  def google_folders
-    folders = []
-    begin
-      (files, page_token) = @site.google_session.files(
-        page_token: page_token,
-        q:'mimeType = "application/vnd.google-apps.folder" and trashed = false and ('+name_query+')'
-      )
-      folders << files
-    end while page_token
-    folders = folders.flatten
-    folders
-  end
-
-  def name_query
-    path = strip_query_string @path
-    path.split("/").each_with_index.map {|name, index|
-      if index != 0
-        "name = '#{name}'"
-      end
-    }.compact.join(" or ")
   end
 
   def access_token
@@ -216,54 +195,6 @@ class Resource
     preamble = "<!doctype html><html><head><meta name='viewport' content='width=device-width'><meta charshet='utf-8'><link rel='stylesheet' type='text/css' href='/markdown.css'></head><body>"
     footer = "</body></html>"
     (preamble + md + footer).html_safe
-  end
-
-  def subcollection_from_uri uri, dir, session, g_folders
-    folders = folders_from_uri uri
-    page_token = nil
-    last_parent = dir
-    folders.each do |folder|
-      subcollection = g_folders.select{ |gf|
-        gf.parents && gf.parents.include?(last_parent.id) && gf.title == folder
-      }.first
-      last_parent = subcollection
-    end
-
-    last_parent
-  end
-
-  def folders_from_uri uri
-    all = uri.split("/")
-    all.shift # the empty initial slash
-    all.pop
-    all
-  end
-
-  def title_from_uri uri
-    folders = uri.split("/")
-    folders.pop # the file
-  end
-
-  def google_content dir, folders
-    filename = strip_query_string(@path)
-    file_path = '/' + @site.name + '/' + filename
-    file_path = file_path.gsub(/\/+/,'/').gsub(/\?(.*)/,'')
-    folda = subcollection_from_uri(@path, dir, @site.google_session, folders) || dir
-    title = title_from_uri(filename)
-    file = google_file_by_title(folda, title)
-    file.nil? ? "Error in call to API function" : download_to_string(file)
-  end
-
-  def google_file_by_title folder, title
-    folder.file_by_title(title || '')
-  end
-
-  def download_to_string file
-    begin
-      file.download_to_string.html_safe
-    rescue Google::Apis::ClientError => e
-      e
-    end
   end
 
   def self.create_dropbox_folder(name, access_token)

@@ -91,26 +91,8 @@ class Site < ActiveRecord::Base
     clicks.where('created_at > ?', Time.now.beginning_of_day)
   end
 
-  def google_session
-    if self.provider == 'google'
-      identity = self.user.identities.find_by(provider: self.provider)
-      begin
-        sesh = GoogleDrive::Session.from_access_token(identity.access_token)
-        sesh.root_collection # literally anything to trigger auth
-      rescue => e
-        if e.to_s == "Unauthorized"
-          identity.refresh_access_token
-          return google_session
-        else
-          Rails.logger.warn e
-        end
-      end
-      sesh
-    end
-  end
-
-  def dir
-    google_session.file_by_id(self.google_id) if self.provider == 'google'
+  def dir folders
+    folders.select{|folder| folder.id == self.google_id }.first if self.provider == 'google'
   end
 
   def domain_cname

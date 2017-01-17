@@ -34,7 +34,7 @@ class SitesController < ApplicationController
     rescue
       return render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true, status: 404, content_type: 'text/html'
     end
-    @identity = current_user.identities.find_by(provider: 'dropbox')
+    @identity = current_user.identities.find_by(provider: @site.provider)
     @sites = current_user && current_user.sites || []
   end
   def destroy
@@ -83,11 +83,11 @@ class SitesController < ApplicationController
         return redirect_to location
       end
     rescue => e
-      p e
+
       if @site.provider == 'dropbox'
         return redirect_to @resource.get_temporary_link
       end
-      raise 'Content Error'
+      return raise e
     end
     if @content[:html] == 'show folders'
       @path = URI.decode(uri)

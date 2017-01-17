@@ -10,9 +10,7 @@
 </div>
 
 <h2 class='site-title'><a href='http://<%= @site.link %>'><%= @site.name %> <small><i class="fa fa-external-link"></i> </small></a></h2>
-
   <small>Created at <time><%= @site.created_at.strftime("%B %d, %Y") %></time></small>
-
 <br>
 
 <h3>Instructions</h3>
@@ -82,10 +80,12 @@
   }
   function filesFromApi(path, callback){
     <% if @site.db_path.present? %>
-    url = '/api/dropbox/files?access_token=<%= @identity.full_access_token %>&path=' + path
+      url = '/api/dropbox/files?access_token=<%= @identity.full_access_token %>&path=' + path
     <% else %>
-    url = '/api/dropbox/files?access_token=<%= @identity.access_token %>&path=' + path
+      url = '/api/<%= @site.provider %>/files?access_token=<%= @identity.access_token %>&path=' + path + '&site_id=<%= @site.id %>'
     <% end %>
+    // <%= @identity.inspect.html_safe %>
+    console.log(url)
     $.ajax({
       url: url,
       success: callback

@@ -20,8 +20,8 @@ class ApplicationController < ActionController::Base
     session["user_id"] = user.id
   end
   def dropbox_files path = nil, access_token = nil
-    path = params[:path] || path || ""
-    at = params[:access_token] || access_token || ""
+    path = path || params[:path] ||""
+    at = access_token || params[:access_token] || ""
     if at.blank?
       return {
         error: "missing access token"
@@ -51,8 +51,8 @@ class ApplicationController < ActionController::Base
 
   end
 
-  def dropbox_folders
-    content = dropbox_files
+  def dropbox_folders path = nil, access_token = nil
+    content = dropbox_files path, access_token
     content.select{|entry|
       entry[".tag"] == "folder"
     }.sort_by{|folder| folder["name"] }
