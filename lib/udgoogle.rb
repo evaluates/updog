@@ -23,10 +23,10 @@ module Udgoogle
       subcollection = g_folders.select{ |gf|
         value = (is_subchild?(gf, last_parent_id) || gf.id == last_parent_id) && gf.title == folder
         value
-      }.first
+      }.first unless g_folders.nil?
       last_parent_id = subcollection.nil? ? last_parent_id : subcollection.id
     end
-    collection = g_folders.select{|folder| folder.id == last_parent_id }.first
+    collection = g_folders.select{|folder| folder.id == last_parent_id }.first unless g_folders.nil?
     collection
   end
   def is_subchild? gf, parent_id
@@ -82,7 +82,7 @@ module Udgoogle
     file.nil? ? "Error in call to API function" : file
   end
   def google_file_by_title folder, title
-    folder.download_to_string.html_safe
+    folder.download_to_string.html_safe unless folder.nil?
   end
 
   def parse_timings times
