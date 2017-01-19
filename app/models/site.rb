@@ -117,6 +117,14 @@ class Site < ActiveRecord::Base
     end
   end
 
+  def protocol
+    if self.domain.present?
+      'http://'
+    else
+      'https://'
+    end
+  end
+
   private
   def notify_drip
     Drip.event self.creator.email, 'created a site'

@@ -127,7 +127,7 @@
       },
       link: function (file, url, dbPath, siteName){
         var replace = dbPath || "/" + siteName + "/"
-        return "http://" + url + "/" + file.path_lower.replace(replace,"")
+        return "<%= @site.protocol %>" + url + "/" + file.path_lower.replace(replace,"")
       },
     }
   })

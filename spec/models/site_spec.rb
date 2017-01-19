@@ -114,6 +114,12 @@ describe Site do
       @s = Site.new name: 'pizza', domain: 'www.jshawl.xyz'
       expect(@s.domain_cname).to eq("updog.co")
     end
+    it "has a protocol" do
+      s = Site.new name: 'pizza'
+      expect(s.protocol).to eq('https://')
+      s.domain = 'www.pizza.com'
+      expect(s.protocol).to eq('http://')
+    end
     context "domain is configured correctly" do
       it "shows error when there is no CNAME entry" do
         @s = Site.new name: 'pizza', domain: 'www.pizza.com'
