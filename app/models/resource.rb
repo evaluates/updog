@@ -63,6 +63,8 @@ class Resource
     elsif site.provider == 'google'
       out = google_content dir, folders, session
     end
+    detection = CharlockHolmes::EncodingDetector.detect(out)
+    out = CharlockHolmes::Converter.convert out, detection[:encoding], 'UTF-8'
     if out.match(/{\".tag\":/) || out.match('Error in call to API function')
       if out.match /path\/not_file/
         return {status: 301, location: path + '/'}
