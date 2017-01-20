@@ -63,7 +63,12 @@ class Resource
     elsif site.provider == 'google'
       out = google_content dir, folders, session
     end
-    out.encode!('UTF-8', 'UTF-8', :invalid => :replace)
+    begin
+      out.encode!('UTF-8', 'UTF-8', :invalid => :replace)
+    rescue => e
+      Rails.logger.debug "trouble encoding #{site.link}/#{path}"
+      Rails.logger.error e.backtrace.join("\n")
+    end
     if out.match(/{\".tag\":/) || out.match('Error in call to API function')
       if out.match /path\/not_file/
         return {status: 301, location: path + '/'}
