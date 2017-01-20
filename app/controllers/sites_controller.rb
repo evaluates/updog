@@ -95,7 +95,11 @@ class SitesController < ApplicationController
       @entries = dropbox_files(@site.base_path + uri,@site.identity.access_token)
       return render 'directory_index', layout: false
     end
-    @content[:html] = @content[:html].gsub("</body>","#{injectee(@site)}</body>").html_safe if @site.inject? && @content[:status] == 200
+    begin
+      @content[:html] = @content[:html].gsub("</body>","#{injectee(@site)}</body>").html_safe if @site.inject? && @content[:status] == 200
+    rescue ArgumentError => e # probably invalid byte sequence
+      Rails.logger.info "Invalid byte sequence error, not injecting"
+    end
     respond_to do |format|
       format.all { render({layout: false}.merge(@content)) }
     end
