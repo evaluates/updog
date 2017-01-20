@@ -64,10 +64,9 @@ class Resource
       out = google_content dir, folders, session
     end
     begin
-      out.encode!('UTF-8', 'UTF-8', :invalid => :replace)
-    rescue => e
-      Rails.logger.debug "trouble encoding #{site.link}/#{path}"
-      Rails.logger.error e.backtrace.join("\n")
+      out.match //
+    rescue ArgumentError => e # probably invalid byte sequence
+      return {html: out, status: 200}
     end
     if out.match(/{\".tag\":/) || out.match('Error in call to API function')
       if out.match /path\/not_file/
