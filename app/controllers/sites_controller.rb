@@ -83,7 +83,8 @@ class SitesController < ApplicationController
         return redirect_to location
       end
     rescue => e
-
+      Rails.logger.error e.message
+      Rails.logger.error e.backtrace.join("\n")
       if @site.provider == 'dropbox'
         return redirect_to @resource.get_temporary_link
       end

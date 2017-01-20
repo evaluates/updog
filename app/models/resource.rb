@@ -145,7 +145,9 @@ class Resource
       }.to_json
     }
     res = HTTParty.post(url, opts).body
-    JSON.parse(res)["link"]
+    link = JSON.parse(res)["link"]
+    p res if link.nil?
+    link
   end
 
   def mime status
