@@ -51,3 +51,6 @@ Mime::Type.register "application/vnd.ms-powerpoint.addin.macroEnabled.12", :ppam
 Mime::Type.register "application/vnd.ms-powerpoint.presentation.macroEnabled.12", :pptm
 Mime::Type.register "application/vnd.ms-powerpoint.presentation.macroEnabled.12", :potm
 Mime::Type.register "application/vnd.ms-powerpoint.slideshow.macroEnabled.12", :ppsm
+Mime::Type.register "application/java-archive", :jar
+Mime::Type.register "application/x-java-jnlp-file", :jnlp
+Mime::Type.register "application/octet-stream", :mm
