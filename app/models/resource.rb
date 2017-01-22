@@ -103,6 +103,7 @@ class Resource
       }.to_json
     }
     res = JSON.parse(HTTParty.post(url, opts).body)
+    return false if res["matches"].nil?
     allowed = res["matches"].select do |match|
       found = match["metadata"]["path_lower"].gsub(@site.base_path,'').gsub("directory-index.html",'') # /jom/directory-index.html
       path.match(/^#{found}/)
