@@ -54,3 +54,4 @@ Mime::Type.register "application/vnd.ms-powerpoint.slideshow.macroEnabled.12", :
 Mime::Type.register "application/java-archive", :jar
 Mime::Type.register "application/x-java-jnlp-file", :jnlp
 Mime::Type.register "application/octet-stream", :mm
+Mime::Type.register "application/octet-stream", :msi
