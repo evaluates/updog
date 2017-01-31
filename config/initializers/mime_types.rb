@@ -55,3 +55,6 @@ Mime::Type.register "application/java-archive", :jar
 Mime::Type.register "application/x-java-jnlp-file", :jnlp
 Mime::Type.register "application/octet-stream", :mm
 Mime::Type.register "application/octet-stream", :msi
+Mime::Type.register "audio/ogg", :oga
+Mime::Type.register "video/ogg", :ogv
+Mime::Type.register "application/ogg", :ogg
