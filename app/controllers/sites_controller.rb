@@ -2,7 +2,7 @@ require 'digest'
 
 class SitesController < ApplicationController
   layout "layouts/application"
-  protect_from_forgery except: [:load, :passcode_verify]
+  protect_from_forgery except: [:load, :passcode_verify, :send_contact]
   before_filter :authenticate, only: [:load]
 
   def index
@@ -153,10 +153,13 @@ class SitesController < ApplicationController
   end
 
   def send_contact
+    if request.env["REQUEST_PATH"].match(/\.php$/)
+      return render nothing: true
+    end
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
     begin
       unless request.env['HTTP_REFERER'].match(@site.domain) || request.env['HTTP_REFERER'].match(@site.subdomain)
-	return render nothing: true
+	       return render nothing: true
       end
       return redirect_to :back unless @site.creator.is_pro
       email = @site.creator.email
