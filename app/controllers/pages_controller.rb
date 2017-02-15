@@ -113,7 +113,7 @@ class PagesController < ApplicationController
       @paying_users = pros.count
       @stats = Stat.all
       @pct_pro = @stats.map{|stat| [stat.date.to_i * 1000, stat.percent_pro] }
-      @daily_revenue = @stats.map{|stat| [stat.date.beginning_of_week.to_i * 1000, stat.new_upgrades * 5]}
+      @daily_revenue = @stats.map{|stat| [stat.date.beginning_of_week.to_i * 1000, stat.new_upgrades * 20]}
 
       if params[:email]
         @user = User.find_by(email: URI.decode(params[:email]))
