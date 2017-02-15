@@ -123,8 +123,12 @@
       This site is currently protected with a passcode. <%= link_to "Remove passcode", site_password_path(@site), method: :delete %>.<br>
     <% end %>
     <%= f.password_field :passcode, placeholder: 'Enter new passcode' %>
-    <br><br>
+
     </div>
+    <%= f.label :contact_email %>
+    <small>Use an alternate email to receive contact form submissions.</small>
+    <%= f.email_field :contact_email, class: 'input', placeholder: 'jesse@updog.co' %>
+    <br><br>
   <% end %>
   <%= f.submit 'Save', :class => 'btn-create' %>
   <div class='instructions'>

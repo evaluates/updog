@@ -7,8 +7,12 @@ form label{
 }
 
 input[type="text"],
-input[type="password"]{
+input[type="password"],
+form .input{
   padding:.5em 1em;
+  display:inline-block;
+  width:auto;
+  font-size:.8rem;
 }
 
 .password-protect{

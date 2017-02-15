@@ -162,7 +162,11 @@ class SitesController < ApplicationController
 	       return render nothing: true
       end
       return redirect_to :back unless @site.creator.is_pro
-      email = @site.creator.email
+      if @site.contact_email.present?
+        email = @site.contact_email
+      else
+        email = @site.creator.email
+      end
       @input = params.except(:action, :controller, :redirect)
       ContactMailer.user_mailer(email, @site.link, @input).deliver_now!
       @site.contacts.create!(params: @input)
@@ -192,7 +196,7 @@ class SitesController < ApplicationController
   private
 
   def site_params
-    params.require(:site).permit(:name, :domain, :document_root, :render_markdown, :db_path, :passcode, :username, :provider)
+    params.require(:site).permit(:contact_email, :name, :domain, :document_root, :render_markdown, :db_path, :passcode, :username, :provider)
   end
 
   def undo_link
