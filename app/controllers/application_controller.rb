@@ -38,8 +38,8 @@ class ApplicationController < ActionController::Base
       }.to_json
     }
     res = HTTParty.post(url, opts)
-    if res.body.match("Error")
-      return render json: {error: res}
+    if res.body.match("error")
+      return {error: res}
     end
     res.body
     entries = JSON.parse(res.body)["entries"] || []

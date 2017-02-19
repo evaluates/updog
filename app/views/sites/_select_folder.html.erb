@@ -3,6 +3,11 @@
   <br>
   <br>
 <% else %>
+  <div style='display:none;' class='js-relink'>
+    <br>
+    <a href='/auth/dropbox?full=true' class='dropbox'><i class='fa fa-dropbox'></i> Re-Link Entire Dropbox</a>
+    <br><br>
+  </div>
   <label>Select a Folder</label>
   <input type="hidden" name="site[db_path]" id="db_path" value="<%= @site.db_path %>">
   <% if @site.db_path && @site.db_path != "" %>
@@ -36,6 +41,9 @@
           $back.addClass('hidden')
         }
       	$(".fa-cog").remove()
+        if(response.length === 0){
+          $(".js-relink").show()
+        }
       	response.forEach(function(folder){
       	  folders.appendChild(view(folder))
       	})
