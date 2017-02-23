@@ -24,7 +24,14 @@ class Resource
 
   def contents
     expires_in = @site.creator && @site.creator.is_pro?  ? 5.seconds : 30.seconds
-    Rails.cache.fetch("#{cache_key}/#{@uri}", expires_in: expires_in) do
+    begin
+      Rails.cache.fetch("#{cache_key}/#{@uri}", expires_in: expires_in) do
+        from_api
+      end
+    rescue Redis::TimeoutError => e
+      Rails.logger.info e
+      Rails.logger.info @site.name
+      Rails.logger.info @uri
       from_api
     end
   end
