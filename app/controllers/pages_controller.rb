@@ -9,7 +9,7 @@ class PagesController < ApplicationController
   end
 
   def faq
-    @price = '19.99'
+    @price = session[:price] ? session[:price] : '19.99'
   end
 
   def feedback
@@ -40,8 +40,13 @@ class PagesController < ApplicationController
   def pricing
     @current_user = current_user
     @paypal_url = ENV['paypal_url']
+    if params[:code] == ENV['coupon_code'] && !params[:code].nil?
+      session[:price] = '9.99'
+    else
+      session[:price] ||= '19.99'
+    end
     @encrypted = paypal_encrypted
-    @price = '19.99'
+    @price = session[:price]
   end
 
   def paypal_encrypted
@@ -54,7 +59,7 @@ class PagesController < ApplicationController
       :notify_url => ENV['paypal_notify'],
       :cert_id => ENV['paypal_cert_id'],
       :invoice => id,
-      "amount_1" => '19.99',
+      "amount_1" => session[:price],
       "item_name_1" => "UpDog Pro",
       "item_number_1" => 1,
       "quantity_1" => 1

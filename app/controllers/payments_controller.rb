@@ -1,6 +1,6 @@
 class PaymentsController < ApplicationController
   def checkout
-    @price = 19.99
+    @price = session[:price].to_f
     begin
       charge = Stripe::Charge.create(
         :source => params[:stripeToken],

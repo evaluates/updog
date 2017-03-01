@@ -5,6 +5,34 @@ class SitesController < ApplicationController
   protect_from_forgery except: [:load, :passcode_verify, :send_contact]
   before_filter :authenticate, only: [:load]
 
+  def send_contact
+    if request.env["REQUEST_PATH"].match(/\.php$/)
+      return render nothing: true
+    end
+    @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
+    begin
+      unless request.env['HTTP_REFERER'].match(@site.domain) || request.env['HTTP_REFERER'].match(@site.subdomain)
+	       return render nothing: true
+      end
+      return redirect_to :back unless @site.creator.is_pro
+      if @site.contact_email.present?
+        email = @site.contact_email
+      else
+        email = @site.creator.email
+      end
+      @input = params.except(:action, :controller, :redirect)
+      ContactMailer.user_mailer(email, @site.link, @input).deliver_now!
+      @site.contacts.create!(params: @input)
+      if params[:redirect]
+	       redirect_to params[:redirect]
+      else
+	       redirect_to :back
+      end
+    rescue
+      render nothing: true
+    end
+  end
+  
   def index
     @sites = current_user.sites if current_user
     @count = File.read(Rails.root.join("tmp/request-count.txt"))
@@ -149,34 +177,6 @@ class SitesController < ApplicationController
       redirect_to @site
     else
       render :edit
-    end
-  end
-
-  def send_contact
-    if request.env["REQUEST_PATH"].match(/\.php$/)
-      return render nothing: true
-    end
-    @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
-    begin
-      unless request.env['HTTP_REFERER'].match(@site.domain) || request.env['HTTP_REFERER'].match(@site.subdomain)
-	       return render nothing: true
-      end
-      return redirect_to :back unless @site.creator.is_pro
-      if @site.contact_email.present?
-        email = @site.contact_email
-      else
-        email = @site.creator.email
-      end
-      @input = params.except(:action, :controller, :redirect)
-      ContactMailer.user_mailer(email, @site.link, @input).deliver_now!
-      @site.contacts.create!(params: @input)
-      if params[:redirect]
-	       redirect_to params[:redirect]
-      else
-	       redirect_to :back
-      end
-    rescue
-      render nothing: true
     end
   end
 
