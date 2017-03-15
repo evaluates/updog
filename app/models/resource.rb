@@ -164,7 +164,8 @@ class Resource
   end
 
   def mime status
-    extname = File.extname(strip_query_string(@path))[1..-1]
+    extname = File.extname(strip_query_string(@path))[1..-1] || ""
+    extname = extname.downcase
     mime_type = Mime::Type.lookup_by_extension(extname)
     mime_type.to_s unless mime_type.nil?
     mime_type = 'text/html; charset=utf-8' if mime_type.nil?
