@@ -58,3 +58,8 @@ Mime::Type.register "application/octet-stream", :msi
 Mime::Type.register "audio/ogg", :oga
 Mime::Type.register "video/ogg", :ogv
 Mime::Type.register "application/ogg", :ogg
+Mime::Type.register "application/vnd.ms-fontobject", :eot
+Mime::Type.register "application/font-sfnt", :otf
+Mime::Type.register "application/font-sfnt", :ttf
+Mime::Type.register "application/font-woff", :woff
+Mime::Type.register "font/woff2", :woff2
