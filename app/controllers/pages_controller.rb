@@ -108,13 +108,14 @@ class PagesController < ApplicationController
         [k, v]
       }.sort_by{|k| k[0]}
       @sites = Site.created_today
-      @popular_sites = [] #Site.popular
+      @popular_sites = []#Site.popular
       @revenue = User.where(is_pro: true).count * 5
       @avg_pro_time = upgrade_times.inject{|sum,el| sum + el}.to_f / upgrades.count
       @mean_pro_time = median upgrade_times
       @num_users = User.count
       @paying_users = pros.count
       @stats = Stat.all
+      @pct_pro = @stats.map{|stat| [stat.date.to_i * 1000, stat.percent_pro] }
       @weekly_revenue = {}
       @stats.each do |stat|
         ts = stat.date.beginning_of_week.to_i * 1000
