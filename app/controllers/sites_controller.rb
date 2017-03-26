@@ -32,7 +32,7 @@ class SitesController < ApplicationController
       render nothing: true
     end
   end
-  
+
   def index
     @sites = current_user.sites if current_user
     @count = File.read(Rails.root.join("tmp/request-count.txt"))
@@ -87,11 +87,16 @@ class SitesController < ApplicationController
   end
 
   def load
-
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
     if !@site
      render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true
      return
+    end
+    if request.env["HTTP_REFERER"] && request.env["HTTP_REFERER"].match(/www.hdvn1.com/)
+      respond_to do |format|
+        format.all { render({layout: false}.merge(html: 'hot linking not allowed')) }
+      end
+      return
     end
     @site.clicks.create(data:{
       path: request.env["REQUEST_URI"],
