@@ -1,5 +1,7 @@
 require 'digest'
-
+class G
+  include Udgoogle
+end
 class SitesController < ApplicationController
   layout "layouts/application"
   protect_from_forgery except: [:load, :passcode_verify, :send_contact]
@@ -32,7 +34,7 @@ class SitesController < ApplicationController
       render nothing: true
     end
   end
-  
+
   def index
     @sites = current_user.sites if current_user
     @count = File.read(Rails.root.join("tmp/request-count.txt"))
@@ -120,7 +122,13 @@ class SitesController < ApplicationController
     end
     if @content[:html] == 'show folders'
       @path = URI.decode(uri)
-      @entries = dropbox_files(@site.base_path + uri,@site.identity.access_token)
+      if @site.provider == 'dropbox'
+        @entries = dropbox_files(@site.base_path + uri,@site.identity.access_token)
+      end
+      if @site.provider == 'google'
+        g = G.new
+        @entries = g.google_files(@site.identity.access_token, @site.id, @path)
+      end
       return render 'directory_index', layout: false
     end
     begin

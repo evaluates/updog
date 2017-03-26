@@ -92,7 +92,9 @@ class Site < ActiveRecord::Base
   end
 
   def dir folders
-    folders.select{|folder| folder.id == self.google_id }.first if self.provider == 'google'
+    folders.select{|folder|
+      folder.id == self.google_id
+    }.first if self.provider == 'google'
   end
 
   def domain_cname

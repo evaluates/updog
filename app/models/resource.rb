@@ -95,27 +95,48 @@ class Resource
   end
 
   def directory_index_exists_in_any_parent_folder? path
-    url = 'https://api.dropboxapi.com/2/files/search'
-    opts = {
-      headers: {
-        'Authorization' => "Bearer #{@site.identity.access_token}",
-        "Content-Type" => "application/json"
-      },
-      body: {
-        "path" => "#{@site.base_path}",
-        "query" => "directory-index.html",
-        "start" => 0,
-        "max_results" => 100,
-        "mode" => "filename"
-      }.to_json
-    }
-    res = JSON.parse(HTTParty.post(url, opts).body)
-    return false if res["matches"].nil?
-    allowed = res["matches"].select do |match|
-      found = match["metadata"]["path_lower"].gsub(@site.base_path,'').gsub("directory-index.html",'') # /jom/directory-index.html
-      path.match(/^#{found}/)
+    if @site.provider == 'google'
+      return google_directory_index_exists_in_any_parent_folder? path
+    else
+      url = 'https://api.dropboxapi.com/2/files/search'
+      opts = {
+        headers: {
+          'Authorization' => "Bearer #{@site.identity.access_token}",
+          "Content-Type" => "application/json"
+        },
+        body: {
+          "path" => "#{@site.base_path}",
+          "query" => "directory-index.html",
+          "start" => 0,
+          "max_results" => 100,
+          "mode" => "filename"
+        }.to_json
+      }
+      res = JSON.parse(HTTParty.post(url, opts).body)
+      return false if res["matches"].nil?
+      allowed = res["matches"].select do |match|
+        found = match["metadata"]["path_lower"].gsub(@site.base_path,'').gsub("directory-index.html",'') # /jom/directory-index.html
+        path.match(/^#{found}/)
+      end
+      allowed.any?
     end
-    allowed.any?
+  end
+
+  def google_directory_index_exists_in_any_parent_folder? path
+    @dir = @session.file_by_id(@site.google_id)
+    dir_indexes = []
+    page_token = nil
+    begin
+      (files, page_token) = @session.files(
+        page_token: page_token,
+        q:'trashed = false and name = "directory-index.html"'
+      )
+      dir_indexes << files
+    end while page_token
+    dir_indexes = dir_indexes.flatten
+    path = path.gsub('index.html','directory-index.html')
+    coll = collection_from_path(@session, path, dir_indexes)
+    return !coll.nil?
   end
 
   def access_token

@@ -1,11 +1,30 @@
 module Udgoogle
   def json files, path
     files.map{|file|
+      path_lower = (path + "/" + file.title).gsub(/\/\//,'/')
+      tag = tag_from_mime_type(file.mime_type)
+      path_lower = path_lower + "/" if tag == 'folder'
       {
-        "title" => file.title,
-        ".tag" => tag_from_mime_type(file.mime_type),
-        "path_lower" => (path + "/" + file.title).gsub(/\/\//,'/')
+        "name" => file.title,
+        ".tag" => tag,
+        "path_lower" => path_lower
     }}
+  end
+  def google_files access_token, site_id, path
+    identity = Identity.find_by(access_token: access_token)
+    @site = identity.user.sites.find(site_id)
+    s = GoogleDrive::Session.from_access_token(identity.access_token)
+    path = path || "/#{@site.name}"
+    @calls = 0
+    folders = google_folders(s, build_query(path), @site)
+    collection = collection_from_path(s, path, folders)
+    files = collection.nil? ? [] : collection.files
+    out = json(files, path)
+    out.sort_by{ |entry|
+      entry['name'][0]
+    }.reject{|entry|
+      entry["name"] == 'directory-index.html'
+    }
   end
   def tag_from_mime_type mime_type
     mime_type == "application/vnd.google-apps.folder" ? "folder" : "file"
