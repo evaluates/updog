@@ -4,6 +4,7 @@ require 'rouge'
 class Resource
   include Udgoogle
   attr_reader :site, :uri, :path
+  attr_accessor :parents
 
   def initialize site, uri
     @site = site
@@ -80,9 +81,11 @@ class Resource
         return {status: 301, location: path + '/'}
       end
       uris.shift
+
       if path.match(/\/index\.html$/)
-        if directory_index_exists_in_any_parent_folder? path
-          return {html: 'show folders', status: 200}
+        dieiapf = directory_index_exists_in_any_parent_folder? path
+        if dieiapf
+          return {html: 'show folders', status: 200, dieiapf: dieiapf}
         end
       end
       if uris.length == 0
@@ -136,6 +139,9 @@ class Resource
     dir_indexes = dir_indexes.flatten
     path = path.gsub('index.html','directory-index.html')
     coll = collection_from_path(@session, path, dir_indexes)
+    if coll.parents.any?
+      return coll.parents
+    end
     return !coll.nil?
   end
 

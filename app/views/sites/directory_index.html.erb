@@ -9,9 +9,8 @@
 <% @entries.each do |entry| %>
   <li class='<%= entry[".tag"] %>'>
   <i class='fa fa-<%= entry[".tag"] %>'></i>
-    <% path = @path + '/'+  entry["name"] %>
-    <% path = path.gsub('//','/') %>
-    <%= link_to entry["name"], path %>
+
+    <%= link_to entry["name"], entry["path_lower"] %>
   </li>
 <% end %>
 </ul>

@@ -89,7 +89,6 @@ class SitesController < ApplicationController
   end
 
   def load
-
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
     if !@site
      render :html => '<div class="wrapper">Not Found</div>'.html_safe, :layout => true

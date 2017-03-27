@@ -11,20 +11,22 @@ module Udgoogle
     }}
   end
   def google_files access_token, site_id, path
-    identity = Identity.find_by(access_token: access_token)
-    @site = identity.user.sites.find(site_id)
-    s = GoogleDrive::Session.from_access_token(identity.access_token)
-    path = path || "/#{@site.name}"
-    @calls = 0
-    folders = google_folders(s, build_query(path), @site)
-    collection = collection_from_path(s, path, folders)
-    files = collection.nil? ? [] : collection.files
-    out = json(files, path)
-    out.sort_by{ |entry|
-      entry['name'][0]
-    }.reject{|entry|
-      entry["name"] == 'directory-index.html'
-    }
+    Rails.cache.fetch("#{site_id}/#{path}", expires_in: 2.minutes) do
+      identity = Identity.find_by(access_token: access_token)
+      @site = identity.user.sites.find(site_id)
+      s = GoogleDrive::Session.from_access_token(identity.access_token)
+      path = path || "/#{@site.name}"
+      @calls = 0
+      folders = google_folders(s, build_query(path), @site)
+      collection = collection_from_path(s, path, folders)
+      files = collection.nil? ? [] : collection.files
+      out = json(files, path)
+      out.sort_by{ |entry|
+        entry['name'][0]
+      }.reject{|entry|
+        entry["name"] == 'directory-index.html'
+      }
+    end
   end
   def tag_from_mime_type mime_type
     mime_type == "application/vnd.google-apps.folder" ? "folder" : "file"
@@ -34,6 +36,12 @@ module Udgoogle
       identity = site.user.identities.find_by(provider: site.provider)
       GoogleDrive::Session.from_access_token(identity.access_token)
     end
+  end
+  def children_of access_token, site_id, id, path
+    identity = Identity.find_by(access_token: access_token)
+    @site = identity.user.sites.find(site_id)
+    s = GoogleDrive::Session.from_access_token(identity.access_token)
+    children = json(s.files(q:"'#{id}' in parents and trashed = false"), path)
   end
   def collection_from_path session, path, g_folders
     folders = folder_names path
@@ -97,7 +105,10 @@ module Udgoogle
     file_path = file_path.gsub(/\/+/,'/').gsub(/\?(.*)/,'')
     folda = collection_from_path(sesh, @path, folders) || dir
     title = title_from_uri(filename)
-    file = google_file_by_title(folda, title)
+    begin
+      file = google_file_by_title(folda, title)
+    rescue
+    end
     file.nil? ? "Error in call to API function" : file
   end
   def google_file_by_title folder, title
