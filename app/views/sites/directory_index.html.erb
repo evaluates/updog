@@ -9,8 +9,13 @@
 <% @entries.each do |entry| %>
   <li class='<%= entry[".tag"] %>'>
   <i class='fa fa-<%= entry[".tag"] %>'></i>
-
-    <%= link_to entry["name"], entry["path_lower"] %>
+    <% path = @path + '/'+  entry["name"] %>
+    <% path = path.gsub('//','/') %>
+    <% if @site.provider == 'google' %>
+      <%= link_to entry["name"], entry["path_lower"] %>
+    <% else %>
+      <%= link_to entry["name"], path %>
+    <% end %>
   </li>
 <% end %>
 </ul>
