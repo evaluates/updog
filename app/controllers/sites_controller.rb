@@ -38,6 +38,7 @@ class SitesController < ApplicationController
     @count = File.read(Rails.root.join("tmp/request-count.txt"))
   end
   def edit
+    return redirect_to root_path unless current_user
     @site = current_user.sites.find(params[:id])
     @providers = current_user.identities.map(&:provider)
     @identity = current_user.identities.find_by(provider: 'dropbox')
