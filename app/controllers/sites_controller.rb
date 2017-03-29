@@ -105,8 +105,10 @@ class SitesController < ApplicationController
     })
     uri = request.env['REQUEST_URI'] || request.env['PATH_INFO']
     @resource = Resource.new(@site, uri)
-    if uri && uri.match(/(\.zip|\.epub)/) && @site.provider == 'dropbox'
-      return redirect_to @resource.get_temporary_link
+    if @site.provider == 'dropbox'
+      if (uri && uri.match(/(\.zip|\.epub)/)) || params[:dl] == '1'
+        return redirect_to @resource.get_temporary_link
+      end
     end
     begin
       @content = @site.content( uri )
