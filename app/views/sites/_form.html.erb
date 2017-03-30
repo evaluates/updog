@@ -68,7 +68,7 @@
   </div>
   <% if current_user.is_pro %>
     <div class='js-select-folder' style="<%= 'display:none' if @site.provider != 'dropbox' %>">
-    <%= render 'select_folder' %>
+    <%= render 'select_folder' if @identity %>
     <script>
     $(".js-toggle-select-folder input").on("change", function(){
       console.log(this.value)
