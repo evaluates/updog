@@ -63,3 +63,4 @@ Mime::Type.register "application/font-sfnt", :otf
 Mime::Type.register "application/font-sfnt", :ttf
 Mime::Type.register "application/font-woff", :woff
 Mime::Type.register "font/woff2", :woff2
+Mime::Type.register "video/webm", :webm
