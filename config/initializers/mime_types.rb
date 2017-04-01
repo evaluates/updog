@@ -5,6 +5,7 @@ Mime::Type.register "image/x-icon", :ico
 Mime::Type.register "image/svg+xml", :svg
 Mime::Type.register "text/plain", :md
 Mime::Type.register "audio/mpeg", :mp3
+Mime::Type.register "video/mp4", :mp4
 Mime::Type.register "application/epub+zip", :epub
 Mime::Type.register "text/plain", :txt
 Mime::Type.register "application/zip", :htmlz
