@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
+  resources :payment_notifications, only: [:create]
   match 'auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   match 'auth/:provider', to: 'sessions#unlink', via: [:delete]
   match '/', to: 'sites#load', constraints: { subdomain: /.+/}, via: [:get, :put, :patch, :delete]
@@ -14,9 +15,8 @@ Rails.application.routes.draw do
   get '/news/css/main.css', to: 'news#css'
   get '/news/:path', to: 'news#show'
   get '/news', to: 'news#index'
-  resources :payments
   resources :reviews
-  resources :payment_notifications, only: [:create]
+
   get '/about', to: 'pages#about'
   get '/faq', to: 'pages#faq'
   get '/tos', to: 'pages#tos'

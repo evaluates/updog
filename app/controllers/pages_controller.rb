@@ -9,7 +9,7 @@ class PagesController < ApplicationController
   end
 
   def faq
-    @price = session[:price] ? session[:price] : '19.99'
+    @price = '10.00'
   end
 
   def feedback
@@ -40,13 +40,9 @@ class PagesController < ApplicationController
   def pricing
     @current_user = current_user
     @paypal_url = ENV['paypal_url']
-    if params[:code] == ENV['coupon_code'] && !params[:code].nil?
-      session[:price] = '9.99'
-    else
-      session[:price] ||= '19.99'
-    end
     @encrypted = paypal_encrypted
-    @price = session[:price]
+    @price = '10.00'
+    @subscribed = PaymentNotification.where(user_id: current_user.id).any?
   end
 
   def paypal_encrypted

@@ -14,7 +14,7 @@
     </ul>
   </div>
   <div class="left fifty">
-    <h3 class='pricing'>Pro: $<%= @price %> one time ever!*</h3>
+    <h3 class='pricing'>Pro: $<%= @price %> a year*</h3>
     <ul>
       <li>Unlimited sites</li>
       <li>5 second cache time</li>
@@ -27,44 +27,21 @@
       <li>Remove "Hosted on UpDog" footer</li>
     </ul>
     <% if current_user %>
-      <% if current_user.is_pro %>
-        Thank you for upgrading to Pro!
-      <% else %>
       <div style='text-align:center'>
-        <%= form_tag @paypal_url do %>
-           <%= hidden_field_tag :cmd, "_s-xclick" %>
-           <%= hidden_field_tag :encrypted, @encrypted %>
-          <input type='image' src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/buy-logo-medium.png" alt="Buy now with PayPal" />
-        <% end %>
-        <form action="/checkout" class='checkout' method="post" style='display:inline-block;'>
-          <noscript>You must <a href="http://www.enable-javascript.com" target="_blank">enable JavaScript</a> in your web browser in order to pay via Stripe.</noscript>
-          <input
-              type="submit"
-              value="Pay with card"
-              data-name="UpDog Pro"
-              data-key="<%= ENV['stripe_publishable_key'] %>"
-              data-amount=<%= @price.to_f * 100 %>
-              class='btn-create trigger-checkout'
-              data-currency='USD'
-          />
-          <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-          <script src="https://checkout.stripe.com/v2/checkout.js"></script>
-          <script>
-            $('.trigger-checkout').on('click', function(event) {
-          event.preventDefault();
-          var $button = $(this),
-              $form = $button.parents('form');
-          var opts = $.extend({}, $button.data(), {
-              token: function(result) {
-            $form.append($('<input>').attr({ type: 'hidden', name: 'stripeToken', value: result.id })).submit();
-              }
-          });
-          StripeCheckout.open(opts);
-            });
-          </script>
+      <% if @subscribed %>
+      <A HREF="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=<%= ENV['paypal_subscription_id'] %>">
+        Unsubscribe
+      </A>
+      <% else %>
+        <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top">
+          <input type="hidden" name="cmd" value="_s-xclick">
+          <input type="hidden" name="hosted_button_id" value="<%= ENV['paypal_button_id'] %>">
+          <input type="hidden" name="custom" value="<%= current_user.id %>">
+          <input type="image" src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/gold-rect-paypalcheckout-44px.png" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+          <img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
         </form>
-      </div>
       <% end %>
+      </div>
     <% else %>
     <div style='text-align:center'>
       <br>
