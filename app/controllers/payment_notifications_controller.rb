@@ -19,7 +19,7 @@ class PaymentNotificationsController < ApplicationController
   end
   def paypal_verify params
     query = 'cmd=_notify-validate'
-    params.each_pair {|key, value| query = query + '&' + key + '=' + value if key != 'register/pay_pal_ipn.html/pay_pal_ipn' }
+    params.each_pair {|key, value| query = query + '&' + key + '=' + URI.encode(value) if key != 'register/pay_pal_ipn.html/pay_pal_ipn' }
     paypal_url = ENV['paypal_host']+"?#{query}"
     HTTParty.post(paypal_url).body == "VERIFIED"
   end
