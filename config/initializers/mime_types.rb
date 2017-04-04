@@ -1,68 +1,15 @@
 # Be sure to restart your server when you modify this file.
+require 'webrick/httputils'
+begin
+  list = WEBrick::HTTPUtils.load_mime_types('/etc/mime.types')
+rescue Errno::ENOENT
+  list = WEBrick::HTTPUtils.load_mime_types('/etc/apache2/mime.types')
+end
+list.merge!({
+  "md" => "text/plain",
+  "ppt" => "application/vnd.ms-powerpoint",
+  "woff2" => "font/woff2"
+})
+Rack::Mime::MIME_TYPES.merge!(list)
 
 # Add new mime types for use in respond_to blocks:
-Mime::Type.register "image/x-icon", :ico
-Mime::Type.register "image/svg+xml", :svg
-Mime::Type.register "text/plain", :md
-Mime::Type.register "audio/mpeg", :mp3
-Mime::Type.register "video/mp4", :mp4
-Mime::Type.register "application/epub+zip", :epub
-Mime::Type.register "text/plain", :txt
-Mime::Type.register "application/zip", :htmlz
-Mime::Type.register "application/x-mobipocket", :prc
-Mime::Type.register "application/pdb", :pdb
-Mime::Type.register "application/octet-stream", :azw
-Mime::Type.register "application/x-mobipocket-ebook", :mobi
-Mime::Type.register "application/x-sony-bbeb", :lrf
-Mime::Type.register "application/x-bbeb-book", :lrx
-Mime::Type.register "text/fb2", :fb2
-Mime::Type.register "application/rar", :rar
-Mime::Type.register "text/rtf", :rtf
-Mime::Type.register "application/x-ms-reader", :lit
-Mime::Type.register "application/x-cbr", :cbr
-Mime::Type.register "application/x-cbz", :cbz
-Mime::Type.register "application/x-chm", :chm
-Mime::Type.register "application/octet-stream", :azw3
-Mime::Type.register "application/octet-stream", :kf8
-Mime::Type.register "image/vnd.djvu", :djvu
-Mime::Type.register "application/x-shockwave-flash", :swf
-Mime::Type.register "application/msword", :doc
-Mime::Type.register "application/msword", :dot
-Mime::Type.register "application/vnd.openxmlformats-officedocument.wordprocessingml.document", :docx
-Mime::Type.register "application/vnd.openxmlformats-officedocument.wordprocessingml.template", :dotx
-Mime::Type.register "application/vnd.ms-word.document.macroEnabled.12", :docm
-Mime::Type.register "application/vnd.ms-word.template.macroEnabled.12", :dotm
-Mime::Type.register "application/vnd.ms-excel", :xls
-Mime::Type.register "application/vnd.ms-excel", :xlt
-Mime::Type.register "application/vnd.ms-excel", :xla
-Mime::Type.register "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", :xlsx
-Mime::Type.register "application/vnd.openxmlformats-officedocument.spreadsheetml.template", :xltx
-Mime::Type.register "application/vnd.ms-excel.sheet.macroEnabled.12", :xlsm
-Mime::Type.register "application/vnd.ms-excel.template.macroEnabled.12", :xltm
-Mime::Type.register "application/vnd.ms-excel.addin.macroEnabled.12", :xlam
-Mime::Type.register "application/vnd.ms-excel.sheet.binary.macroEnabled.12", :xlsb
-Mime::Type.register "application/vnd.ms-powerpoint", :ppt
-Mime::Type.register "application/vnd.ms-powerpoint", :pot
-Mime::Type.register "application/vnd.ms-powerpoint", :pps
-Mime::Type.register "application/vnd.ms-powerpoint", :ppa
-Mime::Type.register "application/vnd.openxmlformats-officedocument.presentationml.presentation", :pptx
-Mime::Type.register "application/vnd.openxmlformats-officedocument.presentationml.template", :potx
-Mime::Type.register "application/vnd.openxmlformats-officedocument.presentationml.slideshow", :ppsx
-Mime::Type.register "application/vnd.ms-powerpoint.addin.macroEnabled.12", :ppam
-Mime::Type.register "application/vnd.ms-powerpoint.presentation.macroEnabled.12", :pptm
-Mime::Type.register "application/vnd.ms-powerpoint.presentation.macroEnabled.12", :potm
-Mime::Type.register "application/vnd.ms-powerpoint.slideshow.macroEnabled.12", :ppsm
-Mime::Type.register "application/java-archive", :jar
-Mime::Type.register "application/x-java-jnlp-file", :jnlp
-Mime::Type.register "application/octet-stream", :mm
-Mime::Type.register "application/octet-stream", :msi
-Mime::Type.register "application/octet-stream", :smc
-Mime::Type.register "audio/ogg", :oga
-Mime::Type.register "video/ogg", :ogv
-Mime::Type.register "application/ogg", :ogg
-Mime::Type.register "application/vnd.ms-fontobject", :eot
-Mime::Type.register "application/font-sfnt", :otf
-Mime::Type.register "application/font-sfnt", :ttf
-Mime::Type.register "application/font-woff", :woff
-Mime::Type.register "font/woff2", :woff2
-Mime::Type.register "video/webm", :webm

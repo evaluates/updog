@@ -142,7 +142,10 @@ class Resource
     }
     res = HTTParty.post(url, opts)
     oat = res.body.html_safe
+    begin
     oat = "Not found - Please Reauthenticate Dropbox" if oat.match("Invalid authorization value")
+    rescue
+    end
     oat
   end
 
@@ -166,8 +169,7 @@ class Resource
   def mime status
     extname = File.extname(strip_query_string(@path))[1..-1] || ""
     extname = extname.downcase
-    mime_type = Mime::Type.lookup_by_extension(extname)
-    mime_type.to_s unless mime_type.nil?
+    mime_type = Rack::Mime.mime_type(extname)
     mime_type = 'text/html; charset=utf-8' if mime_type.nil?
     mime_type = 'text/html; charset=utf-8' if render_markdown?
     mime_type = 'text/html; charset=utf-8' if status == 404

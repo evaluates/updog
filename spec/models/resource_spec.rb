@@ -153,6 +153,56 @@ describe Resource do
         expect(@resource.contents[:content_type]).to match('text/plain')
       end
     end
+    it "has the correct mime_types" do
+      mimes = {
+        :ico => "image/x-icon",
+        :svg => "image/svg+xml",
+        :md => "text/plain",
+        :mp3 => "audio/mpeg",
+        :mp4 => "video/mp4",
+        :epub => "application/epub+zip",
+        :txt => "text/plain",
+        :mobi => "application/x-mobipocket-ebook",
+        :rar => "application/x-rar-compressed",
+        :rtf => "application/rtf",
+        :swf => "application/x-shockwave-flash",
+        :doc => "application/msword",
+        :dot => "application/msword",
+        :docx => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        :dotx => "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
+        :docm => "application/vnd.ms-word.document.macroenabled.12",
+        :dotm => "application/vnd.ms-word.template.macroenabled.12",
+        :xls => "application/vnd.ms-excel",
+        :xlt => "application/vnd.ms-excel",
+        :xla => "application/vnd.ms-excel",
+        :xlsx => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        :xltx => "application/vnd.openxmlformats-officedocument.spreadsheetml.template",
+        :xlsm => "application/vnd.ms-excel.sheet.macroenabled.12",
+        :xltm => "application/vnd.ms-excel.template.macroenabled.12",
+        :xlam => "application/vnd.ms-excel.addin.macroenabled.12",
+        :xlsb => "application/vnd.ms-excel.sheet.binary.macroenabled.12",
+        :ppt => "application/vnd.ms-powerpoint",
+        :pptx => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        :jar => "application/java-archive",
+        :jnlp => "application/x-java-jnlp-file",
+        :smc => "application/octet-stream",
+        :oga => "audio/ogg",
+        :ogv => "video/ogg",
+        :ogg => "audio/ogg",
+        :eot => "application/vnd.ms-fontobject",
+        :otf => "application/x-font-otf",
+        :ttf => "application/x-font-ttf",
+        :woff => "application/x-font-woff",
+        :woff2 => "font/woff2",
+        :webm => "video/webm"
+      }
+      mimes.each do |extension, mime_type|
+        @resource = Resource.new(@u.sites.first, '/example.' + extension.to_s)
+        puts "#{extension} should be #{mime_type}"
+        expect(@resource.mime(200)).to match(mime_type)
+      end
+
+    end
     it "handles all the encodings" do
       user_string = URI.decode('%D0%9C').force_encoding('ISO-8859-1')
       rails_saw = user_string.force_encoding("ASCII-8BIT")
