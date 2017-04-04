@@ -4,6 +4,7 @@ class NewsController < ApplicationController
   end
   def show
     file = params[:path] == "feed" ? "feed.xml" : params[:path] + '/index.html'
+    @title = "Updog - " + params[:path].gsub('-',' ').titleize
     render file: 'news/_site/'+ file
   end
 end

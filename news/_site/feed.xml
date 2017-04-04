@@ -6,8 +6,8 @@
 </description>
     <link>/news/</link>
     <atom:link href="/news/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 18 Dec 2016 07:00:34 -0600</pubDate>
-    <lastBuildDate>Sun, 18 Dec 2016 07:00:34 -0600</lastBuildDate>
+    <pubDate>Tue, 04 Apr 2017 07:38:32 -0400</pubDate>
+    <lastBuildDate>Tue, 04 Apr 2017 07:38:32 -0400</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -44,7 +44,7 @@ protection works.&lt;/p&gt;
 
 &lt;p&gt;Feel free to leave a comment below or &lt;a href=&quot;/contact&quot;&gt;contact us&lt;/a&gt;.&lt;/p&gt;
 </description>
-        <pubDate>Sun, 18 Dec 2016 00:00:00 -0600</pubDate>
+        <pubDate>Sun, 18 Dec 2016 00:00:00 -0500</pubDate>
         <link>/news/password-protect-your-sites/</link>
         <guid isPermaLink="true">/news/password-protect-your-sites/</guid>
         
@@ -81,7 +81,7 @@ your Dropbox account. Select the folder that contains your website:&lt;/p&gt;
 
 &lt;p&gt;That’s it!&lt;/p&gt;
 </description>
-        <pubDate>Thu, 17 Nov 2016 00:00:00 -0600</pubDate>
+        <pubDate>Thu, 17 Nov 2016 00:00:00 -0500</pubDate>
         <link>/news/use-any-folder-in-dropbox/</link>
         <guid isPermaLink="true">/news/use-any-folder-in-dropbox/</guid>
         
@@ -167,7 +167,7 @@ your first impression to new visitors of your site.&lt;/p&gt;
 given page, which might not be convincing enough for potential visitors to click
 on your link.&lt;/p&gt;
 </description>
-        <pubDate>Tue, 01 Nov 2016 00:00:00 -0500</pubDate>
+        <pubDate>Tue, 01 Nov 2016 00:00:00 -0400</pubDate>
         <link>/news/must-have-in-the-head/</link>
         <guid isPermaLink="true">/news/must-have-in-the-head/</guid>
         
@@ -254,7 +254,7 @@ hidden input with the name &lt;code class=&quot;highlighter-rouge&quot;&gt;redir
 
 &lt;p&gt;Questions? &lt;a href=&quot;/contact&quot;&gt;Contact us&lt;/a&gt;.&lt;/p&gt;
 </description>
-        <pubDate>Sun, 30 Oct 2016 00:00:00 -0500</pubDate>
+        <pubDate>Sun, 30 Oct 2016 00:00:00 -0400</pubDate>
         <link>/news/how-to-add-a-contact-form-to-your-website/</link>
         <guid isPermaLink="true">/news/how-to-add-a-contact-form-to-your-website/</guid>
         
@@ -304,7 +304,7 @@ $ jekyll build
 
 &lt;p&gt;Here’s the completed example: &lt;a href=&quot;https://jekyll.updog.co/&quot;&gt;https://jekyll.updog.co/&lt;/a&gt;&lt;/p&gt;
 </description>
-        <pubDate>Fri, 21 Oct 2016 00:00:00 -0500</pubDate>
+        <pubDate>Fri, 21 Oct 2016 00:00:00 -0400</pubDate>
         <link>/news/deploy-jekyll/</link>
         <guid isPermaLink="true">/news/deploy-jekyll/</guid>
         
@@ -370,7 +370,7 @@ adding a file named &lt;code class=&quot;highlighter-rouge&quot;&gt;markdown.css
   &lt;li&gt;Check it out in a browser!&lt;/li&gt;
 &lt;/ol&gt;
 </description>
-        <pubDate>Sun, 16 Oct 2016 00:00:00 -0500</pubDate>
+        <pubDate>Sun, 16 Oct 2016 00:00:00 -0400</pubDate>
         <link>/news/updog-now-supports-markdown/</link>
         <guid isPermaLink="true">/news/updog-now-supports-markdown/</guid>
         
@@ -422,7 +422,7 @@ $ middleman build
 
 &lt;p&gt;Here’s the completed example: &lt;a href=&quot;https://middleman.updog.co/&quot;&gt;https://middleman.updog.co/&lt;/a&gt;&lt;/p&gt;
 </description>
-        <pubDate>Sun, 16 Oct 2016 00:00:00 -0500</pubDate>
+        <pubDate>Sun, 16 Oct 2016 00:00:00 -0400</pubDate>
         <link>/news/deploy-middleman-sites/</link>
         <guid isPermaLink="true">/news/deploy-middleman-sites/</guid>
         
@@ -490,7 +490,7 @@ UpDog. As a result, you’ll need to redirect your domain name traffic to www.&l
 &lt;p&gt;If you’d like any assistance with the above process, please &lt;a href=&quot;/contact&quot;&gt;contact us&lt;/a&gt;
 and we’ll get back to you as soon as possible.&lt;/p&gt;
 </description>
-        <pubDate>Sun, 02 Oct 2016 00:00:00 -0500</pubDate>
+        <pubDate>Sun, 02 Oct 2016 00:00:00 -0400</pubDate>
         <link>/news/custom-domain-godaddy/</link>
         <guid isPermaLink="true">/news/custom-domain-godaddy/</guid>
         
@@ -524,7 +524,7 @@ at what’s to come:&lt;/p&gt;
 Thank you! And as always &lt;a href=&quot;/contact&quot;&gt;let us know&lt;/a&gt; if there’s anything we can do
 to help.&lt;/p&gt;
 </description>
-        <pubDate>Sat, 17 Sep 2016 00:00:00 -0500</pubDate>
+        <pubDate>Sat, 17 Sep 2016 00:00:00 -0400</pubDate>
         <link>/news/updog-is-going-pro/</link>
         <guid isPermaLink="true">/news/updog-is-going-pro/</guid>
         
@@ -569,7 +569,7 @@ to help.&lt;/p&gt;
 
 &lt;p&gt;Because UpDog uses the Dropbox API, your site and HTML files here will be unaffected.&lt;/p&gt;
 </description>
-        <pubDate>Sun, 11 Sep 2016 00:00:00 -0500</pubDate>
+        <pubDate>Sun, 11 Sep 2016 00:00:00 -0400</pubDate>
         <link>/news/discontinuing-rendering-of-html-content/</link>
         <guid isPermaLink="true">/news/discontinuing-rendering-of-html-content/</guid>
         
