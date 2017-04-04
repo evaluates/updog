@@ -98,7 +98,7 @@ class Resource
     url = 'https://api.dropboxapi.com/2/files/search'
     opts = {
       headers: {
-        'Authorization' => "Bearer #{@site.identity.access_token}",
+        'Authorization' => "Bearer #{@site.identity.full_access_token || @site.identity.access_token}",
         "Content-Type" => "application/json"
       },
       body: {

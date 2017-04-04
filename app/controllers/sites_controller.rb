@@ -128,7 +128,7 @@ class SitesController < ApplicationController
     end
     if @content[:html] == 'show folders'
       @path = URI.decode(uri)
-      @entries = dropbox_files(@site.base_path + uri,@site.identity.access_token)
+      @entries = dropbox_files(@site.base_path + uri,@site.identity.full_access_token || @site.identity.access_token)
       return render 'directory_index', layout: false
     end
     begin
