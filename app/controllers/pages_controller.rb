@@ -42,6 +42,7 @@ class PagesController < ApplicationController
     @paypal_url = ENV['paypal_url']
     @encrypted = paypal_encrypted
     @price = '10.00'
+    @reviews = Review.all
     @subscribed = PaymentNotification.where(user_id: current_user.id).any? if current_user && current_user.is_pro
   end
 

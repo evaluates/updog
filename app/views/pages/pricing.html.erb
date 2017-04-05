@@ -53,5 +53,11 @@
     <p style='clear:both;'><br><br>*We offer a no-questions-asked refund policy on all purchases. <a href='/contact'>Contact us</a> at any time
     if you'd like your money back.
     </p>
-  </div>
+    <br>
+    <hr>
+    <br>
+  <h2>What Pro Members Are Saying:</h2>
+  <% @reviews.each do |review| %>
+    <blockquote><%= review.comment %></blockquote>
+  <% end %>
 </div>

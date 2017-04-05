@@ -7,13 +7,6 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 #
 
-
-Click.destroy_all
-
-`curl -s --referer http://some-example.com/ http://jom.updog.co:3000/`
-`curl -s --referer http://some-example.com/some-path http://jom.updog.co:3000/`
-`curl -s --referer http://some-example.com/another-path http://jom.updog.co:3000/`
-
-Stat.create(new_users: 4, new_upgrades: 0, percent_pro: 5.33333333333333, created_at: "2016-12-05 23:59:04", updated_at: "2016-12-05 23:59:04")
-Stat.create(new_users: 8, new_upgrades: 1, percent_pro: 5.30355896720167, created_at: "2016-12-06 23:59:04", updated_at: "2016-12-06 23:59:04")
-Stat.create(new_users: 6, new_upgrades: 0, percent_pro: 5.28144544822794, created_at: "2016-12-07 23:59:05", updated_at: "2016-12-07 23:59:05")
+Review.create(
+[{"rating":5,"comment":"Super easy to use!"},{"rating":4,"comment":"Loving UpDog so far. Being able to write Markdown, store it in Dropbox and have UpDog auto convert it into HTML has made this the quickest website I've ever put together! Keep up the good work, and would love to see new features added in the future like an easy Markdown based blogging engine?"},{"rating":5,"comment":"Awesome service, easy setup.","user_id":1489},{"rating":0,"comment":"I'm so happy that I found this website. I didn't have to think twice before going pro.  I'm the biggest fan!"},{"rating":5,"comment":"It was a disaster for me as a photographer/photojournalist when Dropbox stopped rendering html files, as my preferred modus operandi is to provide Dropbox hi-res files for download and an accompanying lo-res (Dropbox public folder) Lightroom html web gallery as a guide. There are workarounds but the most effective solution is UpDog's Dropbox app, which facilitates the normal rendering of html presentations. The app is effective and intuitive to use and I can't praise it highly enough. UpDog came to my rescue. As a pro user, I can create as many sites/presentations as I want to. A great service!\\r\\nsteve.cray@gmail.com"},{"rating":5,"comment":"Super easy to use. I had Middleman and Jekyll sites up within minutes. Love it!"},{"rating":5,"comment":"Exactly what I was hoping it'd be.  I just need to do quick, single page, static sites.  This is couldn't be easier."}]
+)

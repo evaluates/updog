@@ -4,8 +4,11 @@ class ReviewsController < ApplicationController
     @review = Review.new
   end
   def create
-    @review = Review.create(review_params.merge(user: current_user))
-    Drip.event current_user.email, "left a review" if current_user
+    @review = Review.create(review_params)
+    if current_user
+      @review.update(user_id: current_user.id)
+      Drip.event current_user.email, "left a review"
+    end
     flash[:notice] = 'Thanks for your review!'
     redirect_to root_path
   end
