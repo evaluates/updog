@@ -7,6 +7,14 @@ class WebhookController < ApplicationController
     end
   end
   def post
-    p params
+    users = params["delta"]["users"]
+    users.each do |uid|
+      begin
+        identity = Identity.find_by(uid: uid)
+        Drip.event(identity.email, "Edited a file in dropbox")
+      rescue
+      end
+    end
+    render nothing: true
   end
 end

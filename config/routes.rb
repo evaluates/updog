@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
+  get '/webhook', to: 'webhook#challenge'
+  post '/webhook', to: 'webhook#post'
   resources :payment_notifications, only: [:create]
   match 'auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   match 'auth/:provider', to: 'sessions#unlink', via: [:delete]
@@ -31,8 +33,7 @@ Rails.application.routes.draw do
   get '/files', to: 'sites#files'
   get '/admin', to: 'pages#admin'
   get '/account', to: 'pages#account'
-  get '/webhook', to: 'webhook#challenge'
-  post '/webhook', to: 'webhook#post'
+
   post "/versions/:id/revert", to: "versions#revert", as: "revert_version"
   post "/checkout", to: "payments#checkout"
   resources :sites, path: '' do
