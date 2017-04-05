@@ -23,4 +23,12 @@ $(function(){
   $('[data-toggle]').on('click', function(){
     $($(this).data('toggle')).toggle();
   })
+  $(".js-track-link-click").on("click", function(e){
+    e.preventDefault()
+    var url = $(this).attr('href')
+    ga('send', 'event', 'login', 'click', url, {
+     'transport': 'beacon',
+     'hitCallback': function(){document.location = url;}
+   });
+  })
 });
