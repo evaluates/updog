@@ -75,6 +75,9 @@ class SitesController < ApplicationController
   def authenticate
     @site = Site.where("domain = ? OR subdomain = ?", request.host, request.host).first
     return nil unless @site
+    if request.env["REQUEST_PATH"] == @site.passcode_logo_path && @site.passcode_logo_path.present?
+      return true
+    end
     if @site.username.present?
       authenticate_or_request_with_http_basic do |name, password|
         name == @site.username && Digest::SHA2.hexdigest(password) == @site.encrypted_passcode
@@ -204,7 +207,7 @@ class SitesController < ApplicationController
   private
 
   def site_params
-    params.require(:site).permit(:contact_email, :name, :domain, :document_root, :render_markdown, :db_path, :passcode, :username, :provider)
+    params.require(:site).permit(:passcode_text, :passcode_logo_path, :contact_email, :name, :domain, :document_root, :render_markdown, :db_path, :passcode, :username, :provider)
   end
 
   def undo_link

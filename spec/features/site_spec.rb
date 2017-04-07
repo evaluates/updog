@@ -124,6 +124,19 @@ describe "Sites Controller", :type => :feature do
     find('button').click
     expect(page).to have_content('ok')
   end
+  it "can customize passcode logo and text" do
+    Capybara.app_host = "http://#{@site.domain}/"
+    stub_request(:post, "https://content.dropboxapi.com/2/files/download").to_return(:status => 200, :body => "ok", :headers => {})
+    @site.update(passcode: 'bar')
+    visit '/'
+    expect(page).to have_content('This site is protected with a passcode')
+    expect(page).to have_css("img[src='https://updog.co/logo.png']")
+    @site.update(passcode_logo_path:'/coolimg.jpg', passcode_text:'enter passcode')
+    @site.reload
+    visit '/'
+    expect(page).to have_content('enter passcode')
+    expect(page).to have_css("img[src='/coolimg.jpg']")
+  end
   it "redirects to dropbox for zip files" do
       Capybara.app_host = "http://#{@site.domain}/"
       stub_request(:post, "https://api.dropboxapi.com/2/files/get_temporary_link").

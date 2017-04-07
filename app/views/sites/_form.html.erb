@@ -123,7 +123,10 @@
       This site is currently protected with a passcode. <%= link_to "Remove passcode", site_password_path(@site), method: :delete %>.<br>
     <% end %>
     <%= f.password_field :passcode, placeholder: 'Enter new passcode' %>
-
+    <%= f.label :passcode_logo_path %>
+    <%= f.text_field :passcode_logo_path, placeholder: '/images/logo.png' %>
+    <%= f.label :passcode_text %>
+    <%= f.text_field :passcode_text, placeholder: 'This site is protected with a passcode!' %>
     </div>
     <%= f.label :contact_email %>
     <small>Use an alternate email to receive contact form submissions.</small>

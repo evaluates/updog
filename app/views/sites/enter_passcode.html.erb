@@ -36,8 +36,20 @@
   </head>
   <body>
     <form action="/verify" method="post">
-      <a href="https://updog.co/"><img src='https://updog.co/logo.png'></a>
-      <h2>This site is protected with a passcode.</h2>
+      <a href="https://updog.co/">
+        <% if @site.passcode_logo_path.present? %>
+          <img src='<%= @site.passcode_logo_path %>'>
+        <% else %>
+         <img src="https://updog.co/logo.png">
+        <% end %>
+      </a>
+      <h2>
+        <% if @site.passcode_text.present? %>
+          <%= @site.passcode_text %>
+        <% else %>
+          This site is protected with a passcode.
+        <% end %>
+      </h2>
       <%= flash[:alert] %>
       <input type="password" name="passcode" value="" placeholder="enter passcode">
       <button type="submit" name="button">Submit</button>
