@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20170407133351) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "refresh_token"
+    t.string   "cursor"
   end
 
   add_index "identities", ["user_id"], name: "index_identities_on_user_id", using: :btree
