@@ -154,8 +154,9 @@ class Resource
     document_root = self.site.document_root || ''
     file_path = folder + '/' + document_root + '/' + @path
     file_path = file_path.gsub(/\/+/,'/')
+    token = self.site.identity.full_access_token || self.site.identity.access_token
     opts = {
-      headers: self.class.db_headers(self.site.identity.access_token),
+      headers: self.class.db_headers(token),
       body: {
         path: file_path
       }.to_json
