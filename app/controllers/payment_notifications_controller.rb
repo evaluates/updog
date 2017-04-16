@@ -3,7 +3,8 @@ class PaymentNotificationsController < ApplicationController
   def create
     unless paypal_verify params
       p params
-      raise 'paypal failed verification'
+      p 'paypal failed verification'
+      return render nothing: true
     end
     if params[:txn_type] == 'subscr_payment'
       @user = User.find(params[:custom])
