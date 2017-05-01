@@ -3,7 +3,7 @@ layout: post
 ---
 
 <div class="notice" style="margin-top:10px;">
-  Note: a Pro membership is required for password protection.
+  Note: a <a href='/pricing'>Pro membership</a> is required for password protection.
 </div>
 
 You asked, we listened!
