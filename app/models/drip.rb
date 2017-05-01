@@ -3,6 +3,13 @@ class Drip
     acct_id = ENV['drip_account']
     campaign_id = ENV['drip_campaign']
     identity = Identity.find_by_email(email)
+    begin
+      name = identity.name.split(' ').first
+    rescue
+      name = ''
+      Rails.logger.error('name issue')
+      p identity
+    end
     headers = {
       'User-Agent' => 'UpDog (updog.co)',
       'Content-Type' => 'application/vnd.api+json'
@@ -12,7 +19,7 @@ class Drip
         email: email,
         time_zone: "Ameriza/New_York",
         custom_fields: {
-          name: identity.name
+          name: name
         }
       }
     ]}.to_json

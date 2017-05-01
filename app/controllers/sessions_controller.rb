@@ -105,7 +105,7 @@ class SessionsController < ApplicationController
       }.to_json
     }
     res = HTTParty.post(url, opts)
-    name = res['display_name']
+    name = res['name']['display_name']
     email = res['email']
     return uid, name, email, access_token, full_access_token
   end
