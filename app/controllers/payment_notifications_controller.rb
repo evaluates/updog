@@ -10,6 +10,7 @@ class PaymentNotificationsController < ApplicationController
       @user = User.find(params[:custom])
       PaymentNotification.create!(params: params, user_id: @user.id, payer_id: params[:payer_id])
       @user.update(is_pro: true)
+      Upgrading.create!(user:@user)
     end
     if ['subscr_cancel','subscr_eot','subscr_failed'].include? params[:txn_type]
       pn = PaymentNotification.find_by(payer_id: params[:payer_id])

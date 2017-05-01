@@ -23,4 +23,13 @@ describe PaymentNotificationsController, type: :controller do
     @u.reload
     expect(@u.is_pro).to eq(false)
   end
+  it "creates an upgrading" do
+    @u.update(is_pro: false)
+    expect(@u.upgrading).to be(nil)
+    payload = JSON.parse(fixture('paypal/subscr_payment.json')).merge(custom: @u.id)
+    post :create, payload
+    @u.reload
+    expect(@u.is_pro).to eq(true)
+    expect(@u.upgrading).not_to be(nil)
+  end
 end

@@ -192,7 +192,7 @@ describe Resource do
         :eot => "application/vnd.ms-fontobject",
         :otf => "application/x-font-otf",
         :ttf => "application/x-font-ttf",
-        :woff => "application/x-font-woff",
+        :woff => "application/font-woff",
         :woff2 => "font/woff2",
         :webm => "video/webm"
       }

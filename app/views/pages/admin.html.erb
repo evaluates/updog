@@ -25,8 +25,34 @@
   <strong>Total Revenue: </strong> $<%= @revenue %><br>
   <strong>Num users: </strong><%= @num_users %><br>
   <strong>Num paying users: </strong><%= @paying_users %>
-  <script src='https://code.highcharts.com/highcharts.js'></script>
+  <br>
+  <br>
+  <table>
+    <tr>
+      <th>Week</th>
+      <th>New Users</th>
+      <th>New Upgrades</th>
+      <th>% Pro</th>
+    </tr>
+    <% @stats_by_week.each do |ts, val| %>
+      <tr>
+        <td>
+          <%= Date.strptime((ts.to_i / 1000).to_s,"%s") %>
+        </td>
+        <td>
+          <%= val[:new_users] %>
+        </td>
+        <td>
+          <%= val[:new_upgrades] %>
+        </td>
+        <td>
+          <%= val[:percent_pro].round(2) %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <!-- <script src='https://code.highcharts.com/highcharts.js'></script>
   <%= render "chart", data: @daily_revenue.to_json.html_safe, title: "Revenue", el: 'daily-revenue'%>
   <%= render "chart", data: @users.to_json.html_safe, title: "Users", el: 'container'%>
-  <%= render "chart", data: @pct_pro.to_json.html_safe, title: "% Pro", el: 'percent_pro'%>
+  <%= render "chart", data: @pct_pro.to_json.html_safe, title: "% Pro", el: 'percent_pro'%> -->
 </div>
