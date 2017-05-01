@@ -7,7 +7,11 @@ end
 namespace :request_count do
   desc "Count number of requests"
   task write: :environment do
-    File.write(Rails.root.join('tmp/request-count.txt'),Click.all.count)
+    fpath = Rails.root.join('tmp/request-count.txt')
+    before = File.read(fpath).to_i
+    after = before + Click.all.count
+    File.write(Rails.root.join('tmp/request-count.txt'),after)
+    Click.destroy_all
   end
 end
 namespace :stats do
