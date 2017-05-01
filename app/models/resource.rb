@@ -95,6 +95,7 @@ class Resource
   end
 
   def directory_index_exists_in_any_parent_folder? path
+    return false if @site.provider != "dropbox"
     url = 'https://api.dropboxapi.com/2/files/search'
     opts = {
       headers: {

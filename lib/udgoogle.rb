@@ -82,7 +82,12 @@ module Udgoogle
     file.nil? ? "Error in call to API function" : file
   end
   def google_file_by_title folder, title
-    folder.download_to_string.html_safe unless folder.nil?
+    begin
+      folder.download_to_string.html_safe unless folder.nil?
+    rescue => e
+      Rails.logger.error(e.to_s)
+      "Error in call to API function"
+    end
   end
 
   def parse_timings times
