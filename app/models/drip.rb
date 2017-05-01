@@ -1,24 +1,30 @@
 class Drip
   def self.subscribe email
-      acct_id = ENV['drip_account']
-      campaign_id = ENV['drip_campaign']
-      opts = {
-        headers: {
-	  'User-Agent' => 'UpDog (updog.co)',
-	  'Content-Type' => 'application/vnd.api+json'
-       },
-	basic_auth: { username: ENV['drip_token']},
-	body: {
-	  :subscribers => [{
-	    email: email,
-	    time_zone: "Ameriza/New_York"
-	  }]
-	}.to_json
+    acct_id = ENV['drip_account']
+    campaign_id = ENV['drip_campaign']
+    identity = Identity.find_by_email(email)
+    headers = {
+      'User-Agent' => 'UpDog (updog.co)',
+      'Content-Type' => 'application/vnd.api+json'
+    }
+    body = {
+      :subscribers => [{
+        email: email,
+        time_zone: "Ameriza/New_York",
+        custom_fields: {
+          name: identity.name
+        }
       }
-      HTTParty.post(
-	"https://api.getdrip.com/v2/#{acct_id}/campaigns/#{campaign_id}/subscribers",
-	opts
-      )
+    ]}.to_json
+    opts = {
+      headers: headers,
+      basic_auth: { username: ENV['drip_token']},
+      body: body
+    }
+    HTTParty.post(
+     "https://api.getdrip.com/v2/#{acct_id}/campaigns/#{campaign_id}/subscribers",
+     opts
+    )
   end
   def self.event email, action
       acct_id = ENV['drip_account']
